@@ -6,16 +6,14 @@ export class GregoIndex extends GenericElement {
     items: (Cantus | Psalmus)[] = [];
 
     addPsalm(psalm: Psalmus): void {
-        this.items.push(psalm);
-        psalm.anchor = this.generateAnchor();
+        psalm.anchor = this.generateAnchor(this.items.push(psalm));
     }
 
     addCantus(cantus: Cantus): void {
-        this.items.push(cantus);
-        cantus.anchor = this.generateAnchor();
+        cantus.anchor = this.generateAnchor(this.items.push(cantus));
     }
 
-    private generateAnchor(): string {
-        return `grego-index-item-${this.items.length}`;
+    private generateAnchor(id: number): string {
+        return `grego-index-item-${id}`;
     }
 }

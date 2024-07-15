@@ -15,9 +15,10 @@ import {
     Rubric,
 } from "../Types/paragraphs";
 import { Cantus } from "../Types/Cantus";
-import { Psalmus, Psalterium } from "../Types/Psalterium";
+import { Canticum, Psalmus, Psalterium } from "../Types/Psalterium";
 import { GenericElement } from "../Types/GenericElement";
 import { GregoIndex } from "../Types/GregoIndex";
+import { incipits } from "./incipits";
 
 const gregoIndex = new GregoIndex();
 const table = new TableOfContents();
@@ -122,7 +123,10 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
                     .filter(function () {
                         return true;
                     })
-                    .map(function (psalmDesc): Psalmus {
+                    .reduce(function (
+                        acc: Psalterium,
+                        psalmDesc: string
+                    ): Psalterium {
                         const [, psalmDescription, title] = psalmDesc.match(
                             /^\s*(\S+?)\s*(?::\s*(.+))?\s*$/
                         ) as string[];
@@ -130,7 +134,10 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
                         const psalm = isDoxologie
                             ? psalmDescription.slice(0, -1)
                             : psalmDescription;
-                        const psalmus = new Psalmus(
+                        const PsalmConstructor = /\d/.test(psalm)
+                            ? Psalmus
+                            : Canticum;
+                        const psalmus = new PsalmConstructor(
                             ton.length > 0 ? ton : null,
                             psalm,
                             psBuilder
@@ -138,14 +145,9 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
                         psalmus.doxologie = isDoxologie;
                         psalmus.title =
                             title && title.length > 0 ? title : false;
+                        psalmus.incipit = incipits[psalm] ?? undefined;
                         gregoIndex.addPsalm(psalmus);
-                        return psalmus;
-                    })
-                    .reduce(function (
-                        acc: Psalterium,
-                        psalm: Psalmus
-                    ): Psalterium {
-                        acc.addPsalm(psalm);
+                        acc.addPsalm(psalmus);
                         return acc;
                     },
                     new Psalterium(ton.length > 0 ? ton : null));
