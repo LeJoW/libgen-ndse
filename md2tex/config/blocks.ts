@@ -14,7 +14,7 @@ import {
     RemplacementRubric,
     Rubric,
 } from "../Types/paragraphs";
-import { Cantus } from "../Types/Cantus";
+import { Antiphona, Cantus, Hymnus, Responsorium } from "../Types/Cantus";
 import { Canticum, Psalmus, Psalterium } from "../Types/Psalterium";
 import { GenericElement } from "../Types/GenericElement";
 import { GregoIndex } from "../Types/GregoIndex";
@@ -101,14 +101,28 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
             test: /^!\[(.*)\]\(([\S]+)\)$/,
             callback: function gabc(_, label, file) {
                 const matches = label.match(/(?:(\d+):)?(\w+):(.+)/);
-                const cantus = new Cantus(file);
+                let cantus = new Cantus(file);
+
                 if (matches !== null) {
                     const [, ton, type, title] = matches as string[];
-                    cantus.type = type;
+
+                    switch (type) {
+                        case "ant":
+                            cantus = new Antiphona(file);
+                            gregoIndex.addAntiphona(cantus);
+                            break;
+                        case "hymn":
+                            cantus = new Hymnus(file);
+                            gregoIndex.addHymnus(cantus);
+                        case "resp":
+                            cantus = new Responsorium(file);
+                            gregoIndex.addResponsorium(cantus);
+                            break;
+                    }
                     cantus.mode = parseInt(ton);
                     cantus.incipit = title;
                 }
-                gregoIndex.addCantus(cantus);
+
                 return cantus;
             },
             saveTranslation: function (cantus, trad) {
@@ -120,9 +134,6 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
             callback: function psautier(_, ton, psaumes) {
                 return psaumes
                     .split(";;")
-                    .filter(function () {
-                        return true;
-                    })
                     .reduce(function (
                         acc: Psalterium,
                         psalmDesc: string
