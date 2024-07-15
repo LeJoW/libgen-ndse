@@ -1,9 +1,6 @@
 import { BlockConfigType } from "../Rules/Rules.i";
-import { adapterType } from "../../tex2pdf/adapter/adapter.t";
 import { PsalmBuilder } from "../../buildPsalm/PsalmBuilder";
 import { TableOfContents } from "../Types/TableOfContents";
-import { PsalmIndex } from "./PsalmIndex";
-import { Table } from "./Table";
 import {
     DayTitle,
     LessonTitle,
@@ -20,9 +17,9 @@ import {
 import { Cantus } from "../Types/Cantus";
 import { Psalmus, Psalterium } from "../Types/Psalterium";
 import { GenericElement } from "../Types/GenericElement";
+import { GregoIndex } from "../Types/GregoIndex";
 
-const psalmIndex = new PsalmIndex();
-const gregoTable = new Table();
+const gregoIndex = new GregoIndex();
 const table = new TableOfContents();
 
 const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
@@ -109,12 +106,8 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
                     cantus.type = type;
                     cantus.mode = parseInt(ton);
                     cantus.incipit = title;
-                    cantus.anchor = gregoTable.addChant(
-                        cantus.incipit,
-                        cantus.mode,
-                        cantus.type
-                    );
                 }
+                gregoIndex.addCantus(cantus);
                 return cantus;
             },
             saveTranslation: function (cantus, trad) {
@@ -137,19 +130,15 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
                         const psalm = isDoxologie
                             ? psalmDescription.slice(0, -1)
                             : psalmDescription;
-                        const mode =
-                            ton.length > 0
-                                ? parseInt(ton.replace(/^(\d+)/, "$1"))
-                                : null;
                         const psalmus = new Psalmus(
                             ton.length > 0 ? ton : null,
                             psalm,
                             psBuilder
                         );
-                        psalmus.anchor = psalmIndex.addPsalm(psalm, mode);
                         psalmus.doxologie = isDoxologie;
                         psalmus.title =
                             title && title.length > 0 ? title : false;
+                        gregoIndex.addPsalm(psalmus);
                         return psalmus;
                     })
                     .reduce(function (
@@ -166,10 +155,8 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
             test: /<\s*(\S+)\s*\/>/,
             callback: function (_, tag) {
                 switch (tag) {
-                    /* case "psalms-index":
-                        return adapter.blocks.makePsalmsIndex(psalmIndex);
                     case "grego-index":
-                        return adapter.blocks.makeGregIndex(gregoTable); */
+                        return gregoIndex;
                     case "table-of-contents":
                         return table;
                     default:

@@ -6,6 +6,7 @@ export class Psalmus extends GenericElement {
     psalmDivision: string;
     versi: string[];
     doxologie: boolean = true;
+    mode: number | null = null;
 
     title: string | false = false;
     anchor: string | null = null;
@@ -17,7 +18,10 @@ export class Psalmus extends GenericElement {
     ) {
         super(psalmDivision);
         this.psalmDivision = psalmDivision;
-        this.versi = psalmBuilder.buildPsalm(psalmDivision, ton || "none");
+        this.versi = psalmBuilder.buildPsalm(psalmDivision, ton ?? "none");
+        if (ton && ton.length > 0) {
+            this.mode = parseInt(ton.replace(/^(\d+)/, "$1"));
+        }
     }
 }
 
