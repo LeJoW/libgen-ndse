@@ -157,7 +157,9 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
                         psalmus.title =
                             title && title.length > 0 ? title : false;
                         psalmus.incipit = incipits[psalm] ?? undefined;
-                        gregoIndex.addPsalmus(psalmus);
+                        psalmus instanceof Canticum
+                            ? gregoIndex.addCanticum(psalmus)
+                            : gregoIndex.addPsalmus(psalmus);
                         acc.addPsalm(psalmus);
                         return acc;
                     },

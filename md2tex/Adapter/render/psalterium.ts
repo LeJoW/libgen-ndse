@@ -1,7 +1,7 @@
-import { Cantus } from "../Types/Cantus";
-import { ParagraphLettrine } from "../Types/paragraphs";
-import { Psalmus } from "../Types/Psalterium";
-import { Adapter } from "./Adapter.i";
+import { Cantus } from "../../Types/Cantus";
+import { ParagraphLettrine } from "../../Types/paragraphs";
+import { Psalmus } from "../../Types/Psalterium";
+import { Adapter } from "../Adapter.i";
 import { renderPsalmTitle } from "./titles";
 
 export const renderPsalterium = (adapter: Adapter) =>

@@ -14,11 +14,13 @@ test("", function () {
 
     const ps1 = new Psalmus("1f", "118a", psB);
     index.addPsalmus(ps1);
-    expect(index.getPsalmos()).toStrictEqual([ps1]);
+    const ps2 = new Psalmus("1f", "53", psB);
+    index.addPsalmus(ps2);
+    expect(index.getPsalmos()).toStrictEqual({ "53": [ps2], "118a": [ps1] });
 
-    const cant1 = new Canticum("1f", "Zach", psB);
-    index.addPsalmus(cant1);
-    expect(index.getPsalmos()).toStrictEqual([ps1]);
+    const cant1 = new Canticum("1f", "zach", psB);
+    index.addCanticum(cant1);
+    expect(index.getCanticos()).toStrictEqual({ zach: [cant1] });
 
     const antPueri = new Antiphona("");
     antPueri.incipit = "Pueri";

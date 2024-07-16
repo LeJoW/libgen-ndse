@@ -4,7 +4,8 @@ import { Canticum, Psalmus } from "./Psalterium";
 
 export class GregoIndex extends GenericElement {
     items: (Cantus | Psalmus | Canticum)[] = [];
-    psalmi: Psalmus[] = [];
+    psalmi: { [num: string]: Psalmus[] } = {};
+    cantica: GregoIndex["psalmi"] = {};
     canti: {
         antiphonae: Antiphona[];
         hymni: Hymnus[];
@@ -16,8 +17,21 @@ export class GregoIndex extends GenericElement {
     };
     itemsIndex: number = 1;
 
-    addPsalmus(psalm: Psalmus | Canticum): void {
-        this.psalmi.push(psalm);
+    addPsalmus(psalm: Psalmus): void {
+        this.addPsalmusOrCanticum(psalm, this.psalmi);
+    }
+
+    addCanticum(canticum: Canticum): void {
+        this.addPsalmusOrCanticum(canticum, this.cantica);
+    }
+
+    private addPsalmusOrCanticum(
+        psalm: Psalmus,
+        storage: GregoIndex["psalmi"]
+    ): void {
+        const currentDivision = (storage[psalm.psalmDivision] =
+            storage[psalm.psalmDivision] ?? []);
+        currentDivision.push(psalm);
         psalm.anchor = this.generateAnchor(this.itemsIndex++);
     }
 
@@ -39,25 +53,25 @@ export class GregoIndex extends GenericElement {
         this.addItem(responsorium);
     }
 
-    getPsalmos(): Psalmus[] {
-        return this.getSortedPsalmos().filter(function (item) {
-            return !(item instanceof Canticum);
-        });
+    getPsalmos(): GregoIndex["psalmi"] {
+        return this.sortPsalmorumList(this.psalmi);
     }
 
-    getCanticos(): Canticum[] {
-        return this.getSortedPsalmos().filter(function (item) {
-            return item instanceof Canticum;
-        });
+    getCanticos(): GregoIndex["psalmi"] {
+        return this.sortPsalmorumList(this.cantica);
     }
 
-    private getSortedPsalmos(): Psalmus[] {
-        return this.psalmi.sort((a, b) =>
-            this.setUpPsalmDivisionForComparaison(
-                a.psalmDivision
-            ).localeCompare(
-                this.setUpPsalmDivisionForComparaison(b.psalmDivision)
+    private sortPsalmorumList(
+        storage: GregoIndex["psalmi"]
+    ): GregoIndex["psalmi"] {
+        const sortedKeys = Object.keys(storage).sort((a, b) =>
+            this.setUpPsalmDivisionForComparaison(a).localeCompare(
+                this.setUpPsalmDivisionForComparaison(b)
             )
+        );
+        return sortedKeys.reduce(
+            (acc, key) => ({ ...acc, [key]: storage[key] }),
+            {}
         );
     }
 

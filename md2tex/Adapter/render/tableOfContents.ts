@@ -1,5 +1,5 @@
-import { Render } from "../Render/Render.i";
-import { TableOfContents } from "../Types/TableOfContents";
+import { Render } from "../../Render/Render.i";
+import { TableOfContents } from "../../Types/TableOfContents";
 
 export const renderTableOfContents = (engine: Render) =>
     function (contents: TableOfContents["contents"]): string {

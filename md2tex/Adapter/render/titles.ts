@@ -1,4 +1,4 @@
-import { Render } from "../Render/Render.i";
+import { Render } from "../../Render/Render.i";
 
 export const renderDayTitle = (engine: Render) =>
     function (title: string, dayClass: string | null, short: string): string {

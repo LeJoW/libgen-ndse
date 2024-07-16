@@ -18,11 +18,15 @@ import {
     renderOfficeTitle,
     renderPsalmTitle,
     renderTitle,
-} from "./titles";
-import { renderPsalmus, renderPsalterium } from "./psalterium";
-import { renderLesson, renderParLettrine, renderRubric } from "./paragraphs";
-import { renderCantus } from "./cantus";
-import { renderTableOfContents } from "./tableOfContents";
+} from "./render/titles";
+import { renderPsalmus, renderPsalterium } from "./render/psalterium";
+import {
+    renderLesson,
+    renderParLettrine,
+    renderRubric,
+} from "./render/paragraphs";
+import { renderCantus } from "./render/cantus";
+import { renderTableOfContents } from "./render/tableOfContents";
 
 export class Adapter implements AdapterInterface {
     translation: boolean = false;

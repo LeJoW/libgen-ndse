@@ -1,4 +1,4 @@
-import { Render } from "../Render/Render.i";
+import { Render } from "../../Render/Render.i";
 
 export const renderCantus = (engine: Render) =>
     function (file: string, anchor: string | null): string {

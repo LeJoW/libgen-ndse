@@ -1,4 +1,4 @@
-import { Render } from "../Render/Render.i";
+import { Render } from "../../Render/Render.i";
 
 export const renderParLettrine = (engine: Render) =>
     function (text: string): string {
