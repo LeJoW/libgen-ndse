@@ -27,6 +27,8 @@ import {
 } from "./render/paragraphs";
 import { renderCantus } from "./render/cantus";
 import { renderTableOfContents } from "./render/tableOfContents";
+import { GregoIndex } from "../Types/GregoIndex";
+import { renderGregoIndex } from "./render/gregoIndex";
 
 export class Adapter implements AdapterInterface {
     translation: boolean = false;
@@ -88,6 +90,8 @@ export class Adapter implements AdapterInterface {
             return this.renderLesson(element.text);
         } else if (element instanceof TableOfContents) {
             return this.renderTableOfContents(element.contents);
+        } else if (element instanceof GregoIndex) {
+            return this.renderGregoIndex(element);
         } else {
             return element.content;
         }
@@ -110,4 +114,5 @@ export class Adapter implements AdapterInterface {
 
     private renderTableOfContents = (() =>
         renderTableOfContents(this.engine))();
+    private renderGregoIndex = (() => renderGregoIndex(this.engine))();
 }
