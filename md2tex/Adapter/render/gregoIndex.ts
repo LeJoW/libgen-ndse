@@ -20,7 +20,7 @@ function renderPsalmorumIndex(
                     occurrences: entries
                         .map(function ({ anchor, mode }): string {
                             return engine.concat([
-                                engine.orphan("anchor", { href: anchor }),
+                                engine.orphan("pageref", { href: anchor }),
                                 mode !== null
                                     ? engine.orphan("psMode", { mode })
                                     : undefined,
