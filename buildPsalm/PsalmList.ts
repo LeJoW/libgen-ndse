@@ -7,11 +7,13 @@ export class PsalmList implements PsalmListInterface {
     system: System;
 
     doxologie = [
-        ["Glória Patri, et Fílio,", "et Spirítui Sancto."],
-        [
-            "Sicut erat in princípio, et nunc, et semper,",
-            "et in sǽcula sæculórum. Amen.",
-        ],
+        { la: ["Glória Patri, et Fílio,", "et Spirítui Sancto."] },
+        {
+            la: [
+                "Sicut erat in princípio, et nunc, et semper,",
+                "et in sǽcula sæculórum. Amen.",
+            ],
+        },
     ];
 
     constructor(path: string, system: System) {
@@ -19,8 +21,8 @@ export class PsalmList implements PsalmListInterface {
         this.system = system;
     }
 
-    getPsalm(psalmDivision: string): string[][] {
-        let psalm: string[][];
+    getPsalm(psalmDivision: string): { la: string[]; fr?: string }[] {
+        let psalm;
         try {
             psalm = this.system.readJSON(`${this.path}/${psalmDivision}.json`);
         } catch (error) {

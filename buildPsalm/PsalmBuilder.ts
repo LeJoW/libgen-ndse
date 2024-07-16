@@ -43,7 +43,7 @@ export class PsalmBuilder {
             return cached;
         }
         const psalm = this.setUpPsalm(
-            this.psalmList.getPsalm(psalmDivision),
+            this.psalmList.getPsalm(psalmDivision).map(({ la }) => la),
             ton
         );
         this.psalmCache.setPsalmBuild(psalmDivision, ton, psalm);
