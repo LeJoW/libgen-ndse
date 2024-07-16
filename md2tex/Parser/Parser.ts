@@ -48,13 +48,13 @@ export default class Parser {
 
     parse(doc: Document): string {
         return this.parseBlocks(doc)
-            .map(({ block, mask, replace, parseTranslation }) => {
-                return this.parseString(block).replace(mask, (...params) => {
+            .map(({ block, mask, replace, parseTranslation }) =>
+                this.parseString(block).replace(mask, (...params) => {
                     const element = replace(...params);
                     if (parseTranslation) parseTranslation(element);
                     return this.adapter.render(element);
-                });
-            })
+                })
+            )
             .join("\n\n");
     }
 }
