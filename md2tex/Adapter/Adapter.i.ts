@@ -1,3 +1,4 @@
+import { Render } from "../Render/Render.i";
 import { Cantus } from "../Types/Cantus";
 import { GenericElement } from "../Types/GenericElement";
 import { Lesson, ParagraphLettrine, Rubric } from "../Types/paragraphs";
@@ -13,6 +14,7 @@ import {
 
 export interface Adapter {
     translation: boolean;
+    engine: Render;
 
     render(element: DayTitle): string;
     render(element: OfficeTitle): string;

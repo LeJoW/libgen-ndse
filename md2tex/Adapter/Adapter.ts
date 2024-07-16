@@ -12,6 +12,17 @@ import { Psalmus, Psalterium } from "../Types/Psalterium";
 import { Cantus } from "../Types/Cantus";
 import { Lesson, ParagraphLettrine, Rubric } from "../Types/paragraphs";
 import { TableOfContents } from "../Types/TableOfContents";
+import {
+    renderDayTitle,
+    renderLessonTitle,
+    renderOfficeTitle,
+    renderPsalmTitle,
+    renderTitle,
+} from "./titles";
+import { renderPsalmus, renderPsalterium } from "./psalterium";
+import { renderLesson, renderParLettrine, renderRubric } from "./paragraphs";
+import { renderCantus } from "./cantus";
+import { renderTableOfContents } from "./tableOfContents";
 
 export class Adapter implements AdapterInterface {
     translation: boolean = false;
@@ -78,155 +89,21 @@ export class Adapter implements AdapterInterface {
         }
     }
 
-    private renderDayTitle(
-        title: string,
-        dayClass: string | null,
-        short: string
-    ): string {
-        return this.engine.orphan("dayTitle", {
-            title,
-            dayClass: dayClass || "",
-            short,
-        });
-    }
+    private renderDayTitle = (() => renderDayTitle(this.engine))();
+    private renderOfficeTitle = (() => renderOfficeTitle(this.engine))();
+    private renderLessonTitle = (() => renderLessonTitle(this.engine))();
+    private renderPsalmTitle = (() => renderPsalmTitle(this.engine))();
+    private renderTitle = (() => renderTitle(this.engine))();
 
-    private renderOfficeTitle(
-        title: string,
-        anchor: string | null,
-        short: string
-    ): string {
-        return this.engine.concat([
-            anchor ? this.engine.orphan("anchor", { href: anchor }) : undefined,
-            this.engine.orphan("officeTitle", {
-                title,
-                short,
-            }),
-        ]);
-    }
+    private renderCantus = (() => renderCantus(this.engine))();
 
-    private renderLessonTitle(title: string, ref: string | null): string {
-        return this.engine.orphan("lessonTitle", {
-            title,
-            ref: ref || "",
-        });
-    }
+    private renderPsalmus = (() => renderPsalmus(this))();
+    private renderPsalterium = (() => renderPsalterium(this))();
 
-    private renderPsalterium(
-        intonation: Cantus | false,
-        psalms: Psalmus[]
-    ): string {
-        const beforePsalmBody: string[] = [];
-        let psalmBody;
-        if (intonation && psalms.length > 0) {
-            const firstPsalm = psalms[0];
-            beforePsalmBody.push(
-                this.engine.concat([
-                    firstPsalm.title
-                        ? this.renderPsalmTitle(firstPsalm.title)
-                        : undefined,
-                    firstPsalm.anchor
-                        ? this.engine.orphan("anchor", {
-                              href: firstPsalm.anchor,
-                          })
-                        : undefined,
-                ]),
-                this.render(intonation)
-            );
-            psalmBody = [
-                this.engine.container(
-                    "psalm",
-                    this.engine.join(firstPsalm.versi.slice(1))
-                ),
-                ...psalms.slice(1).map((psalm) => this.render(psalm)),
-            ];
-        } else {
-            psalmBody = psalms.map((psalm) => this.render(psalm));
-        }
+    private renderParLettrine = (() => renderParLettrine(this.engine))();
+    private renderRubric = (() => renderRubric(this.engine))();
+    private renderLesson = (() => renderLesson(this.engine))();
 
-        return this.engine.container(
-            "psalterium",
-            this.engine.join([
-                ...beforePsalmBody,
-                this.engine.container("psalmBody", this.engine.join(psalmBody)),
-            ])
-        );
-    }
-
-    private renderPsalmus(psalm: Psalmus): string {
-        return this.engine.join([
-            this.engine.concat([
-                psalm.title ? this.renderPsalmTitle(psalm.title) : undefined,
-                psalm.anchor
-                    ? this.engine.orphan("anchor", { href: psalm.anchor })
-                    : undefined,
-            ]),
-            this.render(new ParagraphLettrine(psalm.versi[0])),
-            this.engine.container(
-                "psalm",
-                this.engine.join(psalm.versi.slice(1))
-            ),
-        ]);
-    }
-
-    private renderPsalmTitle(title: string): string {
-        return this.engine.orphan("psalmTitle", { title });
-    }
-
-    private renderParLettrine(text: string): string {
-        return this.engine.container("paragraphLettrine", text.slice(1), {
-            initial: text[0] || "",
-        });
-    }
-
-    private renderCantus(file: string, anchor: string | null): string {
-        return this.engine.concat([
-            anchor ? this.engine.orphan("anchor", { href: anchor }) : undefined,
-            this.engine.orphan("cantus", { file }),
-        ]);
-    }
-
-    private renderRubric(text: string): string {
-        return this.engine.container("rubric", text);
-    }
-
-    private renderLesson(text: string): string {
-        return this.engine.container("lesson", this.renderParLettrine(text));
-    }
-
-    private renderTitle(title: string): string {
-        return this.engine.orphan("sectionTitle", { title });
-    }
-
-    private renderTableOfContents(
-        contents: TableOfContents["contents"]
-    ): string {
-        return this.engine.container(
-            "tableOfContents",
-            this.engine.join(
-                contents.map(({ day, entries }) =>
-                    this.engine.container(
-                        "tableSection",
-                        this.engine.join([
-                            day !== null
-                                ? this.engine.orphan("tableSectionTitle", {
-                                      day: day.shortTitle,
-                                  })
-                                : undefined,
-                            this.engine.container(
-                                "sectionEntries",
-                                this.engine.join(
-                                    entries.map(({ office, anchor }) =>
-                                        this.engine.orphan("sectionEntry", {
-                                            office: office.shortTitle,
-                                            anchor,
-                                        })
-                                    )
-                                )
-                            ),
-                        ])
-                    )
-                )
-            )
-        );
-    }
+    private renderTableOfContents = (() =>
+        renderTableOfContents(this.engine))();
 }
