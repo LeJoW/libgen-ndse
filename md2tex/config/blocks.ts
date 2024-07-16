@@ -114,6 +114,7 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
                         case "hymn":
                             cantus = new Hymnus(file);
                             gregoIndex.addHymnus(cantus);
+                            break;
                         case "resp":
                             cantus = new Responsorium(file);
                             gregoIndex.addResponsorium(cantus);
