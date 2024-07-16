@@ -55,6 +55,23 @@ export class Adapter implements AdapterInterface {
             nbsp: this.engine.symbol("nbsp"),
             parnumber: this.engine.orphan("forcebreak"),
         };
+
+        this.renderDayTitle = renderDayTitle(render);
+        this.renderOfficeTitle = renderOfficeTitle(render);
+        this.renderLessonTitle = renderLessonTitle(render);
+        this.renderPsalmTitle = renderPsalmTitle(render);
+        this.renderTitle = renderTitle(render);
+
+        this.renderCantus = renderCantus(render);
+        this.renderPsalmus = renderPsalmus(this);
+        this.renderPsalterium = renderPsalterium(this);
+
+        this.renderParLettrine = renderParLettrine(render);
+        this.renderRubric = renderRubric(render);
+        this.renderLesson = renderLesson(render);
+
+        this.renderTableOfContents = renderTableOfContents(render);
+        this.renderGregoIndex = renderGregoIndex(render);
     }
 
     render(element: GenericElement): string {
@@ -97,22 +114,20 @@ export class Adapter implements AdapterInterface {
         }
     }
 
-    private renderDayTitle = (() => renderDayTitle(this.engine))();
-    private renderOfficeTitle = (() => renderOfficeTitle(this.engine))();
-    private renderLessonTitle = (() => renderLessonTitle(this.engine))();
-    private renderPsalmTitle = (() => renderPsalmTitle(this.engine))();
-    private renderTitle = (() => renderTitle(this.engine))();
+    private renderDayTitle;
+    private renderOfficeTitle;
+    private renderLessonTitle;
+    private renderPsalmTitle;
+    private renderTitle;
 
-    private renderCantus = (() => renderCantus(this.engine))();
+    private renderCantus;
+    private renderPsalmus;
+    private renderPsalterium;
 
-    private renderPsalmus = (() => renderPsalmus(this))();
-    private renderPsalterium = (() => renderPsalterium(this))();
+    private renderParLettrine;
+    private renderRubric;
+    private renderLesson;
 
-    private renderParLettrine = (() => renderParLettrine(this.engine))();
-    private renderRubric = (() => renderRubric(this.engine))();
-    private renderLesson = (() => renderLesson(this.engine))();
-
-    private renderTableOfContents = (() =>
-        renderTableOfContents(this.engine))();
-    private renderGregoIndex = (() => renderGregoIndex(this.engine))();
+    private renderTableOfContents;
+    private renderGregoIndex;
 }
