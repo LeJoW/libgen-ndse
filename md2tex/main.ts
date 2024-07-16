@@ -34,7 +34,7 @@ rules.translater = translate;
 const parser = new Parser(rules, adapter);
 
 function parse(input: string, translation: boolean, output: string) {
-    parser.enableTranslation = translation;
+    adapter.translation = translation;
     readFile(input, { encoding: "utf-8" }, function (err, list: string) {
         const dir = dirname(input);
         const outputTex = list

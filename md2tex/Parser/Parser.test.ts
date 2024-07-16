@@ -38,7 +38,7 @@ title: Fancy title`);
 
 test("Translation", function () {
     const doc = new Document("# Fancy title $Titre fantaisiste$");
-    parser.enableTranslation = true;
+    adapter.translation = true;
 
     expect(JSON.stringify(parser.parseBlocks(doc))).toStrictEqual(
         JSON.stringify([

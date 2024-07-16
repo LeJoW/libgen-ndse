@@ -6,7 +6,6 @@ import { GenericElement } from "../Types/GenericElement.i";
 export default class Parser {
     private rules: Rules;
     private adapter: Adapter;
-    enableTranslation: boolean = false;
 
     constructor(rules: Rules, adapter: Adapter) {
         this.rules = rules;
@@ -48,7 +47,6 @@ export default class Parser {
     }
 
     parse(doc: Document): string {
-        this.adapter.translation = this.enableTranslation;
         return this.parseBlocks(doc)
             .map(({ block, mask, replace, parseTranslation }) => {
                 return this.parseString(block).replace(mask, (...params) => {
