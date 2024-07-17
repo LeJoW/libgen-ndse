@@ -1,7 +1,5 @@
 import { Syllabifier } from "./Syllabifier.i";
 import { tonType, tons } from "./tons";
-import { PsalmList } from "./PsalmList.i";
-import { PsalmCache } from "./PsalmCache.i";
 import { Adapter } from "../md2tex/Adapter/Adapter.i";
 
 type syllabSelection = { before: string[]; accent: string; after: string[] };
@@ -9,24 +7,15 @@ type syllabSelection = { before: string[]; accent: string; after: string[] };
 export class PsalmBuilder {
     syllabifier: Syllabifier;
     adapter: Adapter;
-    psalmList: PsalmList;
-    psalmCache: PsalmCache;
     symbols: { cross: string; star: string };
     styles: {
         italic: (text: string) => string;
         bold: (text: string) => string;
     };
 
-    constructor(
-        syllabifier: Syllabifier,
-        adapter: Adapter,
-        psalmList: PsalmList,
-        psalmCache: PsalmCache
-    ) {
+    constructor(syllabifier: Syllabifier, adapter: Adapter) {
         this.syllabifier = syllabifier;
         this.adapter = adapter;
-        this.psalmList = psalmList;
-        this.psalmCache = psalmCache;
         this.symbols = {
             cross: this.adapter.symbols.nbsp + this.adapter.symbols.cross,
             star: this.adapter.symbols.nbsp + this.adapter.symbols.star,
@@ -37,20 +26,7 @@ export class PsalmBuilder {
         };
     }
 
-    buildPsalm(psalmDivision: string, ton: string): string[] {
-        const cached = this.psalmCache.getPsalmBuild(psalmDivision, ton);
-        if (cached) {
-            return cached;
-        }
-        const psalm = this.setUpPsalm(
-            this.psalmList.getPsalm(psalmDivision).map(({ la }) => la),
-            ton
-        );
-        this.psalmCache.setPsalmBuild(psalmDivision, ton, psalm);
-        return psalm;
-    }
-
-    setUpPsalm(verses: string[][], ton: string): string[] {
+    buildPsalm(verses: string[][], ton: string): string[] {
         if (tons[ton] === undefined) {
             throw new Error(`The ton '${ton}' is not configured.`);
         }

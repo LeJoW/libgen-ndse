@@ -8,27 +8,25 @@ import { Rules } from "./Rules/Rules";
 import Parser from "./Parser/Parser";
 
 import { Command } from "commander";
-import { PsalmBuilder } from "../buildPsalm/PsalmBuilder";
-import { Syllabifier } from "../buildPsalm/Syllabifier";
-import { PsalmList } from "../buildPsalm/PsalmList";
-import { PsalmCache } from "../buildPsalm/PsalmCache";
-import { System } from "../buildPsalm/System";
 import { preprocess } from "./config/preprocess";
 import { translate } from "./config/translation";
 import { TexRender } from "./Render/TexRender";
 import { Adapter } from "./Adapter/Adapter";
+import { PsalmManager } from "./Adapter/PsalmManager/PsalmManager";
 
 const program = new Command();
-const system = new System();
 const tex = new TexRender();
 const adapter = new Adapter(tex);
-const psalmBuilder = new PsalmBuilder(
-    new Syllabifier("tex2pdf/hyphen/hyph_la_VA_all.dic"),
-    adapter,
-    new PsalmList("buildPsalm/psalms", system),
-    new PsalmCache("buildPsalm/cache", system)
+const psalmManager = new PsalmManager(
+    {
+        psalmListPath: "buildPsalm/psalms",
+        psalmCachePath: "buildPsalm/cache",
+        syllabifierDicPath: "tex2pdf/hyphen/hyph_la_VA_all.dic",
+    },
+    adapter
 );
-const rules = new Rules(blockConfig(psalmBuilder), strConfig(adapter));
+
+const rules = new Rules(blockConfig(psalmManager), strConfig(adapter));
 rules.preprocessor = preprocess;
 rules.translater = translate;
 const parser = new Parser(rules, adapter);

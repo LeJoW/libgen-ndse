@@ -1,10 +1,10 @@
-import { PsalmBuilder } from "../../buildPsalm/PsalmBuilder";
 import { Cantus } from "./Cantus";
 import { GenericElement } from "./GenericElement";
 
 export class Psalmus extends GenericElement {
+    ton: string | null;
     psalmDivision: string;
-    versi: string[];
+    versi: string[] = [];
     doxologie: boolean = true;
     mode: number | null = null;
     incipit: string | undefined = undefined;
@@ -12,14 +12,12 @@ export class Psalmus extends GenericElement {
     title: string | false = false;
     anchor: string | null = null;
 
-    constructor(
-        ton: string | null,
-        psalmDivision: string,
-        psalmBuilder: PsalmBuilder
-    ) {
+    translation: (string | undefined)[] | null = null;
+
+    constructor(ton: string | null, psalmDivision: string) {
         super(psalmDivision);
+        this.ton = ton;
         this.psalmDivision = psalmDivision;
-        this.versi = psalmBuilder.buildPsalm(psalmDivision, ton ?? "none");
         if (ton) {
             this.mode = parseInt(ton.replace(/^(\d+)/, "$1"));
         }

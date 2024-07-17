@@ -1,5 +1,4 @@
 import { BlockConfigType } from "../Rules/Rules.i";
-import { PsalmBuilder } from "../../buildPsalm/PsalmBuilder";
 import { TableOfContents } from "../Types/TableOfContents";
 import {
     DayTitle,
@@ -19,11 +18,12 @@ import { Canticum, Psalmus, Psalterium } from "../Types/Psalterium";
 import { GenericElement } from "../Types/GenericElement";
 import { GregoIndex } from "../Types/GregoIndex";
 import { incipits } from "./incipits";
+import { PsalmManager } from "../Adapter/PsalmManager/PsalmManager.i";
 
 const gregoIndex = new GregoIndex();
 const table = new TableOfContents();
 
-const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
+const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
     desc: [
         {
             test: /^(#+)\s+([\S\s]+?)\s*(?:<([\S\s]+?)>)?\s*(?:\{([\S\s]+?)\})?\s*$/i,
@@ -151,9 +151,9 @@ const blockConfig = (psBuilder: PsalmBuilder): BlockConfigType => ({
                             : Canticum;
                         const psalmus = new PsalmConstructor(
                             ton.length > 0 ? ton : null,
-                            psalm,
-                            psBuilder
+                            psalm
                         );
+                        psalmManager.setUpPsalm(psalmus);
                         psalmus.doxologie = isDoxologie;
                         psalmus.title =
                             title && title.length > 0 ? title : false;

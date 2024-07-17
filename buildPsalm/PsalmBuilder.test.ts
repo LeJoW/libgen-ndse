@@ -1,8 +1,5 @@
 import { PsalmBuilder } from "./PsalmBuilder";
 import { Syllabifier } from "./Syllabifier";
-import { PsalmList } from "./PsalmList";
-import { System } from "./System";
-import { PsalmCache } from "./PsalmCache";
 import { TexRender } from "../md2tex/Render/TexRender";
 import { Adapter } from "../md2tex/Adapter/Adapter";
 
@@ -13,12 +10,9 @@ adapter.symbols.cross = "+";
 adapter.symbols.star = "*";
 adapter.symbols.nbsp = " ";
 
-const sys = new System();
 const syllabifier = new Syllabifier("tex2pdf/hyphen/hyph_la_VA_all.dic");
-const psalmList = new PsalmList("buildPsalm/psalms", sys);
-const psalmCache = new PsalmCache("buildPsalm/cache", sys);
 
-const ps = new PsalmBuilder(syllabifier, adapter, psalmList, psalmCache);
+const ps = new PsalmBuilder(syllabifier, adapter);
 
 test("Accent detection", function () {
     expect(ps.getLastAccent(["sem", "per"])).toStrictEqual({
@@ -130,7 +124,26 @@ test("verse setup", function () {
 });
 
 test("all", function () {
-    expect(ps.buildPsalm("test", "1f")).toStrictEqual([
+    expect(
+        ps.buildPsalm(
+            [
+                [
+                    "Legem pone mihi, Dómine, viam iustificatiónum tuárum:",
+                    "et exquíram eam semper.",
+                ],
+                [
+                    "Da mihi intelléctum, et scrutábor legem tuam:",
+                    "et custódiam illam in toto corde meo.",
+                ],
+                ["Glória Patri, et Fílio,", "et Spirítui Sancto."],
+                [
+                    "Sicut erat in princípio, et nunc, et semper,",
+                    "et in sǽcula sæculórum. Amen.",
+                ],
+            ],
+            "1f"
+        )
+    ).toStrictEqual([
         "Legem pone mihi, Dómine, viam iustificati[ó]num tu[á]rum: * et exquíram (eam) [sem]per.",
         "Da mihi intelléctum, et scrutábor [le]gem [tu]am: * et custódiam illam in toto (corde) [me]o.",
         "Glória [Pa]tri, et [Fí]lio, * et Spirí(tui) [Sanc]to.",
