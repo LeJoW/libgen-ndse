@@ -46,6 +46,40 @@ export const renderPsalterium = (adapter: Adapter) =>
         );
     };
 
+export const renderPsalteriumTRAD = (adapter: Adapter) =>
+    function (intonation: Cantus | false, psalms: Psalmus[]): string {
+        return adapter.engine.join(
+            psalms.map(function (psalm) {
+                if (!psalm.translation) {
+                    return renderPsalmus(adapter)(psalm);
+                }
+                return adapter.engine.join([
+                    psalm.title
+                        ? renderPsalmTitle(adapter.engine)(psalm.title)
+                        : undefined,
+                    adapter.engine.container(
+                        "psalmTrad",
+                        adapter.engine.join(
+                            psalm.versi.map(function (verse, index) {
+                                return adapter.engine.concat([
+                                    adapter.engine.orphan("psalmLA", {
+                                        value: verse,
+                                    }),
+                                    adapter.engine.orphan("psalmFR", {
+                                        value:
+                                            psalm.translation![index] ??
+                                            undefined,
+                                    }),
+                                    adapter.engine.orphan("psalmVerseEnd"),
+                                ]);
+                            })
+                        )
+                    ),
+                ]);
+            })
+        );
+    };
+
 export const renderPsalmus = (adapter: Adapter) =>
     function (psalm: Psalmus): string {
         return adapter.engine.join([

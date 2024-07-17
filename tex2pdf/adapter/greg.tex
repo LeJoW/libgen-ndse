@@ -42,3 +42,15 @@
 		}{
 	\end{colonnes}
 }
+
+\newenvironment{psalmTrad}{
+	\setlength{\columnseprule}{0.4pt}
+	\twosided[c]
+	\begin{paracol}{2}
+		}{
+	\end{paracol}
+}
+
+\newcommand{\psalmLA}[1]{{#1}\switchcolumn}
+\newcommand{\psalmFR}[1]{{#1}\switchcolumn}
+\newcommand{\psalmVerseEnd}{\par\switchcolumn*}

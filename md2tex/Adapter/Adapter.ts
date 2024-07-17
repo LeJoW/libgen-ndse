@@ -19,7 +19,11 @@ import {
     renderPsalmTitle,
     renderTitle,
 } from "./render/titles";
-import { renderPsalmus, renderPsalterium } from "./render/psalterium";
+import {
+    renderPsalmus,
+    renderPsalterium,
+    renderPsalteriumTRAD,
+} from "./render/psalterium";
 import {
     renderLesson,
     renderParLettrine,
@@ -65,6 +69,7 @@ export class Adapter implements AdapterInterface {
         this.renderCantus = renderCantus(render);
         this.renderPsalmus = renderPsalmus(this);
         this.renderPsalterium = renderPsalterium(this);
+        this.renderPsalteriumTRAD = renderPsalteriumTRAD(this);
 
         this.renderParLettrine = renderParLettrine(render);
         this.renderRubric = renderRubric(render);
@@ -94,7 +99,9 @@ export class Adapter implements AdapterInterface {
         } else if (element instanceof Title) {
             return this.renderTitle(element.title);
         } else if (element instanceof Psalterium) {
-            return this.renderPsalterium(element.intonation, element.psalms);
+            return this.translation
+                ? this.renderPsalteriumTRAD(element.intonation, element.psalms)
+                : this.renderPsalterium(element.intonation, element.psalms);
         } else if (element instanceof Psalmus) {
             return this.renderPsalmus(element);
         } else if (element instanceof ParagraphLettrine) {
@@ -123,6 +130,7 @@ export class Adapter implements AdapterInterface {
     private renderCantus;
     private renderPsalmus;
     private renderPsalterium;
+    private renderPsalteriumTRAD;
 
     private renderParLettrine;
     private renderRubric;
