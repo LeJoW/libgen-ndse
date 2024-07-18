@@ -1,11 +1,9 @@
-import { Cantus } from "../../Types/Cantus";
 import { ParagraphLettrine } from "../../Types/paragraphs";
-import { Psalmus } from "../../Types/Psalterium";
+import { Psalmus, Psalterium } from "../../Types/Psalterium";
 import { Adapter } from "../Adapter.i";
-import { renderPsalmTitle } from "./titles";
 
 export const renderPsalterium = (adapter: Adapter) =>
-    function (intonation: Cantus | false, psalms: Psalmus[]): string {
+    function ({ intonation, psalms }: Psalterium): string {
         const beforePsalmBody: string[] = [];
         let psalmBody;
         if (intonation && psalms.length > 0) {
@@ -13,7 +11,7 @@ export const renderPsalterium = (adapter: Adapter) =>
             beforePsalmBody.push(
                 adapter.engine.concat([
                     firstPsalm.title
-                        ? renderPsalmTitle(adapter.engine)(firstPsalm.title)
+                        ? adapter.render(firstPsalm.title)
                         : undefined,
                     firstPsalm.anchor
                         ? adapter.engine.orphan("anchor", {
@@ -47,28 +45,38 @@ export const renderPsalterium = (adapter: Adapter) =>
     };
 
 export const renderPsalteriumTRAD = (adapter: Adapter) =>
-    function (intonation: Cantus | false, psalms: Psalmus[]): string {
+    function ({ psalms }: Psalterium): string {
         return adapter.engine.join(
             psalms.map(function (psalm) {
                 if (!psalm.translation) {
                     return renderPsalmus(adapter)(psalm);
                 }
                 return adapter.engine.join([
-                    psalm.title
-                        ? renderPsalmTitle(adapter.engine)(psalm.title)
+                    psalm.title ? adapter.render(psalm.title) : undefined,
+                    psalm.anchor
+                        ? adapter.engine.orphan("anchor", {
+                              href: psalm.anchor,
+                          })
                         : undefined,
                     adapter.engine.container(
                         "psalmTrad",
                         adapter.engine.join(
                             psalm.versi.map(function (verse, index) {
                                 return adapter.engine.concat([
-                                    adapter.engine.orphan("psalmLA", {
-                                        value: verse,
-                                    }),
                                     adapter.engine.orphan("psalmFR", {
                                         value:
                                             psalm.translation![index] ??
                                             undefined,
+                                    }),
+                                    adapter.engine.orphan("psalmLA", {
+                                        value:
+                                            index === 0
+                                                ? adapter.render(
+                                                      new ParagraphLettrine(
+                                                          verse
+                                                      )
+                                                  )
+                                                : verse,
                                     }),
                                     adapter.engine.orphan("psalmVerseEnd"),
                                 ]);
@@ -81,20 +89,18 @@ export const renderPsalteriumTRAD = (adapter: Adapter) =>
     };
 
 export const renderPsalmus = (adapter: Adapter) =>
-    function (psalm: Psalmus): string {
+    function ({ title, anchor, versi }: Psalmus): string {
         return adapter.engine.join([
             adapter.engine.concat([
-                psalm.title
-                    ? renderPsalmTitle(adapter.engine)(psalm.title)
-                    : undefined,
-                psalm.anchor
-                    ? adapter.engine.orphan("anchor", { href: psalm.anchor })
+                title ? adapter.render(title) : undefined,
+                anchor
+                    ? adapter.engine.orphan("anchor", { href: anchor })
                     : undefined,
             ]),
-            adapter.render(new ParagraphLettrine(psalm.versi[0])),
+            adapter.render(new ParagraphLettrine(versi[0])),
             adapter.engine.container(
                 "psalm",
-                adapter.engine.join(psalm.versi.slice(1))
+                adapter.engine.join(versi.slice(1))
             ),
         ]);
     };

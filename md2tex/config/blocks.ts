@@ -156,7 +156,9 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                         psalmManager.setUpPsalm(psalmus);
                         psalmus.doxologie = isDoxologie;
                         psalmus.title =
-                            title && title.length > 0 ? title : false;
+                            title && title.length > 0
+                                ? new PsalmTitle(title)
+                                : false;
                         psalmus.incipit = incipits[psalm] ?? undefined;
                         psalmus instanceof Canticum
                             ? gregoIndex.addCanticum(psalmus)

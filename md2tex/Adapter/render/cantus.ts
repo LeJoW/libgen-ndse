@@ -1,9 +1,10 @@
-import { Render } from "../../Render/Render.i";
+import { Cantus } from "../../Types/Cantus";
+import { Adapter } from "../Adapter.i";
 
-export const renderCantus = (engine: Render) =>
-    function (file: string, anchor: string | null): string {
+export const renderCantus = ({ engine }: Adapter) =>
+    function ({ scorePath, anchor }: Cantus): string {
         return engine.concat([
             anchor ? engine.orphan("anchor", { href: anchor }) : undefined,
-            engine.orphan("cantus", { file }),
+            engine.orphan("cantus", { scorePath }),
         ]);
     };

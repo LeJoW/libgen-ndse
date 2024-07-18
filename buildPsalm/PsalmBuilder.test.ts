@@ -4,8 +4,8 @@ import { TexRender } from "../md2tex/Render/TexRender";
 import { Adapter } from "../md2tex/Adapter/Adapter";
 
 const adapter = new Adapter(new TexRender());
-adapter.chars.italic = (text: string) => `(${text})`;
-adapter.chars.bold = (text: string) => `[${text}]`;
+adapter.textStyles.italic = (text: string) => `(${text})`;
+adapter.textStyles.bold = (text: string) => `[${text}]`;
 adapter.symbols.cross = "+";
 adapter.symbols.star = "*";
 adapter.symbols.nbsp = " ";

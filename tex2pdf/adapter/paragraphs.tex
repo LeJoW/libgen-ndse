@@ -11,3 +11,16 @@
 \newenvironment{lesson}{}{}
 
 \newcommand{\forcebreak}{\newline\indent}
+
+\newcommand{\colLA}[1]{#1\switchcolumn*}
+\newcommand{\colFR}[1]{#1\switchcolumn}
+\newenvironment{tradColonnes}{
+	\addvspace{15pt}
+	\begin{paracol}{2}
+		\vspace*{2pt}
+		\tolerance=9999
+		\colFR{\vspace*{-15pt}}
+		\colLA{\vspace*{-15pt}}
+		}{
+	\end{paracol}
+}

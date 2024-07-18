@@ -24,8 +24,8 @@ const strConfig = (adapter: Adapter): StringConfigType => [
                 return all;
             }
             return /^>/.test(ctx)
-                ? adapter.chars.roman(text)
-                : adapter.chars.italic(text);
+                ? adapter.textStyles.roman(text)
+                : adapter.textStyles.italic(text);
         },
     },
     {

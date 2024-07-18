@@ -1,5 +1,6 @@
 import { Cantus } from "./Cantus";
 import { GenericElement } from "./GenericElement";
+import { PsalmTitle } from "./titles";
 
 export class Psalmus extends GenericElement {
     ton: string | null;
@@ -9,7 +10,7 @@ export class Psalmus extends GenericElement {
     mode: number | null = null;
     incipit: string | undefined = undefined;
 
-    title: string | false = false;
+    title: PsalmTitle | false = false;
     anchor: string | null = null;
 
     translation: (string | undefined)[] | null = null;

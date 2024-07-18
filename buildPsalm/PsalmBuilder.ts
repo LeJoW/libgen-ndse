@@ -21,8 +21,8 @@ export class PsalmBuilder {
             star: this.adapter.symbols.nbsp + this.adapter.symbols.star,
         };
         this.styles = {
-            italic: this.adapter.chars.italic,
-            bold: this.adapter.chars.bold,
+            italic: this.adapter.textStyles.italic,
+            bold: this.adapter.textStyles.bold,
         };
     }
 

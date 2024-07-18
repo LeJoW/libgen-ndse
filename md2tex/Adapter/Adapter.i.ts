@@ -7,7 +7,7 @@ export interface Adapter {
 
     render(element: GenericElement): string;
 
-    chars: {
+    textStyles: {
         italic(text: string): string;
         bold(text: string): string;
         roman(text: string): string;

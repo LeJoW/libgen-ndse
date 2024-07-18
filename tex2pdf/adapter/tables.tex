@@ -1,7 +1,9 @@
 \newcommand{\anchor}[1]{\label{#1}}
 
 \newcommand{\tableTitle}[1]{
-	{\centering\bf\garamond #1\par}
+	\begin{center}
+		\bf\garamond #1
+	\end{center}
 }
 
 \newenvironment{tableOfContents}{
@@ -23,24 +25,26 @@
 \newenvironment{psIndex}{
 	\thispagestyle{empty}
 	\tableTitle{Psalmi}{}
-	\begin{itemize}[left=0pt, leftmargin=0pt, labelwidth=*, labelsep=1cm, itemindent=*]
+	\begin{itemize}[left=0pt, leftmargin=0pt, labelwidth=1cm, labelsep=1cm, itemindent=2cm]
 		}{
 	\end{itemize}
-	\addvspace{5mm}
 }
 
 \newcommand{\psEntry}[3]{\small\item[#1] #2. #3.}
 \newcommand{\psMode}[1]{({\sc\garamond #1})}
 
+\setlength\columnsep{5mm}
+\setlength\columnseprule{0.4pt}
+
 \newenvironment{gregIndex}{
-	\begin{colonnes}
+	\begin{multicols}{2}
 		}{
-	\end{colonnes}
+	\end{multicols}
 }
 \newenvironment{gregList}{
-	\begin{itemize}[leftmargin=7.5mm, labelsep=2mm, itemindent=-3mm, rightmargin=4mm]
+	\begin{itemize}[leftmargin=3mm, rightmargin=3mm]
 		}{
 	\end{itemize}
 }
 
-\newcommand{\gregEntry}[3]{\small\item[#1] #2\dotfill\pageref{#3}\hspace{-4mm}}
+\newcommand{\gregEntry}[3]{\small\item[#1] #2\dotfill\pageref{#3}\hspace{-3mm}}

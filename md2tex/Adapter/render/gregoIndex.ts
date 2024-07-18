@@ -1,8 +1,9 @@
 import { Render } from "../../Render/Render.i";
 import { GregoIndex } from "../../Types/GregoIndex";
 import { Psalmus } from "../../Types/Psalterium";
+import { Adapter } from "../Adapter.i";
 
-export const renderGregoIndex = (engine: Render) =>
+export const renderGregoIndex = ({ engine }: Adapter) =>
     function (grergoIndex: GregoIndex): string {
         const psalmi = grergoIndex.getPsalmos();
         const cantica = grergoIndex.getCanticos();

@@ -1,8 +1,8 @@
-import { Render } from "../../Render/Render.i";
 import { TableOfContents } from "../../Types/TableOfContents";
+import { Adapter } from "../Adapter.i";
 
-export const renderTableOfContents = (engine: Render) =>
-    function (contents: TableOfContents["contents"]): string {
+export const renderTableOfContents = ({ engine }: Adapter) =>
+    function ({ contents }: TableOfContents): string {
         return engine.container(
             "tableOfContents",
             engine.join(

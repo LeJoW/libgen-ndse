@@ -6,10 +6,10 @@ import { Adapter } from "../Adapter/Adapter";
 import { TexRender } from "../Render/TexRender";
 
 export const adapter = new Adapter(new TexRender());
-adapter.chars.bold = function (text) {
+adapter.textStyles.bold = function (text) {
     return `[${text}]`;
 };
-adapter.chars.italic = function (text) {
+adapter.textStyles.italic = function (text) {
     return `(${text})`;
 };
 adapter.symbols.cross = " +";
