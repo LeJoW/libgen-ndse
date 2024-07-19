@@ -61,27 +61,33 @@ export const renderPsalteriumTRAD = (adapter: Adapter) =>
                     adapter.engine.container(
                         "psalmTrad",
                         adapter.engine.join(
-                            psalm.versi.map(function (verse, index) {
-                                return adapter.engine.concat([
-                                    adapter.engine.orphan("psalmFR", {
-                                        value:
-                                            psalm.translation![index] ??
-                                            undefined,
-                                    }),
-                                    adapter.engine.orphan("psalmLA", {
-                                        value:
-                                            index === 0
-                                                ? adapter.render(
-                                                      new ParagraphLettrine(
-                                                          verse
+                            psalm.versi
+                                .slice(0, -2)
+                                .map(function (verse, index) {
+                                    return adapter.engine.concat([
+                                        adapter.engine.orphan("psalmFR", {
+                                            value:
+                                                psalm.translation![index] ??
+                                                undefined,
+                                        }),
+                                        adapter.engine.orphan("psalmLA", {
+                                            value:
+                                                index === 0
+                                                    ? adapter.render(
+                                                          new ParagraphLettrine(
+                                                              verse
+                                                          )
                                                       )
-                                                  )
-                                                : verse,
-                                    }),
-                                    adapter.engine.orphan("psalmVerseEnd"),
-                                ]);
-                            })
+                                                    : verse,
+                                        }),
+                                    ]);
+                                })
                         )
+                    ),
+                    ...(psalm.doxologie ? psalm.versi.slice(-2) : []).map(
+                        function (verse): string {
+                            return verse;
+                        }
                     ),
                 ]);
             })

@@ -13,15 +13,35 @@ export const renderDayTitle = ({ engine }: Adapter) =>
         return printDayTitle(engine, title, dayClass, shortTitle);
     };
 
+export const renderDayTitleTRAD = ({ engine }: Adapter) =>
+    function ({ title, dayClass, shortTitle, translation }: DayTitle): string {
+        if (translation) {
+            return printDayTitle(
+                engine,
+                translation.title,
+                translation.dayClass,
+                translation.shortTitle
+            );
+        }
+        return printDayTitle(engine, title, dayClass, shortTitle);
+    };
+
 export const renderOfficeTitle = ({ engine }: Adapter) =>
     function ({ title, anchor, shortTitle }: OfficeTitle): string {
-        return engine.concat([
-            anchor ? engine.orphan("anchor", { href: anchor }) : undefined,
-            engine.orphan("officeTitle", {
-                title,
-                short: shortTitle,
-            }),
-        ]);
+        return printOfficeTitle(engine, title, anchor, shortTitle);
+    };
+
+export const renderOfficeTitleTRAD = ({ engine }: Adapter) =>
+    function ({ title, anchor, shortTitle, translation }: OfficeTitle): string {
+        if (translation) {
+            return printOfficeTitle(
+                engine,
+                translation.title,
+                anchor,
+                translation.shortTitle
+            );
+        }
+        return printOfficeTitle(engine, title, anchor, shortTitle);
     };
 
 export const renderLessonTitle = ({ engine }: Adapter) =>
@@ -53,4 +73,19 @@ function printDayTitle(
         dayClass: dayClass || "",
         short,
     });
+}
+
+function printOfficeTitle(
+    engine: Render,
+    title: string,
+    anchor: string | null,
+    shortTitle: string
+): string {
+    return engine.concat([
+        anchor ? engine.orphan("anchor", { href: anchor }) : undefined,
+        engine.orphan("officeTitle", {
+            title,
+            short: shortTitle,
+        }),
+    ]);
 }

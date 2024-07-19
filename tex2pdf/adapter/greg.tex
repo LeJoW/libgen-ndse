@@ -1,5 +1,8 @@
 \usepackage{pdfpages}
 \usepackage{enumitem}
+\usepackage{textpos}
+\usepackage{tikz}
+\usepackage{color}
 
 \newcommand*{\pdfnumberofpages}[1]{%
 	\directlua{%
@@ -23,11 +26,17 @@
 		\setlength{\parskip}{4pt}
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{
 			\stepcounter{gabcCount}
-			\includegraphics[page=\thegabcCount,width=1\linewidth]{\pdfFile}
+			\includegraphics[page=\thegabcCount]{\pdfFile}
 			\par
 		}
 	}
 	\addvspace{4mm}
+}
+
+\textblockcolour{white}
+\newcommand{\cantusTRAD}[2]{
+	\begin{textblock*}{3.5cm}(6.7cm, 0pt)#2\end{textblock*}
+	\cantus{#1}
 }
 
 \newenvironment{psalterium}{}{}

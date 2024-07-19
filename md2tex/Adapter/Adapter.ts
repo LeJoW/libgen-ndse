@@ -1,7 +1,7 @@
 import { GenericElement } from "../Types/GenericElement";
 import { Adapter as AdapterInterface } from "./Adapter.i";
 import { Render } from "../Render/Render.i";
-import { renderers } from "./renderers";
+import { renderers, renderersTRAD } from "./renderers";
 
 export class Adapter implements AdapterInterface {
     translation: boolean = false;
@@ -19,11 +19,27 @@ export class Adapter implements AdapterInterface {
         roman: (text: string) => this.engine.orphan("roman", { value: text }),
     };
     private renderers: { [name: string]: (element: GenericElement) => string };
+    private renderersTRAD: Adapter["renderers"];
 
     constructor(engine: Render) {
         this.engine = engine;
         this.symbols = this.initializeSymbols();
         this.renderers = this.initializeRenderers();
+        this.renderersTRAD = this.initializeRenderersTRAD();
+    }
+
+    render(element: GenericElement): string {
+        const renderFunction = this.translation
+            ? this.getRenderFunctionTRAD(element)
+            : this.getRenderFunction(element);
+        try {
+            return renderFunction(element);
+        } catch (error) {
+            if (error instanceof Error) {
+                return this.renderError(`Error : ${error.message}`);
+            }
+            return this.renderError(`Unknown error : ${element.content}`);
+        }
     }
 
     private initializeSymbols() {
@@ -44,9 +60,12 @@ export class Adapter implements AdapterInterface {
         }, {} as { [name: string]: (element: any) => string });
     }
 
-    render(element: GenericElement): string {
-        const renderFunction = this.getRenderFunction(element);
-        return renderFunction(element);
+    private initializeRenderersTRAD() {
+        return renderersTRAD.reduce((acc, wrapper) => {
+            const rendererName = wrapper.name.slice(6, -4);
+            acc[rendererName] = wrapper(this);
+            return acc;
+        }, {} as { [name: string]: (element: any) => string });
     }
 
     private getRenderFunction(element: GenericElement) {
@@ -54,7 +73,16 @@ export class Adapter implements AdapterInterface {
         return renderFunction ?? this.defaultRender;
     }
 
+    private getRenderFunctionTRAD(element: GenericElement) {
+        const renderFunction = this.renderersTRAD[element.constructor.name];
+        return renderFunction ?? this.getRenderFunction(element);
+    }
+
     private defaultRender(element: GenericElement) {
         return element.content;
+    }
+
+    private renderError(msg: string) {
+        return this.engine.orphan("adapterError", { msg });
     }
 }

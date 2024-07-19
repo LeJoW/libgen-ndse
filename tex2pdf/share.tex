@@ -1,11 +1,18 @@
-\usepackage[french]{babel}
-\babelprovide[transforms = punctuation.space]{french}
+\usepackage[french, main=latin]{babel}
+\babelprovide[transforms = letters.noj]{latin}
 \usepackage[utf8]{inputenc}
 \usepackage[urw-garamond]{mathdesign}
 \usepackage[T1]{fontenc}
 \usepackage{fontspec}
 \usepackage{newunicodechar}
+\usepackage{wrapfig}
 
+\babelprehyphenation{latin}{ [A-Za-z0-9] [!?:;] }
+{ {},         % Keep the letter/digit
+	{ insert, penalty = 10000 },                 % Insert a penalty...
+	{ insert, spacefactor= .8 .3 .8, data = 1 }, % ... and a space
+	{}          % Keep the punctuation 
+}
 
 \setmainfont{PlantinStd-Light}[
 	Ligatures=Common,

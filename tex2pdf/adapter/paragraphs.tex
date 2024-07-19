@@ -1,3 +1,5 @@
+\newcommand{\frenchpar}[1]{\begin{otherlanguage*}{french}#1\end{otherlanguage*}}
+
 \newenvironment{paragraphStd}{}{}
 
 \newenvironment{paragraphLettrine}[1]{\initial{#1}}{\par}
@@ -13,7 +15,7 @@
 \newcommand{\forcebreak}{\newline\indent}
 
 \newcommand{\colLA}[1]{#1\switchcolumn*}
-\newcommand{\colFR}[1]{#1\switchcolumn}
+\newcommand{\colFR}[1]{\frenchpar{#1}\switchcolumn}
 \newenvironment{tradColonnes}{
 	\addvspace{15pt}
 	\begin{paracol}{2}

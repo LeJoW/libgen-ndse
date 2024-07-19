@@ -62,17 +62,28 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
             },
             saveTranslation: function (
                 titreElement: GenericElement,
-                trad: string
+                trad: string,
+                mask: RegExp
             ) {
-                if (titreElement instanceof DayTitle) {
-                    const matches = trad.split("|");
-                    if (matches.length === 3) {
-                        titreElement.setTranslation({
-                            title: matches[0],
-                            dayClass: matches[2],
-                            short: matches[1],
-                        });
-                    }
+                trad = `########### ${trad}`;
+                if (!mask.test(trad)) {
+                    return;
+                }
+                const [, , title, summary, subTitle] = trad.match(
+                    mask
+                ) as string[];
+                if (titreElement instanceof DayTitle && mask.test(trad)) {
+                    titreElement.setTranslation({
+                        title,
+                        dayClass: subTitle,
+                        shortTitle: summary,
+                    });
+                } else if (titreElement instanceof OfficeTitle) {
+                    titreElement.setTranslation({
+                        title,
+                        shortTitle:
+                            summary && summary.length > 0 ? summary : title,
+                    });
                 }
             },
         },

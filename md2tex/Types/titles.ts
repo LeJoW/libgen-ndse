@@ -13,7 +13,7 @@ export class DayTitle extends Title {
     shortTitle: string;
     dayClass: string | null = null;
     translation:
-        | { title: string; dayClass: string; short: string }
+        | { title: string; dayClass: string; shortTitle: string }
         | false = false;
 
     constructor(title: string) {
@@ -25,6 +25,7 @@ export class DayTitle extends Title {
 export class OfficeTitle extends Title {
     shortTitle: string;
     anchor: string | null = null;
+    translation: { title: string; shortTitle: string } | false = false;
 
     constructor(title: string) {
         super(title);

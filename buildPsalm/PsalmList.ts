@@ -9,15 +9,12 @@ export class PsalmList implements PsalmListInterface {
     doxologie = [
         {
             la: ["Glória Patri, et Fílio,", "et Spirítui Sancto."],
-            fr: "Gloire au Père, et au Fils, et au Saint-Esprit.",
         },
         {
             la: [
                 "Sicut erat in princípio, et nunc, et semper,",
                 "et in sǽcula sæculórum. Amen.",
             ],
-            fr:
-                "Comme il était au commencement, maintenant et toujours, et dans les siècles des siècles. Ainsi soit-il.",
         },
     ];
 

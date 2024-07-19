@@ -15,7 +15,7 @@ export type parser = {
     storeTranslation?: (
         element: GenericElement,
         translation: string,
-        mask?: RegExp
+        mask: RegExp
     ) => void;
 };
 type converter = { mask: RegExp; replace: replaceCallback };
