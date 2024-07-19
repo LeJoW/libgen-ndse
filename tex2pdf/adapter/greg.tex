@@ -35,8 +35,12 @@
 
 \textblockcolour{white}
 \newcommand{\cantusTRAD}[2]{
-	\begin{textblock*}{3.5cm}(6.7cm, 0pt)#2\end{textblock*}
-	\cantus{#1}
+	\begin{paracol}{2}
+		\switchcolumn
+		#2
+		\switchcolumn
+		\cantus{#1}
+	\end{paracol}
 }
 
 \newenvironment{psalterium}{}{}
