@@ -38,7 +38,10 @@ export class PsalmManager implements PsalmManagerInterface {
     setUpPsalm(psalm: Psalmus): void {
         const rawPsalm = this.psalmList.getPsalm(psalm.psalmDivision);
         psalm.versi = this.getLatinVersesOf(psalm, rawPsalm);
-        psalm.translation = this.getFrenchVersesOf(rawPsalm);
+        const frVersi = this.getFrenchVersesOf(rawPsalm);
+        if (frVersi.join("").trim().length > 0) {
+            psalm.setVersorumTranslation(this.getFrenchVersesOf(rawPsalm));
+        }
     }
 
     private getLatinVersesOf(

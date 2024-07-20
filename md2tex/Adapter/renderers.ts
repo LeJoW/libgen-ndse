@@ -2,6 +2,7 @@ import {
     renderDayTitle,
     renderDayTitleTRAD,
     renderLessonTitle,
+    renderLessonTitleTRAD,
     renderOfficeTitle,
     renderOfficeTitleTRAD,
     renderPsalmTitle,
@@ -9,6 +10,7 @@ import {
 } from "./render/titles";
 import {
     renderPsalmus,
+    renderPsalmusTRAD,
     renderPsalterium,
     renderPsalteriumTRAD,
 } from "./render/psalterium";
@@ -16,6 +18,7 @@ import {
     renderLesson,
     renderParagraphLettrine,
     renderRubric,
+    renderRubricTRAD,
 } from "./render/paragraphs";
 import { renderCantus, renderCantusTRAD } from "./render/cantus";
 import {
@@ -58,10 +61,14 @@ export const renderers = [
 export const renderersTRAD = [
     renderDayTitleTRAD,
     renderOfficeTitleTRAD,
+    renderLessonTitleTRAD,
 
     renderCantusTRAD,
 
     renderPsalteriumTRAD,
+    renderPsalmusTRAD,
+
+    renderRubricTRAD,
 
     renderTableOfContentsTRAD,
 ];

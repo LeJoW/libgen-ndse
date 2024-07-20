@@ -14,16 +14,17 @@ export const renderDayTitle = ({ engine }: Adapter) =>
     };
 
 export const renderDayTitleTRAD = ({ engine }: Adapter) =>
-    function ({ title, dayClass, shortTitle, translation }: DayTitle): string {
-        if (translation) {
-            return printDayTitle(
-                engine,
-                translation.title,
-                translation.dayClass,
-                translation.shortTitle
-            );
-        }
-        return printDayTitle(engine, title, dayClass, shortTitle);
+    function ({
+        translation,
+    }: {
+        translation: Exclude<DayTitle["translation"], false>;
+    }): string {
+        return printDayTitle(
+            engine,
+            translation.title,
+            translation.dayClass,
+            translation.shortTitle
+        );
     };
 
 export const renderOfficeTitle = ({ engine }: Adapter) =>
@@ -32,22 +33,32 @@ export const renderOfficeTitle = ({ engine }: Adapter) =>
     };
 
 export const renderOfficeTitleTRAD = ({ engine }: Adapter) =>
-    function ({ title, anchor, shortTitle, translation }: OfficeTitle): string {
-        if (translation) {
-            return printOfficeTitle(
-                engine,
-                translation.title,
-                anchor,
-                translation.shortTitle
-            );
-        }
-        return printOfficeTitle(engine, title, anchor, shortTitle);
+    function ({
+        anchor,
+        translation,
+    }: Omit<OfficeTitle, "translation"> & {
+        translation: Exclude<OfficeTitle["translation"], false>;
+    }): string {
+        return printOfficeTitle(
+            engine,
+            translation.title,
+            anchor,
+            translation.shortTitle
+        );
     };
 
 export const renderLessonTitle = ({ engine }: Adapter) =>
     function ({ title, addendum }: LessonTitle): string {
         return engine.orphan("lessonTitle", {
             title,
+            ref: addendum ?? "",
+        });
+    };
+
+export const renderLessonTitleTRAD = ({ engine }: Adapter) =>
+    function ({ addendum, translation }: LessonTitle): string {
+        return engine.orphan("lessonTitle", {
+            translation,
             ref: addendum ?? "",
         });
     };

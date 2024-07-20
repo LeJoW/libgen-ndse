@@ -1,7 +1,10 @@
 import { Document } from "../Document/Document.i";
 import { GenericElement } from "../Types/GenericElement.i";
 
-type matchCallback = (mask: string, ...input: string[]) => GenericElement;
+type matchCallback = (
+    mask: string,
+    ...input: string[]
+) => Required<GenericElement>;
 type replaceCallback = (mask: string, ...input: string[]) => string;
 
 export type translatedBlock = {
@@ -13,7 +16,7 @@ export type parser = {
     mask: RegExp;
     replace: matchCallback;
     storeTranslation?: (
-        element: GenericElement,
+        element: ReturnType<parser["replace"]>,
         translation: string,
         mask: RegExp
     ) => void;

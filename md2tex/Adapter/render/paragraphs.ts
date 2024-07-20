@@ -13,6 +13,11 @@ export const renderRubric = ({ engine }: Adapter) =>
         return engine.container("rubric", text);
     };
 
+export const renderRubricTRAD = ({ engine }: Adapter) =>
+    function ({ translation }: Rubric): string {
+        return engine.container("rubric", translation);
+    };
+
 export const renderLesson = (adapter: Adapter) =>
     function ({ text }: Lesson): string {
         return adapter.engine.container(

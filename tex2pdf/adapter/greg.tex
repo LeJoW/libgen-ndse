@@ -1,8 +1,7 @@
 \usepackage{pdfpages}
 \usepackage{enumitem}
-\usepackage{textpos}
-\usepackage{tikz}
-\usepackage{color}
+\usepackage{mdframed}
+\usepackage{xcolor}
 
 \newcommand*{\pdfnumberofpages}[1]{%
 	\directlua{%
@@ -33,14 +32,27 @@
 	\addvspace{4mm}
 }
 
-\textblockcolour{white}
+\mdfdefinestyle{floatTradStyle}{
+	leftmargin=-1mm,
+	rightmargin=-1pt,
+	innerleftmargin=2mm,
+	innerrightmargin=0pt,
+	backgroundcolor=white,
+	linecolor=white
+}
 \newcommand{\cantusTRAD}[2]{
-	\begin{paracol}{2}
-		\switchcolumn
-		#2
-		\switchcolumn
-		\cantus{#1}
-	\end{paracol}
+	{
+			\twosided[m]
+			\setcolumnwidth{/2mm,3.5cm}
+			\setlength\columnseprule{0pt}
+			\begin{paracol}{2}
+				\tolerance=9999
+				\begin{rightcolumn}
+					\begin{mdframed}[style=floatTradStyle]\frenchpar{#2}\end{mdframed}
+				\end{rightcolumn}
+				\begin{leftcolumn}\cantus{#1}\end{leftcolumn}
+			\end{paracol}
+		}
 }
 
 \newenvironment{psalterium}{}{}

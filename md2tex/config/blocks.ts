@@ -84,6 +84,8 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                         shortTitle:
                             summary && summary.length > 0 ? summary : title,
                     });
+                } else if (titreElement instanceof LessonTitle) {
+                    titreElement.setTranslation(title);
                 }
             },
         },
@@ -91,6 +93,9 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
             test: /^>{1}\s+([\s\S]+)/,
             callback: function rubrique(_, text) {
                 return new Rubric(text.replace(/>/g, " "));
+            },
+            saveTranslation(rubric, trad: string) {
+                rubric.setTranslation(trad);
             },
         },
         {
@@ -143,7 +148,7 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
         },
         {
             test: /^@(?:\((\S+)\))?\[([\S\s]+)\]/,
-            callback: function psautier(_, ton, psaumes) {
+            callback(_, ton, psaumes): Psalterium {
                 return psaumes
                     .split(";;")
                     .reduce(function (
@@ -178,6 +183,17 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                         return acc;
                     },
                     new Psalterium(ton.length > 0 ? ton : null));
+            },
+            saveTranslation(psalterium, trad) {
+                trad.split(";;").map(function (title: string, index: number) {
+                    title = title.trim();
+                    if (title.length > 0) {
+                        psalterium.translation = true;
+                        (psalterium as Psalterium).psalms[index].setTranslation(
+                            title
+                        );
+                    }
+                });
             },
         },
         {

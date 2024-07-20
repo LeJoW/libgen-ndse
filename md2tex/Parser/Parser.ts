@@ -47,19 +47,19 @@ export default class Parser {
     }
 
     parse(doc: Document): string {
-        return this.parseBlocks(doc)
-            .map(({ block, mask, replace, parseTranslation }) =>
-                this.parseString(block).replace(mask, (...params) => {
-                    try {
+        try {
+            return this.parseBlocks(doc)
+                .map(({ block, mask, replace, parseTranslation }) =>
+                    this.parseString(block).replace(mask, (...params) => {
                         const element = replace(...params);
                         if (parseTranslation) parseTranslation(element);
                         return this.adapter.render(element);
-                    } catch (error) {
-                        console.log(error);
-                        return "";
-                    }
-                })
-            )
-            .join("\n\n");
+                    })
+                )
+                .join("\n\n");
+        } catch (error) {
+            console.log(error);
+            return "";
+        }
     }
 }

@@ -17,6 +17,8 @@
 \newcommand{\colLA}[1]{#1\switchcolumn*}
 \newcommand{\colFR}[1]{\frenchpar{#1}\switchcolumn}
 \newenvironment{tradColonnes}{
+	\twosided
+	\columnratio{0.5}
 	\addvspace{15pt}
 	\begin{paracol}{2}
 		\vspace*{2pt}

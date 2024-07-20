@@ -75,7 +75,9 @@ export class Adapter implements AdapterInterface {
 
     private getRenderFunctionTRAD(element: GenericElement) {
         const renderFunction = this.renderersTRAD[element.constructor.name];
-        return renderFunction ?? this.getRenderFunction(element);
+        return renderFunction != undefined && element.translation
+            ? renderFunction
+            : this.getRenderFunction(element);
     }
 
     private defaultRender(element: GenericElement) {

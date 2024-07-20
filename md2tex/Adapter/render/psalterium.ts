@@ -48,48 +48,7 @@ export const renderPsalteriumTRAD = (adapter: Adapter) =>
     function ({ psalms }: Psalterium): string {
         return adapter.engine.join(
             psalms.map(function (psalm) {
-                if (!psalm.translation) {
-                    return renderPsalmus(adapter)(psalm);
-                }
-                return adapter.engine.join([
-                    psalm.title ? adapter.render(psalm.title) : undefined,
-                    psalm.anchor
-                        ? adapter.engine.orphan("anchor", {
-                              href: psalm.anchor,
-                          })
-                        : undefined,
-                    adapter.engine.container(
-                        "psalmTrad",
-                        adapter.engine.join(
-                            psalm.versi
-                                .slice(0, -2)
-                                .map(function (verse, index) {
-                                    return adapter.engine.concat([
-                                        adapter.engine.orphan("psalmFR", {
-                                            value:
-                                                psalm.translation![index] ??
-                                                undefined,
-                                        }),
-                                        adapter.engine.orphan("psalmLA", {
-                                            value:
-                                                index === 0
-                                                    ? adapter.render(
-                                                          new ParagraphLettrine(
-                                                              verse
-                                                          )
-                                                      )
-                                                    : verse,
-                                        }),
-                                    ]);
-                                })
-                        )
-                    ),
-                    ...(psalm.doxologie ? psalm.versi.slice(-2) : []).map(
-                        function (verse): string {
-                            return verse;
-                        }
-                    ),
-                ]);
+                return adapter.render(psalm);
             })
         );
     };
@@ -108,5 +67,48 @@ export const renderPsalmus = (adapter: Adapter) =>
                 "psalm",
                 adapter.engine.join(versi.slice(1))
             ),
+        ]);
+    };
+
+export const renderPsalmusTRAD = (adapter: Adapter) =>
+    function ({
+        title,
+        anchor,
+        versi,
+        doxologie,
+        translation,
+    }: Omit<Psalmus, "translation"> & {
+        translation: Exclude<Psalmus["translation"], false>;
+    }): string {
+        return adapter.engine.join([
+            translation.title ? adapter.render(translation.title) : undefined,
+            anchor
+                ? adapter.engine.orphan("anchor", {
+                      href: anchor,
+                  })
+                : undefined,
+            adapter.engine.container(
+                "psalmTrad",
+                adapter.engine.join(
+                    versi.slice(0, -2).map(function (verse, index) {
+                        return adapter.engine.concat([
+                            adapter.engine.orphan("psalmFR", {
+                                value: translation.versi[index] ?? "",
+                            }),
+                            adapter.engine.orphan("psalmLA", {
+                                value:
+                                    index === 0
+                                        ? adapter.render(
+                                              new ParagraphLettrine(verse)
+                                          )
+                                        : verse,
+                            }),
+                        ]);
+                    })
+                )
+            ),
+            ...(doxologie ? versi.slice(-2) : []).map(function (verse): string {
+                return verse;
+            }),
         ]);
     };

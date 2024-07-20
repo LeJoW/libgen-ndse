@@ -17,4 +17,6 @@ test("", function () {
     expect(preprocess("Test\n\n$\net retest\n$")).toStrictEqual([
         "Test $et retest$",
     ]);
+
+    expect(preprocess("> aze\n> eza")).toStrictEqual(["> aze eza"]);
 });

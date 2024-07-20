@@ -1,5 +1,6 @@
 export function preprocess(content: string): string[] {
     return content
+        .replace(/>(([^\n]*\n)>)+/, ">$2")
         .replace(/\n\s*\$([^$]*)\$/g, function (_, traduction) {
             return ` $${traduction.trim()}$`;
         })
