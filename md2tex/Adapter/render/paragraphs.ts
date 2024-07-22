@@ -1,5 +1,23 @@
-import { Lesson, ParagraphLettrine, Rubric } from "../../Types/paragraphs";
+import {
+    Lesson,
+    ParagraphLettrine,
+    ParagraphStd,
+    Rubric,
+} from "../../Types/paragraphs";
 import { Adapter } from "../Adapter.i";
+
+export const renderParagraphStdTRAD = ({ engine }: Adapter) =>
+    function ({ text, translation }: ParagraphStd) {
+        return engine.container(
+            "tradColonnes",
+            engine.join([
+                engine.orphan("colFR", { content: translation }),
+                engine.orphan("colLA", {
+                    content: text,
+                }),
+            ])
+        );
+    };
 
 export const renderParagraphLettrine = ({ engine }: Adapter) =>
     function ({ text }: ParagraphLettrine): string {
@@ -23,5 +41,18 @@ export const renderLesson = (adapter: Adapter) =>
         return adapter.engine.container(
             "lesson",
             adapter.render(new ParagraphLettrine(text))
+        );
+    };
+
+export const renderLessonTRAD = (adapter: Adapter) =>
+    function ({ text, translation }: Lesson): string {
+        return adapter.engine.container(
+            "tradColonnes",
+            adapter.engine.join([
+                adapter.engine.orphan("colFR", { content: translation }),
+                adapter.engine.orphan("colLA", {
+                    content: adapter.render(new ParagraphLettrine(text)),
+                }),
+            ])
         );
     };

@@ -19,4 +19,11 @@ test("", function () {
     ]);
 
     expect(preprocess("> aze\n> eza")).toStrictEqual(["> aze eza"]);
+    expect(preprocess("> aze\n> eza --- \n> test")).toStrictEqual([
+        "> aze eza --- test",
+    ]);
+
+    expect(preprocess("nothing \\$ to say")).toStrictEqual([
+        "nothing $ to say",
+    ]);
 });

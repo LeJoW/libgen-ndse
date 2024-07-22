@@ -1,5 +1,3 @@
-\newcommand{\frenchpar}[1]{\begin{otherlanguage*}{french}#1\end{otherlanguage*}}
-
 \newenvironment{paragraphStd}{}{}
 
 \newenvironment{paragraphLettrine}[1]{\initial{#1}}{\par}
@@ -17,14 +15,16 @@
 \newcommand{\colLA}[1]{#1\switchcolumn*}
 \newcommand{\colFR}[1]{\frenchpar{#1}\switchcolumn}
 \newenvironment{tradColonnes}{
+	\begingroup
 	\twosided
 	\columnratio{0.5}
 	\addvspace{15pt}
 	\begin{paracol}{2}
-		\vspace*{2pt}
+		%\vspace*{2pt}
 		\tolerance=9999
 		\colFR{\vspace*{-15pt}}
 		\colLA{\vspace*{-15pt}}
 		}{
 	\end{paracol}
+	\endgroup
 }

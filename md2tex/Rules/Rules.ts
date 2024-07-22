@@ -47,8 +47,11 @@ export class Rules implements RulesInterface {
         const output: parser =
             possibleConverters.length === 0
                 ? {
-                      mask: /(?:)/,
+                      mask: /([\S\s]*)/,
                       replace: this.defaultCase,
+                      storeTranslation(element, translation: string) {
+                          element.setTranslation(translation);
+                      },
                   }
                 : {
                       mask: possibleConverters[0].test,

@@ -17,6 +17,9 @@ export class Adapter implements AdapterInterface {
         italic: (text: string) => this.engine.orphan("italic", { value: text }),
         bold: (text: string) => this.engine.orphan("bold", { value: text }),
         roman: (text: string) => this.engine.orphan("roman", { value: text }),
+        smallCaps: (text: string) =>
+            this.engine.orphan("smallCaps", { value: text }),
+        upper: (text: string) => this.engine.orphan("upper", { value: text }),
     };
     private renderers: { [name: string]: (element: GenericElement) => string };
     private renderersTRAD: Adapter["renderers"];

@@ -45,9 +45,12 @@ export const renderPsalterium = (adapter: Adapter) =>
     };
 
 export const renderPsalteriumTRAD = (adapter: Adapter) =>
-    function ({ psalms }: Psalterium): string {
+    function ({ intonation, psalms }: Psalterium): string {
         return adapter.engine.join(
-            psalms.map(function (psalm) {
+            psalms.map(function (psalm, index) {
+                if (index === 0) {
+                    psalm.intonation = intonation;
+                }
                 return adapter.render(psalm);
             })
         );
@@ -72,7 +75,7 @@ export const renderPsalmus = (adapter: Adapter) =>
 
 export const renderPsalmusTRAD = (adapter: Adapter) =>
     function ({
-        title,
+        intonation,
         anchor,
         versi,
         doxologie,
@@ -80,6 +83,9 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
     }: Omit<Psalmus, "translation"> & {
         translation: Exclude<Psalmus["translation"], false>;
     }): string {
+        if (intonation) {
+            intonation.setTranslation(translation.versi[0]);
+        }
         return adapter.engine.join([
             translation.title ? adapter.render(translation.title) : undefined,
             anchor
@@ -87,24 +93,27 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
                       href: anchor,
                   })
                 : undefined,
+            intonation ? adapter.render(intonation) : undefined,
             adapter.engine.container(
                 "psalmTrad",
                 adapter.engine.join(
-                    versi.slice(0, -2).map(function (verse, index) {
-                        return adapter.engine.concat([
-                            adapter.engine.orphan("psalmFR", {
-                                value: translation.versi[index] ?? "",
-                            }),
-                            adapter.engine.orphan("psalmLA", {
-                                value:
-                                    index === 0
-                                        ? adapter.render(
-                                              new ParagraphLettrine(verse)
-                                          )
-                                        : verse,
-                            }),
-                        ]);
-                    })
+                    versi
+                        .slice(intonation ? 1 : 0, -2)
+                        .map(function (verse, index) {
+                            return adapter.engine.concat([
+                                adapter.engine.orphan("psalmFR", {
+                                    value: translation.versi[index] ?? "",
+                                }),
+                                adapter.engine.orphan("psalmLA", {
+                                    value:
+                                        index === 0 && !intonation
+                                            ? adapter.render(
+                                                  new ParagraphLettrine(verse)
+                                              )
+                                            : verse,
+                                }),
+                            ]);
+                        })
                 )
             ),
             ...(doxologie ? versi.slice(-2) : []).map(function (verse): string {

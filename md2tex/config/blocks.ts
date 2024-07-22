@@ -19,6 +19,7 @@ import { GenericElement } from "../Types/GenericElement";
 import { GregoIndex } from "../Types/GregoIndex";
 import { incipits } from "./incipits";
 import { PsalmManager } from "../Adapter/PsalmManager/PsalmManager.i";
+import { GregError } from "../Types/GregError";
 
 const gregoIndex = new GregoIndex();
 const table = new TableOfContents();
@@ -115,7 +116,7 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
         },
         {
             test: /^!\[(.*)\]\(([\S]+)\)$/,
-            callback: function gabc(_, label, file) {
+            callback(_, label, file) {
                 const matches = label.match(/(?:(\d+):)?(\w+):(.+)/);
                 let cantus = new Cantus(file);
 
@@ -166,7 +167,7 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                             ? Psalmus
                             : Canticum;
                         const psalmus = new PsalmConstructor(
-                            ton.length > 0 ? ton : null,
+                            ton.length > 0 && ton != "0" ? ton : null,
                             psalm
                         );
                         psalmManager.setUpPsalm(psalmus);
@@ -182,7 +183,7 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                         acc.addPsalm(psalmus);
                         return acc;
                     },
-                    new Psalterium(ton.length > 0 ? ton : null));
+                    new Psalterium(ton.length > 0 && ton != "0" ? ton : null));
             },
             saveTranslation(psalterium, trad) {
                 trad.split(";;").map(function (title: string, index: number) {

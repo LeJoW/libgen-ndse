@@ -23,7 +23,7 @@ export const renderDayTitleTRAD = ({ engine }: Adapter) =>
             engine,
             translation.title,
             translation.dayClass,
-            translation.shortTitle
+            translation.shortTitle ?? translation.title
         );
     };
 

@@ -11,6 +11,8 @@ export interface Adapter {
         italic(text: string): string;
         bold(text: string): string;
         roman(text: string): string;
+        smallCaps(text: string): string;
+        upper(text: string): string;
     };
 
     symbols: {

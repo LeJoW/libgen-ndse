@@ -34,6 +34,18 @@ const strConfig = (adapter: Adapter): StringConfigType => [
             return adapter.symbols[symbols[char]];
         },
     },
+    {
+        test: /\|([^|]+)\|/g,
+        callback(_, text) {
+            return adapter.textStyles.smallCaps(text);
+        },
+    },
+    {
+        test: /\^(\S+)/g,
+        callback(_, text) {
+            return adapter.textStyles.upper(text);
+        },
+    },
 ];
 
 export default strConfig;

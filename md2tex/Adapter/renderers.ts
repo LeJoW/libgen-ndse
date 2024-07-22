@@ -16,7 +16,9 @@ import {
 } from "./render/psalterium";
 import {
     renderLesson,
+    renderLessonTRAD,
     renderParagraphLettrine,
+    renderParagraphStdTRAD,
     renderRubric,
     renderRubricTRAD,
 } from "./render/paragraphs";
@@ -58,16 +60,25 @@ export const renderers = [
     renderGregoIndex,
 ];
 
+const renderHymnusTRAD = (adapter: Adapter) => renderCantusTRAD(adapter);
+const renderAntiphonaTRAD = (adapter: Adapter) => renderCantusTRAD(adapter);
+const renderCanticumTRAD = (adapter: Adapter) => renderPsalmusTRAD(adapter);
+
 export const renderersTRAD = [
     renderDayTitleTRAD,
     renderOfficeTitleTRAD,
     renderLessonTitleTRAD,
 
     renderCantusTRAD,
+    renderHymnusTRAD,
+    renderAntiphonaTRAD,
 
     renderPsalteriumTRAD,
     renderPsalmusTRAD,
+    renderCanticumTRAD,
 
+    renderParagraphStdTRAD,
+    renderLessonTRAD,
     renderRubricTRAD,
 
     renderTableOfContentsTRAD,

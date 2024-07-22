@@ -6,6 +6,7 @@ export class Psalmus extends GenericElement {
     ton: string | null;
     psalmDivision: string;
     versi: string[] = [];
+    intonation: Cantus | false = false;
     doxologie: boolean = true;
     mode: number | null = null;
     incipit: string | undefined = undefined;
