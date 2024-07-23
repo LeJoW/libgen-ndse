@@ -38,19 +38,16 @@ export class GregoIndex extends GenericElement {
     addAntiphona(antiphona: Antiphona) {
         this.canti.antiphonae.push(antiphona);
         antiphona.anchor = this.generateAnchor(this.itemsIndex++);
-        this.addItem(antiphona);
     }
 
     addHymnus(hymnus: Hymnus) {
         this.canti.hymni.push(hymnus);
         hymnus.anchor = this.generateAnchor(this.itemsIndex++);
-        this.addItem(hymnus);
     }
 
     addResponsorium(responsorium: Responsorium) {
         this.canti.responsoria.push(responsorium);
         responsorium.anchor = this.generateAnchor(this.itemsIndex++);
-        this.addItem(responsorium);
     }
 
     getPsalmos(): GregoIndex["psalmi"] {
@@ -149,10 +146,6 @@ export class GregoIndex extends GenericElement {
 
     private setUpIncipitForComparaison(incipit: string): string {
         return incipit.replace(/(æ)/gi, "ae").replace(/(\s+)/, "");
-    }
-
-    private addItem(item: Cantus | Psalmus) {
-        item.anchor = this.generateAnchor(this.items.push(item));
     }
 
     private setUpPsalmDivisionForComparaison(ref: string): string {

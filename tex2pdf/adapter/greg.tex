@@ -25,7 +25,7 @@
 		\setlength{\parskip}{4pt}
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{
 			\stepcounter{gabcCount}
-			\includegraphics[page=\thegabcCount]{\pdfFile}
+			\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}
 			\par
 		}
 	}
@@ -33,7 +33,7 @@
 }
 
 \mdfdefinestyle{floatTradStyle}{
-	leftmargin=-1mm,
+	leftmargin=0mm,
 	rightmargin=-1pt,
 	skipabove=5pt,
 	innertopmargin=0pt,
@@ -45,12 +45,8 @@
 \newcommand{\cantusTRAD}[2]{
 	\addvspace{2mm}
 	{
-		\fancyhead[RO,LE]{}
-		\fancyhead[RE,LO]{\hstyle{\thepage}}
-		\fancyhead[CO]{\hstyle{\dayTitleShort}}
-		\fancyhead[CE]{\hstyle{\officeTitleShort}}
-		\twosided[b]
-		\setcolumnwidth{/2mm,3.5cm}
+		\twosided[p]
+		\setcolumnwidth{,3.6cm}
 		\setlength\columnseprule{0pt}
 		\begin{paracol}{2}
 			\tolerance=9999
@@ -59,11 +55,6 @@
 			\end{rightcolumn}
 			\begin{leftcolumn}\cantus{#1}\end{leftcolumn}
 		\end{paracol}
-		\twosided
-		\fancyhead[RE,LO]{}
-		\fancyhead[RO,LE]{\hstyle{\thepage}}
-		\fancyhead[CE]{\hstyle{\dayTitleShort}}
-		\fancyhead[CO]{\hstyle{\officeTitleShort}}
 	}
 }
 

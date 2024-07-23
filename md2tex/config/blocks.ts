@@ -117,7 +117,7 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
         {
             test: /^!\[(.*)\]\(([\S]+)\)$/,
             callback(_, label, file) {
-                const matches = label.match(/(?:(\d+):)?(\w+):(.+)/);
+                const matches = label.match(/(?:([1-8pi]+):)?(\w+):(.+)/);
                 let cantus = new Cantus(file);
 
                 if (matches !== null) {
@@ -137,6 +137,7 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                             gregoIndex.addResponsorium(cantus);
                             break;
                     }
+                    cantus.ton = ton;
                     cantus.mode = parseInt(ton);
                     cantus.incipit = title;
                 }

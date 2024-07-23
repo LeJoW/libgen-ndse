@@ -1,6 +1,7 @@
 import { GenericElement } from "./GenericElement";
 
 export class Cantus extends GenericElement {
+    ton: string | undefined;
     mode: number | undefined;
     incipit: string | undefined;
     scorePath: string = "";

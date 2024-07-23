@@ -1,4 +1,5 @@
 import { Render } from "../../Render/Render.i";
+import { Antiphona } from "../../Types/Cantus";
 import { GregoIndex } from "../../Types/GregoIndex";
 import { Psalmus } from "../../Types/Psalterium";
 import { Adapter } from "../Adapter.i";
@@ -62,13 +63,21 @@ function renderCanticorumIndex(
     );
 }
 
+const int2roman = [, "i", "ii", "iii", "iv", "v", "vi", "vii", "viii"];
 function renderOccurrences(engine: Render, list: Psalmus[]) {
     return list
-        .map(function ({ anchor, mode }): string {
-            return engine.concat([
+        .map(function ({ anchor, mode, ton }): string {
+            const printedMode = mode && !isNaN(mode) ? mode : ton;
+            return [
                 engine.orphan("pageref", { href: anchor }),
-                mode !== null ? engine.orphan("psMode", { mode }) : undefined,
-            ]);
+                printedMode ? engine.symbol("nbsp") : undefined,
+                printedMode
+                    ? engine.orphan("psMode", {
+                          value:
+                              int2roman[printedMode as number] ?? printedMode,
+                      })
+                    : undefined,
+            ].join("");
         })
         .join(", ");
 }
@@ -100,21 +109,26 @@ function renderCantorumIndex(
                         "gregList",
                         engine.join(
                             list.map(function (alphabeticGroup) {
-                                return engine.join([
+                                return engine.container(
+                                    "gregAlphabeticGroup",
                                     engine.join(
                                         alphabeticGroup.map(function ({
+                                            ton,
                                             mode,
                                             incipit,
                                             anchor,
                                         }) {
                                             return engine.orphan("gregEntry", {
-                                                mode: mode ?? "",
+                                                mode:
+                                                    mode && !isNaN(mode)
+                                                        ? mode
+                                                        : ton,
                                                 incipit,
                                                 anchor,
                                             });
                                         })
-                                    ),
-                                ]);
+                                    )
+                                );
                             })
                         )
                     ),

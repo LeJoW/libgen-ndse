@@ -7,5 +7,5 @@ export const incipits: { [ps: string]: string } = {
     "113": "In exitu Israel de Ægypto",
     "118a": "Beati immaculati in via",
     "118b": "Retribue servo tuo, vivifica me",
-    Magnificat: "Magnificat \\italic{B. Mariæ Virg.}",
+    Magnificat: "Magnificat \\italic{(B. Mariæ Virg.)}",
 };
