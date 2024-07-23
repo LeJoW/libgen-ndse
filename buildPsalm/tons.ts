@@ -1,4 +1,7 @@
-export type tonType = { mediante: number[]; end: number[] };
+export type tonType = {
+    mediante: [number, number, boolean?];
+    end: [number, number, boolean?];
+};
 
 export const tons: {
     [key: string]: tonType;

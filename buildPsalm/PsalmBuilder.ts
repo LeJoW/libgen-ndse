@@ -51,7 +51,11 @@ export class PsalmBuilder {
 
     setUpHalfVerse(
         halfVerse: string,
-        [preparationSyllabsCount, accents]: number[]
+        [preparationSyllabsCount, accents, isAnticipated = false]: [
+            number,
+            number,
+            boolean?
+        ]
     ): string {
         const rec = (
             output: string,

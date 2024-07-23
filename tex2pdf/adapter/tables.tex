@@ -25,7 +25,7 @@
 \newenvironment{psIndex}{
 	\thispagestyle{empty}
 	\tableTitle{Psalmi}{}
-	\begin{itemize}[left=0pt, leftmargin=0pt, labelwidth=1cm, labelsep=1cm, itemindent=2cm]
+	\begin{itemize}[left=0pt, leftmargin=1.6cm, labelwidth=6mm, labelsep=1cm]
 		}{
 	\end{itemize}
 }
@@ -35,8 +35,9 @@
 
 \newenvironment{cantIndex}{
 	\tableTitle{Cantica}{}
+	\setlength\leftskip{1cm}
 }{}
-\newcommand{\cantEntry}[2]{\small #1. #2.}
+\newcommand{\cantEntry}[2]{\hspace*{-1cm}\small #1. #2.\par}
 
 \setlength\columnsep{5mm}
 \setlength\columnseprule{0.4pt}
