@@ -7,6 +7,7 @@ import {
     Title,
 } from "../../Types/titles";
 import { Adapter } from "../Adapter.i";
+import { fr } from "./paragraphs";
 
 export const renderDayTitle = ({ engine }: Adapter) =>
     function ({ title, dayClass, shortTitle }: DayTitle): string {
@@ -21,9 +22,9 @@ export const renderDayTitleTRAD = ({ engine }: Adapter) =>
     }): string {
         return printDayTitle(
             engine,
-            translation.title,
+            fr(engine, translation.title),
             translation.dayClass,
-            translation.shortTitle ?? translation.title
+            fr(engine, translation.shortTitle ?? translation.title)
         );
     };
 
@@ -41,9 +42,9 @@ export const renderOfficeTitleTRAD = ({ engine }: Adapter) =>
     }): string {
         return printOfficeTitle(
             engine,
-            translation.title,
+            fr(engine, translation.title),
             anchor,
-            translation.shortTitle
+            fr(engine, translation.shortTitle)
         );
     };
 

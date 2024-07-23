@@ -32,20 +32,24 @@ function printTableOfContents(
                                           : day.shortTitle,
                               })
                             : undefined,
-                        engine.container(
-                            "sectionEntries",
-                            engine.join(
-                                entries.map(({ office, anchor }) =>
-                                    engine.orphan("sectionEntry", {
-                                        office:
-                                            translate && office.translation
-                                                ? office.translation.shortTitle
-                                                : office.shortTitle,
-                                        anchor,
-                                    })
-                                )
-                            )
-                        ),
+                        entries.length > 0
+                            ? engine.container(
+                                  "sectionEntries",
+                                  engine.join(
+                                      entries.map(({ office, anchor }) =>
+                                          engine.orphan("sectionEntry", {
+                                              office:
+                                                  translate &&
+                                                  office.translation
+                                                      ? office.translation
+                                                            .shortTitle
+                                                      : office.shortTitle,
+                                              anchor,
+                                          })
+                                      )
+                                  )
+                              )
+                            : undefined,
                     ])
                 )
             )

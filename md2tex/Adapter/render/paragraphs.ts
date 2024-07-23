@@ -1,3 +1,4 @@
+import { Render } from "../../Render/Render.i";
 import {
     Lesson,
     ParagraphLettrine,
@@ -11,10 +12,10 @@ export const renderParagraphStdTRAD = ({ engine }: Adapter) =>
         return engine.container(
             "tradColonnes",
             engine.join([
-                engine.orphan("colFR", { content: translation }),
                 engine.orphan("colLA", {
                     content: text,
                 }),
+                engine.orphan("colFR", { content: translation }),
             ])
         );
     };
@@ -49,10 +50,14 @@ export const renderLessonTRAD = (adapter: Adapter) =>
         return adapter.engine.container(
             "tradColonnes",
             adapter.engine.join([
-                adapter.engine.orphan("colFR", { content: translation }),
                 adapter.engine.orphan("colLA", {
                     content: adapter.render(new ParagraphLettrine(text)),
                 }),
+                adapter.engine.orphan("colFR", { content: translation }),
             ])
         );
     };
+
+export function fr(engine: Render, text: string): string {
+    return engine.orphan("frenchpar", { content: text });
+}

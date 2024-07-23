@@ -1,6 +1,7 @@
 import { ParagraphLettrine } from "../../Types/paragraphs";
 import { Psalmus, Psalterium } from "../../Types/Psalterium";
 import { Adapter } from "../Adapter.i";
+import { fr } from "./paragraphs";
 
 export const renderPsalterium = (adapter: Adapter) =>
     function ({ intonation, psalms }: Psalterium): string {
@@ -101,9 +102,6 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
                         .slice(intonation ? 1 : 0, -2)
                         .map(function (verse, index) {
                             return adapter.engine.concat([
-                                adapter.engine.orphan("psalmFR", {
-                                    value: translation.versi[index] ?? "",
-                                }),
                                 adapter.engine.orphan("psalmLA", {
                                     value:
                                         index === 0 && !intonation
@@ -111,6 +109,12 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
                                                   new ParagraphLettrine(verse)
                                               )
                                             : verse,
+                                }),
+                                adapter.engine.orphan("psalmFR", {
+                                    value:
+                                        translation.versi[
+                                            index + (intonation ? 1 : 0)
+                                        ] ?? "",
                                 }),
                             ]);
                         })

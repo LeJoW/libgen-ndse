@@ -45,6 +45,10 @@
 \newcommand{\cantusTRAD}[2]{
 	\addvspace{2mm}
 	{
+		\fancyhead[RO,LE]{}
+		\fancyhead[RE,LO]{\hstyle{\thepage}}
+		\fancyhead[CO]{\hstyle{\dayTitleShort}}
+		\fancyhead[CE]{\hstyle{\officeTitleShort}}
 		\twosided[b]
 		\setcolumnwidth{/2mm,3.5cm}
 		\setlength\columnseprule{0pt}
@@ -56,6 +60,10 @@
 			\begin{leftcolumn}\cantus{#1}\end{leftcolumn}
 		\end{paracol}
 		\twosided
+		\fancyhead[RE,LO]{}
+		\fancyhead[RO,LE]{\hstyle{\thepage}}
+		\fancyhead[CE]{\hstyle{\dayTitleShort}}
+		\fancyhead[CO]{\hstyle{\officeTitleShort}}
 	}
 }
 
