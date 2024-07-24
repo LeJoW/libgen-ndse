@@ -14,7 +14,7 @@ export class Psalmus extends GenericElement {
     title: PsalmTitle | false = false;
     anchor: string | null = null;
 
-    translation: { title: PsalmTitle | false; versi: string[] } | false = false;
+    translation: string[] | false = false;
 
     constructor(ton: string | null, psalmDivision: string) {
         super(psalmDivision);
@@ -26,19 +26,15 @@ export class Psalmus extends GenericElement {
     }
 
     setTranslation(title: string): void {
-        const psalmTitle = new PsalmTitle(title);
-        this.translation
-            ? (this.translation.title = psalmTitle)
-            : (this.translation = { versi: [], title: psalmTitle });
+        const psalmTitle = new PsalmTitle("");
+        if (!this.title) {
+            this.title = psalmTitle;
+        }
+        this.title.setTranslation(title);
     }
 
     setVersorumTranslation(versi: (string | undefined)[]): void {
-        this.translation
-            ? (this.translation.versi = versi as string[])
-            : (this.translation = {
-                  versi: versi as string[],
-                  title: false,
-              });
+        this.translation = versi as string[];
     }
 }
 

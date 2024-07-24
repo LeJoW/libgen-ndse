@@ -34,7 +34,14 @@ export class PsalmCache implements PsalmCacheInterface {
     }
 
     private nameFromPsalmInfo(psalmDivision: string, ton: tonType): string {
-        const signature = [...ton.mediante, ...ton.end].join("");
+        const signature = [
+            ton.mediante[0],
+            ton.mediante[1],
+            ton.mediante[2] ? 1 : 0,
+            ton.end[0],
+            ton.end[1],
+            ton.end[2] ? 1 : 0,
+        ].join("");
         return `${this.path}/${psalmDivision}-${signature}.json`;
     }
 }

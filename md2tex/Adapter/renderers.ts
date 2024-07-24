@@ -6,6 +6,7 @@ import {
     renderOfficeTitle,
     renderOfficeTitleTRAD,
     renderPsalmTitle,
+    renderPsalmTitleTRAD,
     renderTitle,
 } from "./render/titles";
 import {
@@ -68,6 +69,7 @@ export const renderersTRAD = [
     renderDayTitleTRAD,
     renderOfficeTitleTRAD,
     renderLessonTitleTRAD,
+    renderPsalmTitleTRAD,
 
     renderCantusTRAD,
     renderHymnusTRAD,

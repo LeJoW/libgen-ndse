@@ -26,10 +26,10 @@ export default class Parser {
                 replace,
                 parseTranslation:
                     storeTranslation && translation
-                        ? function (element: GenericElement) {
+                        ? (element: GenericElement) => {
                               return storeTranslation(
                                   element,
-                                  translation,
+                                  this.parseString(translation),
                                   mask
                               );
                           }

@@ -59,7 +59,7 @@ export const renderLessonTitle = ({ engine }: Adapter) =>
 export const renderLessonTitleTRAD = ({ engine }: Adapter) =>
     function ({ addendum, translation }: LessonTitle): string {
         return engine.orphan("lessonTitle", {
-            translation,
+            translation: fr(engine, translation),
             ref: addendum ?? "",
         });
     };
@@ -67,6 +67,11 @@ export const renderLessonTitleTRAD = ({ engine }: Adapter) =>
 export const renderPsalmTitle = ({ engine }: Adapter) =>
     function ({ title }: PsalmTitle): string {
         return engine.orphan("psalmTitle", { title });
+    };
+
+export const renderPsalmTitleTRAD = ({ engine }: Adapter) =>
+    function ({ translation }: PsalmTitle): string {
+        return engine.orphan("psalmTitle", { title: fr(engine, translation) });
     };
 
 export const renderTitle = ({ engine }: Adapter) =>

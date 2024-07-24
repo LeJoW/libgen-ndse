@@ -18,6 +18,7 @@
 
 \newcounter{gabcCount}
 \newcommand{\cantus}[1]{
+	\addvspace{2mm}
 	\setcounter{gabcCount}{0}
 	{
 		\def\pdfFile{../../content/gabc/build/#1.pdf}
@@ -43,19 +44,21 @@
 	linecolor=white
 }
 \newcommand{\cantusTRAD}[2]{
-	\addvspace{2mm}
 	{
-		\twosided[p]
-		\setcolumnwidth{,3.6cm}
-		\setlength\columnseprule{0pt}
-		\begin{paracol}{2}
-			\tolerance=9999
-			\begin{rightcolumn}
-				\begin{mdframed}[style=floatTradStyle]\frenchpar{#2}\end{mdframed}
-			\end{rightcolumn}
-			\begin{leftcolumn}\cantus{#1}\end{leftcolumn}
-		\end{paracol}
-	}
+			\twosided[p]
+			\setcolumnwidth{,3.6cm}
+			\setlength\columnseprule{0pt}
+			\begin{paracol}{2}
+				\tolerance=9999
+				\begin{rightcolumn}
+					\begin{mdframed}[style=floatTradStyle]
+						\addvspace{2mm}
+						\frenchpar{#2}
+					\end{mdframed}
+				\end{rightcolumn}
+				\begin{leftcolumn}\cantus{#1}\end{leftcolumn}
+			\end{paracol}
+		}
 }
 
 \newenvironment{psalterium}{}{}

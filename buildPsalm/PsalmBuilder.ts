@@ -63,9 +63,18 @@ export class PsalmBuilder {
             before: string[]
         ): string => {
             if (accentsLeft > 0 && before.length >= 2) {
-                const { before: newBefore, accent, after } = this.getLastAccent(
+                let { before: newBefore, accent, after } = this.getLastAccent(
                     before
                 );
+                if (
+                    isAnticipated &&
+                    accentsLeft === accents &&
+                    after.length > 1
+                ) {
+                    const postTonic = after[0];
+                    accent += postTonic;
+                    after = after.slice(1);
+                }
                 return rec(
                     this.setUpPostTonicSyllabs(accent, after) + output,
                     accentsLeft - 1,

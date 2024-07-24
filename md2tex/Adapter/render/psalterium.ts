@@ -81,14 +81,15 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
         versi,
         doxologie,
         translation,
+        title,
     }: Omit<Psalmus, "translation"> & {
         translation: Exclude<Psalmus["translation"], false>;
     }): string {
         if (intonation) {
-            intonation.setTranslation(translation.versi[0]);
+            intonation.setTranslation(translation[0]);
         }
         return adapter.engine.join([
-            translation.title ? adapter.render(translation.title) : undefined,
+            title ? adapter.render(title) : undefined,
             anchor
                 ? adapter.engine.orphan("anchor", {
                       href: anchor,
@@ -112,7 +113,7 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
                                 }),
                                 adapter.engine.orphan("psalmFR", {
                                     value:
-                                        translation.versi[
+                                        translation[
                                             index + (intonation ? 1 : 0)
                                         ] ?? "",
                                 }),

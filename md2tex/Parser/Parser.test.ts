@@ -13,7 +13,7 @@ But set a title :
     expect(parser.parseBlocks(doc)).toStrictEqual([
         {
             block: "Nothing to see *here*. But set a title :",
-            mask: /(?:)/,
+            mask: /([\S\s]*)/,
             parseTranslation: undefined,
             replace: id,
         },
@@ -37,7 +37,7 @@ title: Fancy title`);
 });
 
 test("Translation", function () {
-    const doc = new Document("# Fancy title $Titre fantaisiste$");
+    const doc = new Document("# Fancy title $Titre _fantaisiste_$");
     adapter.translation = true;
 
     expect(JSON.stringify(parser.parseBlocks(doc))).toStrictEqual(
@@ -52,7 +52,7 @@ test("Translation", function () {
     );
 
     expect(parser.parse(doc)).toStrictEqual(
-        "trad: Titre fantaisiste\ntitle: Fancy title"
+        "trad: Titre (fantaisiste)\ntitle: Fancy title"
     );
 
     expect(
@@ -60,9 +60,9 @@ test("Translation", function () {
             new Document(`# Fancy title
 
 $
-Titre fantaisiste
+Titre _fantaisiste_
 $
 `)
         )
-    ).toStrictEqual("trad: Titre fantaisiste\ntitle: Fancy title");
+    ).toStrictEqual("trad: Titre (fantaisiste)\ntitle: Fancy title");
 });

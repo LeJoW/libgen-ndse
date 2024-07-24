@@ -149,4 +149,29 @@ test("all", function () {
         "Glória [Pa]tri, et [Fí]lio, * et Spirí(tui) [Sanc]to.",
         "Sicut erat in princípio, et [nunc], et [sem]per, * et in sǽcula sæcu(lórum). [A]men.",
     ]);
+    expect(
+        ps.buildPsalm(
+            [
+                [
+                    "Legem pone mihi, Dómine, viam iustificatiónum tuárum:",
+                    "et exquíram eam semper.",
+                ],
+                [
+                    "Da mihi intelléctum, et scrutábor legem tuam:",
+                    "et custódiam illam in toto corde meo.",
+                ],
+                ["Glória Patri, et Fílio,", "et Spirítui Sancto."],
+                [
+                    "Sicut erat in princípio, et nunc, et semper,",
+                    "et in sǽcula sæculórum. Amen.",
+                ],
+            ],
+            "3b"
+        )
+    ).toStrictEqual([
+        "Legem pone mihi, Dómine, viam iustificati[ó]num tu[á]rum: * et exquíram [e]am [sem]per.",
+        "Da mihi intelléctum, et scrutábor [le]gem [tu]am: * et custódiam illam in toto [cor]de [me]o.",
+        "Glória [Pa]tri, et [Fíli]o, * et Spi[rí]tui [Sanc]to.",
+        "Sicut erat in princípio, et [nunc], et [sem]per, * et in sǽcula sæcu[ló]rum. [A]men.",
+    ]);
 });

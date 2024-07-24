@@ -34,7 +34,7 @@ export const renderRubric = ({ engine }: Adapter) =>
 
 export const renderRubricTRAD = ({ engine }: Adapter) =>
     function ({ translation }: Rubric): string {
-        return engine.container("rubric", translation);
+        return engine.container("rubric", fr(engine, translation));
     };
 
 export const renderLesson = (adapter: Adapter) =>

@@ -68,6 +68,12 @@ export const rules = new Rules(
                 return `{\\it ${text}}`;
             },
         },
+        {
+            test: /_{1}([^_]+)_{1}/g,
+            callback(_, text) {
+                return adapter.textStyles.italic(text);
+            },
+        },
     ]
 );
 rules.preprocessor = preprocess;
