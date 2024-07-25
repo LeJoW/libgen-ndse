@@ -4,23 +4,23 @@ import { Psalmus } from "../../Types/Psalterium";
 import { Adapter } from "../Adapter.i";
 
 const titles: {
-    [key: string]: string;
+    [key: string]: [string, string];
 } = {
-    antiphonae: "Antiphonæ",
-    hymni: "Hymni",
-    responsoria: "Responsoria",
-    psalmi: "Psalmi",
-    cantica: "Cantica",
+    antiphonae: ["Antiphonæ", "Antiphona"],
+    hymni: ["Hymni", "Hymnus"],
+    responsoria: ["Responsoria", "Responsorium"],
+    psalmi: ["Psalmi", "Psalmus"],
+    cantica: ["Cantica", "Canticum"],
 };
 
 const titlesTRAD: {
-    [key: string]: string;
+    [key: string]: [string, string];
 } = {
-    antiphonae: "Antiennes",
-    hymni: "Hymnes",
-    responsoria: "Répons",
-    psalmi: "Psaumes",
-    cantica: "Cantiques",
+    antiphonae: ["Antiennes", "Antienne"],
+    hymni: ["Hymnes", "Hymne"],
+    responsoria: ["Répons", "Répon"],
+    psalmi: ["Psaumes", "Psaume"],
+    cantica: ["Cantiques", "Cantique"],
 };
 
 export const renderGregoIndex = (adapter: Adapter) =>
@@ -43,16 +43,17 @@ function renderPsalmorumIndex(
     { engine, translation }: Adapter,
     index: GregoIndex["psalmi"]
 ): string {
+    const indexEntries = Object.entries(index);
     return engine.join([
         engine.orphan("tableTitle", {
-            title: (translation ? titlesTRAD : titles)["psalmi"],
+            title: (translation ? titlesTRAD : titles)["psalmi"][
+                indexEntries.length > 1 ? 0 : 1
+            ],
         }),
         engine.container(
             "psIndex",
             engine.join(
-                Object.entries(index).map(function ([num, entries]):
-                    | string
-                    | undefined {
+                indexEntries.map(function ([num, entries]): string | undefined {
                     if (entries.length === 0) {
                         return undefined;
                     }
@@ -71,9 +72,12 @@ function renderCanticorumIndex(
     { engine, translation }: Adapter,
     index: GregoIndex["psalmi"]
 ): string {
+    const indexValues = Object.values(index);
     return engine.join([
         engine.orphan("tableTitle", {
-            title: (translation ? titlesTRAD : titles)["cantica"],
+            title: (translation ? titlesTRAD : titles)["cantica"][
+                indexValues.length > 1 ? 0 : 1
+            ],
         }),
         engine.container(
             "cantIndex",
@@ -127,8 +131,8 @@ function renderCantorumIndex(
                 return engine.join([
                     engine.orphan("tableTitle", {
                         value:
-                            (translation ? titlesTRAD : titles)[
-                                type as string
+                            (translation ? titlesTRAD : titles)[type as string][
+                                list.length > 1 ? 0 : 1
                             ] ?? type,
                     }),
                     engine.container(

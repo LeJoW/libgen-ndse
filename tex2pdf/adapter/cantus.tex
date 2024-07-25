@@ -77,7 +77,7 @@
 	\setlength{\frameheight}{0pt}%
 	\storeObjHeight{\frameheight}{{\begin{mdframed}[style=floatTradStyle]#1\end{mdframed}}}%
 	\addtolength{\frameheight}{-12.84526pt}%
-	{\begin{mdframed}[style=floatTradStyle]\printGapFromHeights{\privateHeightsList}{\the\frameheight}#1\end{mdframed}}%
+	{\begin{mdframed}[style=floatTradStyle]#1\printGapFromHeights{\privateHeightsList}{\the\frameheight}\end{mdframed}}%
 }
 
 \newcommand{\cantusTRAD}[2]{%
@@ -86,12 +86,12 @@
 		\twosided[p]%
 		\setcolumnwidth{,3.65cm}%
 		\setlength\columnseprule{0pt}%
-		\tolerance=9999%
 		\begin{paracol}{2}%
 			\cantus{#1}%
 			\switchcolumn%
+			\sloppy%
 			\vspace{2mm}
-			\sizedFrame{\frenchpar{#2}}%
+			\sizedFrame{\frenchpar{\textTranslation{#2}}}%
 		\end{paracol}%
 	}%
 }

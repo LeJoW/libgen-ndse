@@ -3,27 +3,29 @@
 \newenvironment{paragraphLettrine}[1]{\initial{#1}}{\par}
 
 \newenvironment{rubric}{
-	\it}{
+	\addvspace{1mm}
+	\it\ttrad}{\nowidow
+	\vspace{0.6mm}
 }
 
 \newenvironment{remplacement}{\P~}{}
 
-\newenvironment{lesson}{}{}
+\newenvironment{lesson}{}{\nowidow}
 
 \newcommand{\forcebreak}{\newline\indent}
 
-\newcommand{\colLA}[1]{#1\switchcolumn}
-\newcommand{\colFR}[1]{\frenchpar{#1}\switchcolumn*}
-\newenvironment{tradColonnes}{
-	\begingroup
-	\twosided
-	\addvspace{15pt}
-	\columnratio{0.5}
-	\begin{paracol}{2}
-		\tolerance=9999
-		\colLA{\vspace*{-15pt}}
-		\colFR{\vspace*{-15pt}}
-		}{
-	\end{paracol}
-	\endgroup
+\newcommand{\colLA}[1]{#1\switchcolumn\nowidow}
+\newcommand{\colFR}[1]{\frenchpar{\ttrad #1}\nowidow\switchcolumn*}
+\newenvironment{tradColonnes}{%
+	\begingroup%
+	\twosided%
+	\addvspace{\topSepRuleTradSpace}%
+	\columnratio{0.5}%
+	\begin{paracol}{2}%
+		\tolerance=9999%
+		\colLA{\vspace*{-\topSepRuleTradSpace}}%
+		\colFR{\vspace*{-\topSepRuleTradSpace}}%
+		}{%
+	\end{paracol}%
+	\endgroup%
 }

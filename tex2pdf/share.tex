@@ -7,7 +7,7 @@
 \usepackage{newunicodechar}
 \usepackage{wrapfig}
 
-\babelprehyphenation{latin}{ [A-Za-z0-9] [!?:;] }
+\babelprehyphenation{latin}{ [A-Za-z0-9æœ] [!?:;] }
 { {},         % Keep the letter/digit
 	{ insert, penalty = 10000 },                 % Insert a penalty...
 	{ insert, spacefactor= .8 .3 .8, data = 1 }, % ... and a space
@@ -17,6 +17,7 @@
 \newcommand{\frenchpar}[1]{\begin{otherlanguage*}{french}#1\end{otherlanguage*}}
 
 \setmainfont{PlantinStd-Light}[
+	Numbers=OldStyle,
 	Ligatures=Common,
 	BoldFont=PlantinStd-Bold,
 	ItalicFont=PlantinStd-LightItalic,
