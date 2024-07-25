@@ -1,0 +1,97 @@
+\usepackage{pdfpages}
+\usepackage{enumitem}
+\usepackage{mdframed}
+\usepackage{pgffor}
+
+\newcommand*{\pdfnumberofpages}[1]{%
+	\directlua{%
+		local doc = pdfe.open("\luaescapestring{#1}")
+		local pages
+		if (doc) then
+		pages = pdfe.getnofpages(doc)
+		else
+		pages = 0
+		end
+		tex.write(pages)
+	}%
+}
+
+\newcommand{\storeObjHeight}[2]{\settoheight{#1}{\vbox{#2}}}
+
+\def\privateHeightsList{0pt}
+\newcommand{\resetHeightsList}{\def\privateHeightsList{0pt}}
+
+\newcounter{gabcCount}
+\newlength{\myhh}
+\newcommand{\cantus}[1]{%
+	\addvspace{2mm}%
+	\setcounter{gabcCount}{0}%
+	{%
+		\def\pdfFile{../../content/gabc/build/#1.pdf}%
+		\setlength{\parindent}{0pt}%
+		\setlength{\parskip}{4pt}%
+		\vspace{-4pt}%
+		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
+			\stepcounter{gabcCount}%
+			\def\gline{\vspace{0pt}\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}\par}%
+			\storeObjHeight{\myhh}{\gline}%%
+			\global\edef\privateHeightsList{\privateHeightsList,\the\myhh}%%
+			\gline%%
+		}%
+	}%
+	\addvspace{4mm}%
+}
+
+\newlength{\privateSumForAccumulator}
+\newcommand{\printGapFromHeights}[2]{%
+	\setlength{\privateSumForAccumulator}{-#2}%
+	%\setlength{\privateSumForAccumulator}{2pt}%
+	\foreach \x in #1 {%
+			\addtolength{\privateSumForAccumulator}{\x}%
+			\global\privateSumForAccumulator=\privateSumForAccumulator
+			\ifdim\privateSumForAccumulator>0pt%
+				\breakforeach%
+			\fi%
+		}%
+	\addtolength{\privateSumForAccumulator}{-1.4ex}%
+	\ifdim\privateSumForAccumulator>0pt%
+		\vspace*{\privateSumForAccumulator}%
+	\fi%
+}
+
+\mdfdefinestyle{floatTradStyle}{
+	leftmargin=0pt,
+	rightmargin=-1pt,
+	skipabove=0pt,
+	skipbelow=0pt,
+	innertopmargin=0pt,
+	innerleftmargin=2mm,
+	innerrightmargin=0pt,
+	innerbottommargin=0pt,
+	backgroundcolor=white,
+	linecolor=white
+}
+
+\newlength{\frameheight}
+\newcommand{\sizedFrame}[1]{%
+	\setlength{\frameheight}{0pt}%
+	\storeObjHeight{\frameheight}{{\begin{mdframed}[style=floatTradStyle]#1\end{mdframed}}}%
+	\addtolength{\frameheight}{-12.84526pt}%
+	{\begin{mdframed}[style=floatTradStyle]\printGapFromHeights{\privateHeightsList}{\the\frameheight}#1\end{mdframed}}%
+}
+
+\newcommand{\cantusTRAD}[2]{%
+	\resetHeightsList%
+	{%
+		\twosided[p]%
+		\setcolumnwidth{,3.65cm}%
+		\setlength\columnseprule{0pt}%
+		\tolerance=9999%
+		\begin{paracol}{2}%
+			\cantus{#1}%
+			\switchcolumn%
+			\vspace{2mm}
+			\sizedFrame{\frenchpar{#2}}%
+		\end{paracol}%
+	}%
+}

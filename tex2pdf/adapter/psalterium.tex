@@ -1,0 +1,22 @@
+\newenvironment{psalterium}{}{}
+
+\newenvironment{psalm}{
+	\setlength{\parsep}{0pt}
+	\setlength{\parskip}{0pt}
+}{}
+
+\newenvironment{psalmBody}{
+	\begin{colonnes}
+		}{
+	\end{colonnes}
+}
+
+\newcommand{\psalmLA}[1]{\colLA{#1}}
+\newcommand{\psalmFR}[1]{\colFR{#1}}
+\newcommand{\psalmVerseEnd}{}
+
+\newenvironment{psalmTrad}{
+	\begin{tradColonnes}
+		}{
+	\end{tradColonnes}
+}
