@@ -103,6 +103,12 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
                         .slice(intonation ? 1 : 0, -2)
                         .map(function (verse, index) {
                             return adapter.engine.concat([
+                                adapter.engine.orphan("psalmFR", {
+                                    value:
+                                        translation[
+                                            index + (intonation ? 1 : 0)
+                                        ] ?? "",
+                                }),
                                 adapter.engine.orphan("psalmLA", {
                                     value:
                                         index === 0 && !intonation
@@ -111,18 +117,15 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
                                               )
                                             : verse,
                                 }),
-                                adapter.engine.orphan("psalmFR", {
-                                    value:
-                                        translation[
-                                            index + (intonation ? 1 : 0)
-                                        ] ?? "",
-                                }),
                             ]);
                         })
                 )
             ),
             ...(doxologie ? versi.slice(-2) : []).map(function (verse): string {
-                return verse;
+                return adapter.engine.orphan("aloneDoxologie", {
+                    content: verse,
+                });
             }),
+            adapter.engine.orphan("psalteriumEnd"),
         ]);
     };

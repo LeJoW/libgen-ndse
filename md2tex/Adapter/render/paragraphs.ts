@@ -12,10 +12,10 @@ export const renderParagraphStdTRAD = ({ engine }: Adapter) =>
         return engine.container(
             "tradColonnes",
             engine.join([
+                engine.orphan("colFR", { content: translation }),
                 engine.orphan("colLA", {
                     content: text,
                 }),
-                engine.orphan("colFR", { content: translation }),
             ])
         );
     };
@@ -47,15 +47,11 @@ export const renderLesson = (adapter: Adapter) =>
 
 export const renderLessonTRAD = (adapter: Adapter) =>
     function ({ text, translation }: Lesson): string {
-        return adapter.engine.container(
-            "tradColonnes",
-            adapter.engine.join([
-                adapter.engine.orphan("colLA", {
-                    content: adapter.render(new ParagraphLettrine(text)),
-                }),
-                adapter.engine.orphan("colFR", { content: translation }),
-            ])
+        const par = new ParagraphStd(
+            adapter.render(new ParagraphLettrine(text))
         );
+        par.setTranslation(translation);
+        return adapter.engine.container("lesson", adapter.render(par));
     };
 
 export function fr(engine: Render, text: string): string {

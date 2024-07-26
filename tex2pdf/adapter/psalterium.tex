@@ -12,7 +12,7 @@
 }
 
 \newcommand{\psalmLA}[1]{\colLA{#1}}
-\newcommand{\psalmFR}[1]{\colFR{#1}}
+\newcommand{\psalmFR}[1]{\sloppy \colFR{#1}}
 \newcommand{\psalmVerseEnd}{}
 
 \newenvironment{psalmTrad}{
@@ -20,3 +20,7 @@
 		}{
 	\end{tradColonnes}
 }
+
+\newcommand{\aloneDoxologie}[1]{#1\nowidow}
+
+\newcommand{\psalteriumEnd}{\vspace*{2mm}}

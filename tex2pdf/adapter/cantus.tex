@@ -92,7 +92,9 @@
 			\switchcolumn%%
 			\sloppy%%
 			\vspace{2mm}%
-			\sizedFrame{\frenchpar{\textTranslation{#2}}}%%
+			{%
+				\sizedFrame{\frenchpar{\textTranslation{#2}}}%
+			}%%
 		\end{paracol}%%
 	}%%
 }
