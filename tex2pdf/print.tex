@@ -1,16 +1,16 @@
 \documentclass[a4paper, landscape]{article}
 
 \usepackage{pdfpages}
+\usepackage{everyshi}
+
+\makeatletter\EveryShipout{\ifodd\c@page\pdfpageattr{/Rotate 180}\fi}\makeatother
 
 \begin{document}
 
 \includepdf[
 	pages=-,
 	booklet,
-	noautoscale,
-	pagecommand={
-			\thispagestyle{empty}
-		}
+	noautoscale
 ]{build/core-fr}
 
 \end{document}
