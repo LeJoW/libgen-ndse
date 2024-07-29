@@ -117,7 +117,7 @@ function renderOccurrences(engine: Render, list: Psalmus[]) {
                     : undefined,
             ].join("");
         })
-        .join(", ");
+        .join("\\,; ");
 }
 
 function renderCantorumIndex(
