@@ -28,15 +28,18 @@ export const renderGregoIndex = (adapter: Adapter) =>
         const psalmi = grergoIndex.getPsalmos();
         const cantica = grergoIndex.getCanticos();
         const canti = grergoIndex.getCantos();
-        return adapter.engine.join([
-            Object.keys(psalmi).length > 0
-                ? renderPsalmorumIndex(adapter, psalmi)
-                : undefined,
-            Object.keys(cantica).length > 0
-                ? renderCanticorumIndex(adapter, cantica)
-                : undefined,
-            renderCantorumIndex(adapter, canti),
-        ]);
+        return adapter.engine.container(
+            "gregoIndex",
+            adapter.engine.join([
+                Object.keys(psalmi).length > 0
+                    ? renderPsalmorumIndex(adapter, psalmi)
+                    : undefined,
+                Object.keys(cantica).length > 0
+                    ? renderCanticorumIndex(adapter, cantica)
+                    : undefined,
+                renderCantorumIndex(adapter, canti),
+            ])
+        );
     };
 
 function renderPsalmorumIndex(

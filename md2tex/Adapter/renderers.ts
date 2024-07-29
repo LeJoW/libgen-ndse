@@ -8,6 +8,7 @@ import {
     renderPsalmTitle,
     renderPsalmTitleTRAD,
     renderTitle,
+    renderTitleTRAD,
 } from "./render/titles";
 import {
     renderPsalmus,
@@ -24,10 +25,7 @@ import {
     renderRubricTRAD,
 } from "./render/paragraphs";
 import { renderCantus, renderCantusTRAD } from "./render/cantus";
-import {
-    renderTableOfContents,
-    renderTableOfContentsTRAD,
-} from "./render/tableOfContents";
+import { renderTableOfContents } from "./render/tableOfContents";
 import { renderGregoIndex } from "./render/gregoIndex";
 import { Adapter } from "./Adapter.i";
 
@@ -65,11 +63,15 @@ const renderHymnusTRAD = (adapter: Adapter) => renderCantusTRAD(adapter);
 const renderAntiphonaTRAD = (adapter: Adapter) => renderCantusTRAD(adapter);
 const renderCanticumTRAD = (adapter: Adapter) => renderPsalmusTRAD(adapter);
 
+const renderSectionTitleTRAD = (adapter: Adapter) => renderTitleTRAD(adapter);
+
 export const renderersTRAD = [
     renderDayTitleTRAD,
     renderOfficeTitleTRAD,
     renderLessonTitleTRAD,
     renderPsalmTitleTRAD,
+    renderSectionTitleTRAD,
+    renderTitleTRAD,
 
     renderCantusTRAD,
     renderHymnusTRAD,
@@ -82,6 +84,4 @@ export const renderersTRAD = [
     renderParagraphStdTRAD,
     renderLessonTRAD,
     renderRubricTRAD,
-
-    renderTableOfContentsTRAD,
 ];

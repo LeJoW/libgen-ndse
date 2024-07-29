@@ -1,15 +1,15 @@
 import { Render } from "../../Render/Render.i";
 import { TableOfContents } from "../../Types/TableOfContents";
 import { Adapter } from "../Adapter.i";
+import { fr } from "./paragraphs";
 
-export const renderTableOfContents = ({ engine }: Adapter) =>
+export const renderTableOfContents = (adapter: Adapter) =>
     function ({ contents }: TableOfContents): string {
-        return printTableOfContents(engine, contents, false);
-    };
-
-export const renderTableOfContentsTRAD = ({ engine }: Adapter) =>
-    function ({ contents }: TableOfContents): string {
-        return printTableOfContents(engine, contents, true);
+        return printTableOfContents(
+            adapter.engine,
+            contents,
+            adapter.translation
+        );
     };
 
 function printTableOfContents(
@@ -27,8 +27,13 @@ function printTableOfContents(
                         day !== null
                             ? engine.orphan("tableSectionTitle", {
                                   day:
-                                      translate && day.translation
-                                          ? day.translation.shortTitle
+                                      translate &&
+                                      day.translation &&
+                                      day.translation.shortTitle
+                                          ? fr(
+                                                engine,
+                                                day.translation.shortTitle
+                                            )
                                           : day.shortTitle,
                               })
                             : undefined,
@@ -41,8 +46,11 @@ function printTableOfContents(
                                               office:
                                                   translate &&
                                                   office.translation
-                                                      ? office.translation
-                                                            .shortTitle
+                                                      ? fr(
+                                                            engine,
+                                                            office.translation
+                                                                .shortTitle
+                                                        )
                                                       : office.shortTitle,
                                               anchor,
                                           })

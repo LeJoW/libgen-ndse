@@ -6,11 +6,7 @@
 	\vspace*{3mm}
 }
 
-\newenvironment{tableOfContents}{
-	\pagebreak
-	\thispagestyle{empty}
-	\sectionTitle{Index generalis}
-}{}
+\newenvironment{tableOfContents}{\thispagestyle{empty}}{}
 
 \newenvironment{tableSection}{}{}
 \newenvironment{sectionEntries}{
@@ -22,8 +18,10 @@
 \newcommand{\tableSectionTitle}[1]{{\small\sc\garamond #1}}
 \newcommand{\sectionEntry}[2]{\small\item[] #1\dotfill\pageref{#2}}
 
+
+\newenvironment{gregoIndex}{\thispagestyle{empty}}{}
+
 \newenvironment{psIndex}{
-	\thispagestyle{empty}
 	\begin{itemize}[left=0pt, leftmargin=1.6cm, labelwidth=6mm, labelsep=1cm]
 		}{
 	\end{itemize}

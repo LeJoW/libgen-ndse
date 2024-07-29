@@ -79,6 +79,13 @@ export const renderTitle = ({ engine }: Adapter) =>
         return engine.orphan("sectionTitle", { title });
     };
 
+export const renderTitleTRAD = ({ engine }: Adapter) =>
+    function ({ translation }: Title): string {
+        return engine.orphan("sectionTitle", {
+            title: fr(engine, translation),
+        });
+    };
+
 function printDayTitle(
     engine: Render,
     title: string,

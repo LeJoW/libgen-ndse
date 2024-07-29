@@ -77,7 +77,8 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                     titreElement.setTranslation({
                         title,
                         dayClass: subTitle,
-                        shortTitle: summary,
+                        shortTitle:
+                            summary && summary.length > 0 ? summary : title,
                     });
                 } else if (titreElement instanceof OfficeTitle) {
                     titreElement.setTranslation({
@@ -85,7 +86,7 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                         shortTitle:
                             summary && summary.length > 0 ? summary : title,
                     });
-                } else if (titreElement instanceof LessonTitle) {
+                } else {
                     titreElement.setTranslation(title);
                 }
             },
