@@ -64,6 +64,20 @@ test("Accent detection", function () {
         accent: "nunc ",
         after: ["et"],
     });
+
+    expect(ps.getLastAccent(["A", "a", "ron"])).toStrictEqual({
+        before: [],
+        accent: "A",
+        after: ["a", "ron"],
+    });
+
+    expect(ps.getLastAccent(["dó", "mu", "i ", "A", "a", "ron"])).toStrictEqual(
+        {
+            before: ["dó", "mu", "i "],
+            accent: "A",
+            after: ["a", "ron"],
+        }
+    );
 });
 
 test("half-verse setup", function () {

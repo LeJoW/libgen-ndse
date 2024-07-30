@@ -139,6 +139,8 @@ export class PsalmBuilder {
             beforeReversed.length !== 0 &&
             !this.isLastSyllab(beforeReversed[0]) &&
             (this.isAccentuatedSyllab(beforeReversed[0]) ||
+                (/[A-Z]/.test(beforeReversed[0]) &&
+                    !this.isAccentuatedSyllab(accent)) ||
                 ((beforeReversed.length === 1 ||
                     this.isLastSyllab(beforeReversed[1])) &&
                     this.isLastSyllab(accent)))
