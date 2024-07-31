@@ -15,8 +15,8 @@
 
 \newcommand{\forcebreak}{\newline\indent}
 
-\newcommand{\colLA}[1]{#1\switchcolumn*}
-\newcommand{\colFR}[1]{\frenchpar{\ttrad #1}\switchcolumn}
+\newcommand{\colLA}[1]{#1\nowidow\switchcolumn*}
+\newcommand{\colFR}[1]{\frenchpar{\ttrad #1}\nowidow\switchcolumn}
 \newenvironment{tradColonnes}{%
 	\begingroup%
 	\twosided%
@@ -24,8 +24,8 @@
 	\columnratio{0.5}%
 	\begin{paracol}{2}%
 		\tolerance=9999%
-		\colFR{\vspace*{-\topSepRuleTradSpace}}%
-		\colLA{\vspace*{-\topSepRuleTradSpace}}%
+		{\vspace*{-\topSepRuleTradSpace}\switchcolumn}%
+		{\vspace*{-\topSepRuleTradSpace}\switchcolumn*}%
 		}{%
 	\end{paracol}%
 	\endgroup%

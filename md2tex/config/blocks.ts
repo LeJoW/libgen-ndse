@@ -181,7 +181,7 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                         psalmus instanceof Canticum
                             ? gregoIndex.addCanticum(psalmus)
                             : gregoIndex.addPsalmus(psalmus);
-                        if (index === 0) {
+                        if (index === 0 && acc.ton) {
                             psalmus.intonation = new Cantus(
                                 `${psalmus.psalmDivision}-${acc.ton}`
                             );
