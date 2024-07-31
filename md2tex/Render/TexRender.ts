@@ -8,16 +8,20 @@ export class TexRender implements Render {
     symbol(name: string): string {
         return symbols[name] || name;
     }
-    orphan(type: string, attributes?: { [attr: string]: any }): string {
-        return `{\\${type}${
-            attributes
-                ? Object.values(attributes)
-                      .map(function (attr) {
-                          return `{${attr}}`;
-                      })
-                      .join("")
-                : ""
-        }}`;
+    orphan(
+        type: string,
+        attributes?: { [attr: string]: any },
+        optionalAttributes?: { [attr: string]: any }
+    ): string {
+        return `{\\${type}${Object.values(optionalAttributes ?? [])
+            .map(function (attr) {
+                return attr ? `[${attr}]` : "";
+            })
+            .join("")}${Object.values(attributes ?? [])
+            .map(function (attr) {
+                return `{${attr}}`;
+            })
+            .join("")}}`;
     }
     container(
         type: string,

@@ -4,19 +4,19 @@
 
 \newenvironment{rubric}{
 	\addvspace{1mm}
-	\setstretch{0.9}
-	\it\ttrad}{\nowidow
+	%\setstretch{0.9}
+	\it\ttrad}{
 	\vspace{0.6mm}
 }
 
 \newenvironment{remplacement}{\P~}{}
 
-\newenvironment{lesson}{}{\nowidow}
+\newenvironment{lesson}{}{}
 
 \newcommand{\forcebreak}{\newline\indent}
 
-\newcommand{\colLA}[1]{#1\nowidow\switchcolumn*}
-\newcommand{\colFR}[1]{\frenchpar{\ttrad #1}\nowidow\switchcolumn}
+\newcommand{\colLA}[1]{#1\switchcolumn*}
+\newcommand{\colFR}[1]{\frenchpar{\ttrad #1}\switchcolumn}
 \newenvironment{tradColonnes}{%
 	\begingroup%
 	\twosided%

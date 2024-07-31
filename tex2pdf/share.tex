@@ -17,7 +17,6 @@
 \newcommand{\frenchpar}[1]{\begin{otherlanguage*}{french}#1\end{otherlanguage*}}
 
 \setmainfont{PlantinStd-Light}[
-	Numbers=OldStyle,
 	Ligatures=Common,
 	BoldFont=PlantinStd-Bold,
 	ItalicFont=PlantinStd-LightItalic,
@@ -27,5 +26,11 @@
 \newunicodechar{℟}{\mbox{R\kern-0.5em\reflectbox{\rotatebox[origin=c]{30}{∫}}\kern-0.25em}}
 \newunicodechar{ǽ}{æ\kern-0.5em´\kern0.15em}
 
-\newfontfamily\garamond[Numbers=OldStyle,WordSpace=2.5,ItalicFont=EBGaramond-Italic]{EBGaramond}
+\newfontfamily\garamond[
+	Numbers=OldStyle,
+	WordSpace=2.4,
+	ItalicFont=EBGaramond-Italic
+]{EBGaramond}
 \newfontfamily\plantin{PlantinStd-Light}
+
+\fontsize{11.5pt}{5mm}\selectfont

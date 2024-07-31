@@ -150,14 +150,16 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
             },
         },
         {
-            test: /^@(?:\((\S+)\))?\[([\S\s]+)\]/,
-            callback(_, ton, psaumes): Psalterium {
+            test: /^@(?:(\d+))?(?:\((\S+)\))?\[([\S\s]+)\]/,
+            callback(_, linesTrad, ton, psaumes): Psalterium {
                 return psaumes
                     .split(";;")
                     .reduce(function (
                         acc: Psalterium,
-                        psalmDesc: string
+                        psalmDesc: string,
+                        index: number
                     ): Psalterium {
+                        const numberLinesTrad = parseInt(linesTrad, 10);
                         const [, psalmDescription, title] = psalmDesc.match(
                             /^\s*(\S+?)\s*(?::\s*(.+))?\s*$/
                         ) as string[];
@@ -168,10 +170,7 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                         const PsalmConstructor = /\d/.test(psalm)
                             ? Psalmus
                             : Canticum;
-                        const psalmus = new PsalmConstructor(
-                            ton.length > 0 && ton != "0" ? ton : null,
-                            psalm
-                        );
+                        const psalmus = new PsalmConstructor(acc.ton, psalm);
                         psalmManager.setUpPsalm(psalmus);
                         psalmus.doxologie = isDoxologie;
                         psalmus.title =
@@ -182,6 +181,14 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                         psalmus instanceof Canticum
                             ? gregoIndex.addCanticum(psalmus)
                             : gregoIndex.addPsalmus(psalmus);
+                        if (index === 0) {
+                            psalmus.intonation = new Cantus(
+                                `${psalmus.psalmDivision}-${acc.ton}`
+                            );
+                            if (!isNaN(numberLinesTrad)) {
+                                psalmus.intonation.translationLinesCount = numberLinesTrad;
+                            }
+                        }
                         acc.addPsalm(psalmus);
                         return acc;
                     },

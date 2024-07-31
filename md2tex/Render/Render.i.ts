@@ -1,6 +1,10 @@
 export interface Render {
     symbol(name: string): string;
-    orphan(type: string, attributes?: { [attr: string]: any }): string;
+    orphan(
+        type: string,
+        attributes?: { [attr: string]: any },
+        optionalAttributes?: { [attr: string]: any }
+    ): string;
     container(
         type: string,
         content: any,

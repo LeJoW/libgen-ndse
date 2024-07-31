@@ -7,6 +7,8 @@ export class Cantus extends GenericElement {
     scorePath: string = "";
     anchor: string | null = null;
 
+    translationLinesCount: number | undefined;
+
     constructor(file: string) {
         super();
         this.scorePath = file;

@@ -1,13 +1,12 @@
 import { ParagraphLettrine } from "../../Types/paragraphs";
 import { Psalmus, Psalterium } from "../../Types/Psalterium";
 import { Adapter } from "../Adapter.i";
-import { fr } from "./paragraphs";
 
 export const renderPsalterium = (adapter: Adapter) =>
-    function ({ intonation, psalms }: Psalterium): string {
+    function ({ psalms }: Psalterium): string {
         const beforePsalmBody: string[] = [];
         let psalmBody;
-        if (intonation && psalms.length > 0) {
+        if (psalms.length > 0 && psalms[0].intonation) {
             const firstPsalm = psalms[0];
             beforePsalmBody.push(
                 adapter.engine.concat([
@@ -20,7 +19,7 @@ export const renderPsalterium = (adapter: Adapter) =>
                           })
                         : undefined,
                 ]),
-                adapter.render(intonation)
+                adapter.render(psalms[0].intonation)
             );
             psalmBody = [
                 adapter.engine.container(
@@ -46,14 +45,14 @@ export const renderPsalterium = (adapter: Adapter) =>
     };
 
 export const renderPsalteriumTRAD = (adapter: Adapter) =>
-    function ({ intonation, psalms }: Psalterium): string {
-        return adapter.engine.join(
-            psalms.map(function (psalm, index) {
-                if (index === 0) {
-                    psalm.intonation = intonation;
-                }
-                return adapter.render(psalm);
-            })
+    function ({ psalms }: Psalterium): string {
+        return adapter.engine.container(
+            "psalterium",
+            adapter.engine.join(
+                psalms.map(function (psalm, index) {
+                    return adapter.render(psalm);
+                })
+            )
         );
     };
 
@@ -126,6 +125,5 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
                     content: verse,
                 });
             }),
-            adapter.engine.orphan("psalteriumEnd"),
         ]);
     };

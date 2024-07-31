@@ -42,7 +42,6 @@ export class Canticum extends Psalmus {}
 
 export class Psalterium extends GenericElement {
     ton: string | null = null;
-    intonation: Cantus | false = false;
 
     psalms: (Psalmus | Canticum)[] = [];
 
@@ -52,9 +51,6 @@ export class Psalterium extends GenericElement {
     }
 
     addPsalm(psalm: Psalmus | Canticum) {
-        if (this.psalms.length === 0 && this.ton) {
-            this.intonation = new Cantus(`${psalm.psalmDivision}-${this.ton}`);
-        }
         this.psalms.push(psalm);
     }
 }

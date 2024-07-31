@@ -17,38 +17,53 @@
 \newcommand{\resetHeightsList}{\def\privateHeightsList{0pt}}
 
 \newcounter{gabcCount}
-\newlength{\myhh}
+\newlength{\singleGregoLineHeight}
 \newcommand{\cantus}[1]{%
 	\addvspace{2mm}%
 	\setcounter{gabcCount}{0}%
 	{%
 		\def\pdfFile{../../content/gabc/build/#1.pdf}%
 		\setlength{\parindent}{0pt}%
-		\setlength{\parskip}{4pt}%
-		\vspace{-4pt}%
+		\setlength{\parskip}{8pt}%
+		\vspace{-8pt}%
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
 			\stepcounter{gabcCount}%
 			\def\gline{\vspace{0pt}\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}\par}%
-			\storeObjHeight{\myhh}{\gline}%%
-			\global\edef\privateHeightsList{\privateHeightsList,\the\myhh}%%
+			\storeObjHeight{\singleGregoLineHeight}{\gline}%%
+			\global\edef\privateHeightsList{\privateHeightsList,\the\singleGregoLineHeight}%%
 			\gline%%
 		}%
 	}%
 	\addvspace{4mm}%
 }
 
-\newlength{\privateSumForAccumulator}
-\newcommand{\printGapFromHeights}[2]{%
-	\setlength{\privateSumForAccumulator}{-#2}%
-	%\setlength{\privateSumForAccumulator}{2pt}%
+\newlength{\privateAutoSumForAccumulator}
+\newcommand{\autoPrintGapFromHeights}[2]{%
+	\setlength{\privateAutoSumForAccumulator}{-#2}%
 	\foreach \x in #1 {%
-			\addtolength{\privateSumForAccumulator}{\x}%
-			\global\privateSumForAccumulator=\privateSumForAccumulator
-			\ifdim\privateSumForAccumulator>0pt%
+			\addtolength{\privateAutoSumForAccumulator}{\x}%
+			\global\privateAutoSumForAccumulator=\privateAutoSumForAccumulator
+			\ifdim\privateAutoSumForAccumulator>0pt%
 				\breakforeach%
 			\fi%
 		}%
-	\addtolength{\privateSumForAccumulator}{-1.4ex}%
+	\addtolength{\privateAutoSumForAccumulator}{-26pt}%
+	\ifdim\privateAutoSumForAccumulator>0pt%
+		\vspace*{\privateAutoSumForAccumulator}%
+	\fi%
+}
+
+\newlength{\privateSumForAccumulator}
+\newcommand{\printGapFromHeights}[2]{%
+	\setlength{\privateSumForAccumulator}{0pt}%
+	\foreach \x [count=\n] in #1 {%
+			\addtolength{\privateSumForAccumulator}{\x}%
+			\global\privateSumForAccumulator=\privateSumForAccumulator
+			\ifnum\n=#2%
+				\breakforeach%
+			\fi%
+		}%
+	\addtolength{\privateSumForAccumulator}{-26pt}%
 	\ifdim\privateSumForAccumulator>0pt%
 		\vspace*{\privateSumForAccumulator}%
 	\fi%
@@ -59,7 +74,7 @@
 	rightmargin=-1pt,
 	skipabove=0pt,
 	skipbelow=0pt,
-	innertopmargin=0pt,
+	innertopmargin=2mm,
 	innerleftmargin=2mm,
 	innerrightmargin=0pt,
 	innerbottommargin=0pt,
@@ -67,30 +82,36 @@
 	linecolor=white
 }
 
-\newlength{\frameheight}
-\newcommand{\sizedFrame}[1]{%
-	\setlength{\frameheight}{0pt}%
-	\storeObjHeight{\frameheight}{{\begin{mdframed}[style=floatTradStyle]#1\end{mdframed}}}%
-	\addtolength{\frameheight}{-12.84526pt}%
-	{\begin{mdframed}[style=floatTradStyle]#1\printGapFromHeights{\privateHeightsList}{\the\frameheight}\end{mdframed}}%
+\newlength{\frameHeight}
+\newlength{\emptyFrameHeight}
+\setlength{\emptyFrameHeight}{0pt}
+\newcommand{\sizedFrame}[2]{%
+\setlength{\frameHeight}{0pt}%
+\storeObjHeight{\emptyFrameHeight}{{\begin{mdframed}[style=floatTradStyle]\end{mdframed}}}%
+\storeObjHeight{\frameHeight}{{\begin{mdframed}[style=floatTradStyle]#1\end{mdframed}}}%
+\addtolength{\frameHeight}{-\emptyFrameHeight}%
+\ifnum #2>0%
+	\def\gapToAdd{\printGapFromHeights{\privateHeightsList}{#2}}
+\else
+	\def\gapToAdd{\autoPrintGapFromHeights{\privateHeightsList}{\the\frameHeight}}
+\fi
+{\begin{mdframed}[style=floatTradStyle]#1\gapToAdd\end{mdframed}}%
 }
 
-\newcommand{\cantusTRAD}[2]{%%
+\newcommand{\cantusTRAD}[3][0]{%%
 	\resetHeightsList%%
 	{%%
 		\twosided[p]%%
 		\setcolumnwidth{,3.65cm}%%
 		\setlength\columnseprule{0pt}%%
 		\renewcommand{\italic}[1]{\it\garamond ##1}%
+		\ttrad%
 		\begin{paracol}{2}%%
-			\cantus{#1}%%
+			\cantus{#2}%%
 			\switchcolumn%%
 			\sloppy%%
 			\vspace{2mm}%
-			{%
-				\setstretch{0.9}%
-				\sizedFrame{\frenchpar{\textTranslation{#2}}}%
-			}%%
+			{\sizedFrame{\frenchpar{#3}}{#1}}%
 		\end{paracol}%%
 	}%%
 }
