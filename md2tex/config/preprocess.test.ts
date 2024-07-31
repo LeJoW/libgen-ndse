@@ -26,4 +26,12 @@ test("", function () {
     expect(preprocess("nothing \\$ to say")).toStrictEqual([
         "nothing $ to say",
     ]);
+
+    expect(preprocess("%nothing")).toStrictEqual([""]);
+
+    expect(preprocess("%\n")).toStrictEqual([""]);
+
+    expect(preprocess("aze %\n")).toStrictEqual(["aze "]);
+    expect(preprocess("aze %\n eaz")).toStrictEqual(["aze eaz"]);
+    expect(preprocess("aze % comment\n%other comment\n eaz")).toStrictEqual(["aze eaz"]);
 });
