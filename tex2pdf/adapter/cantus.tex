@@ -24,7 +24,7 @@
 	{%
 		\def\pdfFile{../../content/gabc/build/#1.pdf}%
 		\setlength{\parindent}{0pt}%
-		\setlength{\parskip}{8pt}%
+		\setlength{\parskip}{8pt plus 2pt minus 3pt}%
 		\vspace{-8pt}%
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
 			\stepcounter{gabcCount}%
