@@ -24,10 +24,10 @@ parse-fr: $(JSON_FILES_FROM_TXT) $(MARKDOWN)/*.md | $(SOURCE)
 	node dist/md2tex/main.js parse -t ../content/md.list -o $(SOURCE)/parsed-fr.tex
 
 print: $(WORK_DIR)/core.tex
-	cd $(WORK_DIR) && lualatex --output-directory=build print.tex
+	cd $(WORK_DIR) && lualatex --output-directory=build print/print.tex
 
 print-fr: $(WORK_DIR)/core-fr.tex
-	cd $(WORK_DIR) && lualatex --output-directory=build print-fr.tex
+	cd $(WORK_DIR) && lualatex --output-directory=build print/print-fr.tex
 
 $(SOURCE)/%.tex: $(MARKDOWN)/%.tex | $(SOURCE)
 	cp $< $@
