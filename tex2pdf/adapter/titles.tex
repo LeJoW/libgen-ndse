@@ -15,9 +15,9 @@
 	{
 		\titleSpaceLength=1.1em
 		\thispagestyle{empty}
-		{\centering \onehalfspacing \Huge\MakeUppercase{\garamond #1}\par}
+		{\centering \onehalfspacing \Huge\MakeUppercase{\decorativ #1}\par}
 		\vspace{5mm}
-		{\centering\it\garamond #2\par}
+		{\centering\it\decorativ #2\par}
 	}
 	\global\def\dayTitleShort{#3}
 }
@@ -27,7 +27,7 @@
 \vspace*{8mm}
 {
 \titleSpaceLength=0.5em
-{\centering \uppercase{\it\garamond #1}\par}
+{\centering \uppercase{\it\decorativ #1}\par}
 }
 \addvspace{5mm}
 \global\def\officeTitleShort{#2}
@@ -44,13 +44,13 @@
 	\vspace{4mm}
 	\def\detail{#2}
 	\ifx\empty\detail
-		{\centering\garamond #1\par}
+		{\centering\decorativ #1\par}
 		\vspace{2mm}
 	\else
-		{\hfill\garamond#1\hfill\hfill{\it\garamond #2}\hfill}
+		{\hfill\decorativ#1\hfill\hfill{\it\decorativ #2}\hfill}
 	\fi
 }
 
 \newcommand{\psalmTitle}[1]{%
-	\needspace{6mm}\addvspace{2mm}{\centering\garamond #1\par}%
+	\needspace{6mm}\addvspace{2mm}{\centering\decorativ #1\par}%
 }

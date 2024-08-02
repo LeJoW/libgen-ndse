@@ -195,6 +195,10 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                     new Psalterium(ton.length > 0 && ton != "0" ? ton : null));
             },
             saveTranslation(psalterium, trad) {
+                if (trad.trim() === "{}") {
+                    psalterium.translation = true;
+                    return;
+                }
                 trad.split(";;").map(function (title: string, index: number) {
                     title = title.trim();
                     if (title.length > 0) {

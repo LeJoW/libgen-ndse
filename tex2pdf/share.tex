@@ -1,7 +1,7 @@
 \usepackage[french, main=latin]{babel}
 \babelprovide[transforms = letters.noj]{latin}
 \usepackage[utf8]{inputenc}
-\usepackage[urw-garamond]{mathdesign}
+\usepackage[urw-decorativ]{mathdesign}
 \usepackage[T1]{fontenc}
 \usepackage{fontspec}
 \usepackage{newunicodechar}
@@ -15,22 +15,24 @@
 }
 
 \newcommand{\frenchpar}[1]{\begin{otherlanguage*}{french}#1\end{otherlanguage*}}
+\newcommand{\fbseries}{\unskip\setBold[0.1]\aftergroup\unsetBold\aftergroup\ignorespaces}
 
 \setmainfont{PlantinStd-Light}[
-	Ligatures=Common,
 	BoldFont=PlantinStd-Bold,
 	ItalicFont=PlantinStd-LightItalic,
-	BoldItalicFont=PlantinStd-BoldItalic
+	BoldItalicFont=PlantinStd-BoldItalic,
+	SmallCapsFont=Sabon,
+	SmallCapsFeatures={Letters=SmallCaps}
 ]
 \newunicodechar{℣}{\mbox{V\kern-0.85em\reflectbox{\rotatebox[origin=c]{25}{∫}}\kern-0.05em}}
 \newunicodechar{℟}{\mbox{R\kern-0.5em\reflectbox{\rotatebox[origin=c]{30}{∫}}\kern-0.25em}}
 \newunicodechar{ǽ}{æ\kern-0.5em´\kern0.15em}
 
-\newfontfamily\garamond[
+\newfontfamily\decorativ[
 	Numbers=OldStyle,
-	WordSpace=2.4,
-	ItalicFont=EBGaramond-Italic
-]{EBGaramond}
-\newfontfamily\plantin{PlantinStd-Light}
+	WordSpace=1.7,
+	ItalicFont=SabonItalic
+]{Sabon}
+\newfontfamily\courant{PlantinStd-Light}
 
 \fontsize{11.5pt}{5mm}\selectfont

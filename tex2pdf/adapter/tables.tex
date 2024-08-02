@@ -1,9 +1,9 @@
 \newcommand{\anchor}[1]{\label{#1}}
 
-\newcommand{\tableTitle}[1]{
-	\vspace*{4mm}
-	{\centering\bf\garamond #1\par}
-	\vspace*{3mm}
+\newcommand{\tableTitle}[1]{%
+	\vspace*{4mm}%
+	{\centering\fbseries\decorativ #1\par}%
+	\vspace*{3mm}%
 }
 
 \newenvironment{tableOfContents}{\thispagestyle{empty}}{}
@@ -15,7 +15,7 @@
 	\end{itemize}
 }
 
-\newcommand{\tableSectionTitle}[1]{{\small\sc\garamond #1}}
+\newcommand{\tableSectionTitle}[1]{{\small\scshape #1}}
 \newcommand{\sectionEntry}[2]{\small\item[] #1\dotfill\pageref{#2}}
 
 
@@ -28,7 +28,7 @@
 }
 
 \newcommand{\psEntry}[3]{\small\item[#1] #2. #3.}
-\newcommand{\psMode}[1]{{\sc\garamond (#1)}}
+\newcommand{\psMode}[1]{{\scshape (#1)}}
 
 \newenvironment{cantIndex}{
 	\setlength\leftskip{1cm}
