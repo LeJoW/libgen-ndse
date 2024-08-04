@@ -18,23 +18,22 @@
 
 \newcounter{gabcCount}
 \newlength{\singleGregoLineHeight}
-\newcommand{\cantus}[1]{%
-	\addvspace{2mm}%
+\newlength{\gregoLineSkip}
+\setlength{\gregoLineSkip}{8pt plus 2pt minus 3pt}
+\newcommand{\cantusInternal}[1]{%
 	\setcounter{gabcCount}{0}%
 	{%
 		\def\pdfFile{../../content/gabc/build/#1.pdf}%
 		\setlength{\parindent}{0pt}%
-		\setlength{\parskip}{8pt plus 2pt minus 3pt}%
-		\vspace{-8pt}%
+		\setlength{\parskip}{\gregoLineSkip}%
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
 			\stepcounter{gabcCount}%
-			\def\gline{\vspace{0pt}\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}\par}%
+			\def\gline{\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}\par}%
 			\storeObjHeight{\singleGregoLineHeight}{\gline}%%
 			\global\edef\privateHeightsList{\privateHeightsList,\the\singleGregoLineHeight}%%
 			\gline%%
 		}%
 	}%
-	\addvspace{4mm}%
 }
 
 \newlength{\privateAutoSumForAccumulator}
@@ -79,7 +78,7 @@
 	innerrightmargin=0pt,
 	innerbottommargin=0pt,
 	backgroundcolor=white,
-	linecolor=white
+	%linecolor=white
 }
 
 \newlength{\frameHeight}
@@ -98,6 +97,8 @@
 {\begin{mdframed}[style=floatTradStyle]#1\gapToAdd\end{mdframed}}%
 }
 
+\newcommand{\cantus}[1]{\cantusInternal{#1}}
+
 \newcommand{\cantusTRAD}[3][0]{%%
 	\resetHeightsList%%
 	{%%
@@ -107,10 +108,10 @@
 		\renewcommand{\italic}[1]{\it\decorativ ##1}%
 		\ttrad%
 		\begin{paracol}{2}%%
-			\cantus{#2}%%
+			\cantusInternal{#2}%%
 			\switchcolumn%%
+			\vspace{\gregoLineSkip}%
 			\sloppy%%
-			\vspace{2mm}%
 			{\sizedFrame{\frenchpar{#3}}{#1}}%
 		\end{paracol}%%
 	}%%
