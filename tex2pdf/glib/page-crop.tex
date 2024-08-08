@@ -1,0 +1,58 @@
+\directlua{%
+    internalListOfPageHeight = {}%
+}
+
+\newcommand{\enablePageCropping}{
+    \directlua{
+        local function post_linebreak(current)
+            while current do
+                if current.id == node.id("hlist") then
+                    local height = current.height
+                    local depth = current.depth
+                    local total_height = (height + depth) .. "sp"
+                    table.insert(internalListOfPageHeight, total_height)
+                end
+                current = current.next
+            end
+            return true
+        end
+        luatexbase.add_to_callback('post_linebreak_filter', post_linebreak, 'Hook after line break')
+    }
+}
+
+\newcommand{\getHeightOfPage}[1]{\directlua{%
+    local height = internalListOfPageHeight[#1]
+    if height == nil then
+        tex.print("\the\paperheight")
+    else
+        tex.print(height)%
+    end
+}}
+
+\makeatletter
+\newcommand{\convert}[1]{\strip@pt\dimexpr0.996264009963#1\relax}
+\makeatother
+
+\makeatletter
+\newdimen{\new@pageheight}
+\newdimen{\given@pageheight}
+\AtBeginShipout{%
+    \setlength{\given@pageheight}{\getHeightOfPage{\thepage}}%
+    \new@pageheight=\dimexpr\pagegoal-\given@pageheight\relax%
+    \edef\mypdfpageattr{/CropBox [0 \convert{\new@pageheight} \convert{\paperwidth} \convert{\paperheight}]}%
+    \expandafter\pdfpageattr\expandafter{\mypdfpageattr}%
+}
+\makeatother
+
+\makeatletter
+\renewcommand{\strut}[1][.3\baselineskip]{%
+    \hbox{%
+        \vrule\@height\z@%
+        \@depth#1%
+        \@width\z@%
+    }%
+}
+\makeatother
+
+\let\oldGreSetThisSyllable\GreSetThisSyllable
+\renewcommand{\GreSetThisSyllable}[5]{\oldGreSetThisSyllable{#1\strut[\gregoLineDepth]}{#2}{#3}{#4}{#5}}
