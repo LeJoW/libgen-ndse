@@ -4,20 +4,33 @@
 \usepackage[paperwidth=10.2cm, paperheight=5cm, margin=0mm]{geometry}
 \usepackage{gregoriotex}
 \usepackage{wrapfig}
+\usepackage{twoopt}
+
 \input{\CurrentFilePath/../share}
 \input{\CurrentFilePath/config}
 \input{\CurrentFilePath/page-crop}
+\input{\CurrentFilePath/check-syllabs}
 
 \makeatletter
 \long\def\nabcsnippet#1{%
-  \directlua{gregoriotex.direct_gabc("\luatexluaescapestring{\unexpanded\expandafter{#1}}", "nabc-lines:1;", \gre@allowdeprecated@asboolean)}%
+	\directlua{gregoriotex.direct_gabc("\luatexluaescapestring{\unexpanded\expandafter{#1}}", "nabc-lines:1;", \gre@allowdeprecated@asboolean)}%
 }%
 \makeatother
 
-\let\snippet\gabcsnippet
-\newcommand{\enableNabc}{%
-    \global\let\snippet\nabcsnippet%
+\newcommand{\snippet}[1]{%
+	\immediate\message{#1}%
+	\checkSyllabs{#1}%
+	\gabcsnippet{#1}%
 }
+\newcommand{\enableNabc}{%
+	\renewcommand{\snippet}[1]{%
+		\checkSyllabs{##1}%
+		\nabcsnippet{##1}%
+	}
+}
+
+\let\oldGreannotation\greannotation
+\renewcommand{\greannotation}[1]{\oldGreannotation{\strut[1mm]#1}}
 
 \newcommand{\linesTrad}[1]{\begin{wrapfigure}[#1]{r}[2mm]{3.5cm}\end{wrapfigure}}
 
@@ -29,7 +42,7 @@
 }
 
 \newcommand{\gabcNormal}[1]{
-	\grechangestyle{initial}{\fontsize{40}{40}\selectfont\decorativ}
+	\grechangestyle{initial}{\fontsize{35}{35}\selectfont\decorativ}
 	\gresetinitiallines{1}
 	\snippet{#1}
 }
@@ -37,7 +50,7 @@
 \newcommand{\gabcAnnotation}[3]{
 	\greannotation{#1}
 	\greannotation{#2}
-	\grechangedim{annotationraise}{0.5mm}{fixed}
+	\grechangedim{annotationraise}{1mm}{fixed}
 	\gabcNormal{#3}
 }
 
@@ -46,10 +59,10 @@
 	\snippet{#1}
 }
 
-\newcommand{\gabcAnt}[3][Anti-]{
+\newcommandtwoopt{\gabcAnt}[3][Anti-][phona]{
 	\greannotation{#1}
 	\greannotation{#2}
-	\grechangedim{annotationraise}{-4mm}{scalable}
+	\grechangedim{annotationraise}{-3mm}{scalable}
 	\gresetinitiallines{1}
 	\grechangestyle{initial}{\color{white}}
 	\snippet{#3}

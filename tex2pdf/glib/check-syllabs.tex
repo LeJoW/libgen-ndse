@@ -1,0 +1,8 @@
+\directlua{pwd = "\CurrentFilePath"}
+\newcommand{\checkSyllabs}[1]{\directlua{
+local cmd = [[echo "#1"]] .. ' | php "' .. pwd .. '/check-syllabs.php"'
+local status, msg = os.execute(cmd)
+    if (status == nil) then
+        print("--shell-escape must be active to check syllabification")
+    end
+}}

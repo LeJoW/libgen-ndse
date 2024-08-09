@@ -1,5 +1,4 @@
-\newcommand*{\pdfnumberofpages}[1]{%
-	\directlua{%
+\newcommand*{\pdfnumberofpages}[1]{\directlua{%
 		local doc = pdfe.open("\luaescapestring{#1}")
 		local pages
 		if (doc) then
@@ -8,8 +7,7 @@
 		pages = 0
 		end
 		tex.write(pages)
-	}%
-}
+	}}
 
 \newcommand{\storeObjHeight}[2]{\settoheight{#1}{\vbox{#2}}}
 
@@ -28,10 +26,13 @@
 		\setlength{\parskip}{\gregoLineSkip}%
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
 			\stepcounter{gabcCount}%
-			\def\gline{\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}\par}%
+			\def\gline{}%\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}\par}%
 			\storeObjHeight{\singleGregoLineHeight}{\gline}%%
 			\global\edef\privateHeightsList{\privateHeightsList,\the\singleGregoLineHeight}%%
+			\message{\thegabcCount}
+			\message{\pdfFile}
 			\gline%%
+			\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}%
 		}%
 	}%
 }
