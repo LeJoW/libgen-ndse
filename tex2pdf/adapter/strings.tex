@@ -8,3 +8,10 @@
 \renewcommand{\roman}[1]{{\rm #1}}
 \newcommand{\smallCaps}[1]{#1}
 \newcommand{\upper}[1]{\textsuperscript{#1}}
+
+\newlength{\ttradLineSkip}
+\setlength{\ttradLineSkip}{4mm plus 0pt minus 0pt}
+\newlength{\ttradFontSize}
+\setlength{\ttradFontSize}{10pt}
+\newcommand{\ttrad}{\fontsize{\ttradFontSize}{\ttradLineSkip}\selectfont}
+\newcommand{\textTranslation}[1]{\ttrad #1}

@@ -38,3 +38,15 @@
 
 \newdimen{\gregoLineDepth}
 \gregoLineDepth=2mm
+
+\makeatletter
+%{\relax\ifmmode\copy\strutbox[#1]\else\unhcopy\strutbox[#1]\fi}
+%\def\strutbox#1{}
+\renewcommand{\strut}[1][.3\baselineskip]{%
+    \hbox{%
+        \vrule\@height\z@%
+        \@depth#1%
+        \@width\z@%
+    }%
+}
+\makeatother

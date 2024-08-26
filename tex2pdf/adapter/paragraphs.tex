@@ -3,9 +3,7 @@
 \newenvironment{paragraphLettrine}[1]{\initial{#1}}{\par}
 
 \newenvironment{rubric}{
-	\addvspace{1mm}
 	\it\ttrad}{\par
-	\vspace{0.6mm}
 }
 
 \newenvironment{remplacement}{\P~}{}
@@ -14,17 +12,48 @@
 
 \newcommand{\forcebreak}{\newline\indent}
 
+\newlength{\topSepRuleTradSpace}%
+\newlength{\minGapToBaselineAlign}%
+\newlength{\maxGapToBaselineAlign}%
+\setlength{\minGapToBaselineAlign}{-1.2mm}%
+\setlength{\maxGapToBaselineAlign}{3.5mm}%
 \newcommand{\colLA}[1]{#1\switchcolumn*}
 \newcommand{\colFR}[1]{\frenchpar{\ttrad #1}\switchcolumn}
+\newcommand{\pushBottom}{%
+	\prevdepth=-\maxdimen\null%
+	\vspace{\directlua{
+			local spaceLeft = (tex.pagegoal - tex.pagetotal) - tex.sp("\the\capsHeight")
+			local baselineskip = tex.baselineskip.width
+			local lineCount = math.floor(spaceLeft / baselineskip)
+			local gap = spaceLeft - (baselineskip * lineCount)
+			local invertGap =  gap - baselineskip
+			if gap > tex.sp("\the\maxGapToBaselineAlign")
+				and invertGap > tex.sp("\the\minGapToBaselineAlign")
+				and lineCount > 1
+			then
+			tex.sprint(invertGap .. "sp")
+			else
+			tex.sprint(gap .. "sp")
+			end
+		}}%
+}
 \newenvironment{tradColonnes}{%
-	\begingroup%
 	\twosided%
-	%\addvspace{\topSepRuleTradSpace}%
 	\columnratio{0.5}%
+	\setlength{\parskip}{0pt}%
+	\setlength{\topSepRuleTradSpace}{\dimexpr\baselineskip-\capsHeight}%
+	\vspace{\parskip}%
+	\vspace{\topSepRuleTradSpace}%
+	\pushBottom%
+	\begingroup%
+	\let\storeParskip\parskip%
+	\setlength{\parskip}{0pt}%
+	\hrule width\textwidth height0pt depth0pt%
 	\begin{paracol}{2}%
-		\tolerance=9999%
-		%{\vspace*{-\topSepRuleTradSpace}\switchcolumn}%
-		%{\vspace*{-\topSepRuleTradSpace}\switchcolumn*}%
+		\setlength{\parskip}{\storeParskip}%
+		\sloppy%
+		{\strut[0pt]\vspace*{-\topSepRuleTradSpace}\switchcolumn}%
+		{\strut[0pt]\vspace*{-\topSepRuleTradSpace}\switchcolumn*}%
 		}{%
 	\end{paracol}%
 	\endgroup%

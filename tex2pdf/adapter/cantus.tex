@@ -13,26 +13,31 @@
 
 \def\privateHeightsList{0pt}
 \newcommand{\resetHeightsList}{\def\privateHeightsList{0pt}}
+\newlength{\singleGregoLineHeight}
+\newlength{\singleGregoLineDepth}
+\newcommand{\pushHeightOf}[1]{%
+	\settoheight{\singleGregoLineHeight}{\hbox{#1}}%
+	\settodepth{\singleGregoLineDepth}{\hbox{#1}}%
+	\addtolength{\singleGregoLineHeight}{\singleGregoLineDepth}%
+	\addtolength{\singleGregoLineHeight}{\gregoLineSkip}%
+	\global\edef\privateHeightsList{\privateHeightsList, \the\singleGregoLineHeight}%%%
+}
 
 \newcounter{gabcCount}
-\newlength{\singleGregoLineHeight}
 \newlength{\gregoLineSkip}
-\setlength{\gregoLineSkip}{8pt plus 2pt minus 3pt}
+\setlength{\gregoLineSkip}{1.8cm plus 2mm minus 2mm}
 \newcommand{\cantusInternal}[1]{%
 	\setcounter{gabcCount}{0}%
 	{%
 		\def\pdfFile{../../content/gabc/build/#1.pdf}%
 		\setlength{\parindent}{0pt}%
-		\setlength{\parskip}{\gregoLineSkip}%
+		\setlength{\baselineskip}{\gregoLineSkip}%
+		\setlength{\lineskip}{0pt}%
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
 			\stepcounter{gabcCount}%
-			\def\gline{}%\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}\par}%
-			\storeObjHeight{\singleGregoLineHeight}{\gline}%%
-			\global\edef\privateHeightsList{\privateHeightsList,\the\singleGregoLineHeight}%%
-			\message{\thegabcCount}
-			\message{\pdfFile}
-			\gline%%
-			\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}%
+			\def\gline{\vbox{\raisebox{-\gregoLineDepth}{\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}}}}%
+			\pushHeightOf{\gline}%
+			\gline\penalty0%
 		}%
 	}%
 }
@@ -47,7 +52,7 @@
 				\breakforeach%
 			\fi%
 		}%
-	\addtolength{\privateAutoSumForAccumulator}{-26pt}%
+	\addtolength{\privateAutoSumForAccumulator}{-\gregoLineSkip}%
 	\ifdim\privateAutoSumForAccumulator>0pt%
 		\vspace*{\privateAutoSumForAccumulator}%
 	\fi%
@@ -58,12 +63,12 @@
 	\setlength{\privateSumForAccumulator}{0pt}%
 	\foreach \x [count=\n] in #1 {%
 			\addtolength{\privateSumForAccumulator}{\x}%
-			\global\privateSumForAccumulator=\privateSumForAccumulator
+			\global\privateSumForAccumulator=\privateSumForAccumulator%
 			\ifnum\n=#2%
 				\breakforeach%
 			\fi%
 		}%
-	\addtolength{\privateSumForAccumulator}{-26pt}%
+	\addtolength{\privateSumForAccumulator}{-\gregoLineSkip}%
 	\ifdim\privateSumForAccumulator>0pt%
 		\vspace*{\privateSumForAccumulator}%
 	\fi%
@@ -79,7 +84,7 @@
 	innerrightmargin=0pt,
 	innerbottommargin=0pt,
 	backgroundcolor=white,
-	%linecolor=white
+	linecolor=white
 }
 
 \newlength{\frameHeight}
@@ -98,22 +103,29 @@
 {\begin{mdframed}[style=floatTradStyle]#1\gapToAdd\end{mdframed}}%
 }
 
-\newcommand{\cantus}[1]{\cantusInternal{#1}}
-
+\newcommand{\cantus}[1]{%
+	\cantusInternal{#1}%
+	\par%
+}
 \newcommand{\cantusTRAD}[3][0]{%%
 	\resetHeightsList%%
-	{%%
-		\twosided[p]%%
-		\setcolumnwidth{,3.65cm}%%
-		\setlength\columnseprule{0pt}%%
-		\renewcommand{\italic}[1]{\it\decorativ ##1}%
-		\ttrad%
-		\begin{paracol}{2}%%
-			\cantusInternal{#2}%%
-			\switchcolumn%%
-			\vspace{\gregoLineSkip}%
-			\sloppy%%
-			{\sizedFrame{\frenchpar{#3}}{#1}}%
-		\end{paracol}%%
-	}%%
+	\twosided[p]%%
+	\setcolumnwidth{,3.65cm}%%
+	\setlength\columnseprule{0pt}%%
+	\renewcommand{\italic}[1]{\it\decorativ ##1}%
+	\vspace{\parskip}%
+	\begingroup%
+	\let\storeParskip\parskip%
+	\setlength{\parskip}{0pt}%
+	\hrule width\textwidth height0pt depth0pt%
+	\begin{paracol}{2}%%
+		\prevdepth=-\maxdimen%
+		\setlength{\parskip}{\storeParskip}%
+		\cantusInternal{#2}%%
+		\switchcolumn%%
+		\sloppy%
+		{\sizedFrame{\frenchpar{\ttrad #3}}{#1}}%
+	\end{paracol}%%
+	\endgroup%
+	\par%
 }

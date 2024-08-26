@@ -1,4 +1,6 @@
-\newenvironment{psalterium}{}{\vspace{2mm}}
+\newenvironment{psalterium}{%
+	\psalteriumStyle%
+}{}
 
 \newenvironment{psalm}{}{}
 
@@ -9,8 +11,7 @@
 }
 
 \newcommand{\psalmLA}[1]{\colLA{#1}}
-\newcommand{\psalmFR}[1]{\sloppy \colFR{#1}}
-\newcommand{\psalmVerseEnd}{}
+\newcommand{\psalmFR}[1]{\colFR{#1}}
 
 \newenvironment{psalmTrad}{
 	\begin{tradColonnes}
