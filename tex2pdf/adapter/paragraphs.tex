@@ -40,11 +40,11 @@
 \newenvironment{tradColonnes}{%
 	\twosided%
 	\columnratio{0.5}%
-	\setlength{\parskip}{0pt}%
-	\setlength{\topSepRuleTradSpace}{\dimexpr\baselineskip-\capsHeight}%
 	\vspace{\parskip}%
 	\vspace{\topSepRuleTradSpace}%
 	\pushBottom%
+	\setlength{\parskip}{0pt}%
+	\setlength{\topSepRuleTradSpace}{\dimexpr\baselineskip-\capsHeight}%
 	\begingroup%
 	\let\storeParskip\parskip%
 	\setlength{\parskip}{0pt}%
@@ -57,4 +57,15 @@
 		}{%
 	\end{paracol}%
 	\endgroup%
+}
+
+\newenvironment{colonnes}{%
+	\vspace{\parskip}%
+	\pushBottom%
+	\vspace{-1pt}%
+	\setlength{\parskip}{0pt}%
+	\hrule width\textwidth height0pt depth0pt%
+	\begin{multicols}{2}%
+		}{%
+	\end{multicols}%
 }
