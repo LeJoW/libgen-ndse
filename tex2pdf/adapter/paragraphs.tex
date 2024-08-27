@@ -25,6 +25,7 @@
 	\vspace{\directlua{tex.sprint(paragraphs.getSpaceToPushBottom() .. "sp")}}%
 }
 \newenvironment{tradColonnes}{%
+	\needspace{3\baselineskip}%
 	\twosided%
 	\columnratio{0.5}%
 	\vspace{\parskip}%
@@ -47,6 +48,7 @@
 }
 
 \newenvironment{colonnes}{%
+	\needspace{3\baselineskip}%
 	\vspace{\parskip}%
 	\pushBottom%
 	\vspace{-1pt}%
