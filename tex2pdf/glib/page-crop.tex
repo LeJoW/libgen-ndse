@@ -1,43 +1,8 @@
-\directlua{%
-    internalListOfPageHeight = {}%
-}
+\directlua{dofile("\CurrentFilePath" .. "/page-crop.lua")}
 
-\newcommand{\enablePageCropping}{\directlua{
-    local function debug(message)
-        -- print(message)
-    end
-    local function post_linebreak(head)
-        local total_height = 0;
-        while head do
-            if head.id == node.id("hlist") then
-                local height = head.height
-                local depth = head.depth
-                total_height = height + depth
-                if total_height > 0 then
-                    table.insert(internalListOfPageHeight, total_height .. "sp")
-                end
-            end
-            debug("-------------------------")
-            debug(head)
-            debug(total_height)
-            head = head.next
-        end
-        debug("+++++++++++++++++++++++++")
-        debug(head)
-        debug(total_height)
-        return true
-    end
-    luatexbase.add_to_callback('post_linebreak_filter', post_linebreak, 'Hook after line break')
-}}
+\newcommand{\enablePageCropping}{\directlua{pageCrop.enable()}}
 
-\newcommand{\getHeightOfPage}[1]{\directlua{%
-    local height = internalListOfPageHeight[#1]
-    if height == nil then
-        tex.print("\the\paperheight")
-    else
-        tex.print(height)%
-    end
-}}
+\newcommand{\getHeightOfPage}[1]{\directlua{tex.sprint(pageCrop.getHeightOfPage(#1) .. "sp")}}
 
 \makeatletter
 \newcommand{\convert}[1]{\strip@pt\dimexpr0.996264009963#1\relax}
@@ -47,10 +12,10 @@
 \newdimen{\new@pageheight}
 \newdimen{\given@pageheight}
 \AtBeginShipout{%
-    \setlength{\given@pageheight}{\getHeightOfPage{\thepage}}%
-    \new@pageheight=\dimexpr\pagegoal-\given@pageheight\relax%
-    \edef\mypdfpageattr{/CropBox [0 \convert{\new@pageheight} \convert{\paperwidth} \convert{\paperheight}]}%
-    \expandafter\pdfpageattr\expandafter{\mypdfpageattr}%
+\setlength{\given@pageheight}{\getHeightOfPage{\thepage}}%
+\new@pageheight=\dimexpr\pagegoal-\given@pageheight\relax%
+\edef\mypdfpageattr{/CropBox [0 \convert{\new@pageheight} \convert{\paperwidth} \convert{\paperheight}]}%
+\expandafter\pdfpageattr\expandafter{\mypdfpageattr}%
 }
 \makeatother
 

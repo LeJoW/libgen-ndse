@@ -1,8 +1,6 @@
-\directlua{pwd = "\CurrentFilePath"}
-\newcommand{\checkSyllabs}[1]{\directlua{
-local cmd = [[echo "#1"]] .. ' | php "' .. pwd .. '/check-syllabs.php"'
-local status, msg = os.execute(cmd)
-    if (status == nil) then
-        print("--shell-escape must be active to check syllabification")
-    end
-}}
+\directlua{
+	pwd = "\CurrentFilePath";
+	dofile(pwd .. "/check-syllabs.lua")
+}
+
+\newcommand{\checkSyllabs}[1]{\directlua{tex.sprint(checkSyllabs.of("\luaescapestring{#1}"))}}
