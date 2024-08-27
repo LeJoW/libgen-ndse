@@ -3,6 +3,7 @@
 \newenvironment{paragraphLettrine}[1]{\initial{#1}}{\par}
 
 \newenvironment{rubric}{
+	\setlength{\parskip}{2mm}%
 	\it\ttrad}{\par
 }
 
@@ -12,30 +13,16 @@
 
 \newcommand{\forcebreak}{\newline\indent}
 
-\newlength{\topSepRuleTradSpace}%
-\newlength{\minGapToBaselineAlign}%
-\newlength{\maxGapToBaselineAlign}%
+\newdimen{\topSepRuleTradSpace}%
+\newdimen{\minGapToBaselineAlign}%
+\newdimen{\maxGapToBaselineAlign}%
 \setlength{\minGapToBaselineAlign}{-1.2mm}%
 \setlength{\maxGapToBaselineAlign}{3.5mm}%
 \newcommand{\colLA}[1]{#1\switchcolumn*}
 \newcommand{\colFR}[1]{\frenchpar{\ttrad #1}\switchcolumn}
 \newcommand{\pushBottom}{%
 	\prevdepth=-\maxdimen\null%
-	\vspace{\directlua{
-			local spaceLeft = (tex.pagegoal - tex.pagetotal) - tex.sp("\the\capsHeight")
-			local baselineskip = tex.baselineskip.width
-			local lineCount = math.floor(spaceLeft / baselineskip)
-			local gap = spaceLeft - (baselineskip * lineCount)
-			local invertGap =  gap - baselineskip
-			if gap > tex.sp("\the\maxGapToBaselineAlign")
-				and invertGap > tex.sp("\the\minGapToBaselineAlign")
-				and lineCount > 1
-			then
-			tex.sprint(invertGap .. "sp")
-			else
-			tex.sprint(gap .. "sp")
-			end
-		}}%
+	\vspace{\directlua{tex.sprint(paragraphs.getSpaceToPushBottom() .. "sp")}}%
 }
 \newenvironment{tradColonnes}{%
 	\twosided%

@@ -1,4 +1,4 @@
-\newlength{\capsHeight}%
+\newdimen{\capsHeight}%
 
 \newcommand{\hstyle}[1]{\decorativ\Large #1}
 
@@ -24,7 +24,7 @@
 	\fontdimen4\font=0.5ex
 
 	\begin{justify}
-		%\flushbottom%
+		\flushbottom%
 		\bodyStyle%
 		\settoheight{\capsHeight}{ABCDEFGHIJKLMNOPQRST}%
 		}{
@@ -33,7 +33,7 @@
 
 \def\bodyStyle{
 	\setlength{\parsep}{0pt}
-	\setlength{\parskip}{3.5mm plus 2pt minus 0pt}
+	\setlength{\parskip}{4mm plus \maxdimen minus 0pt}
 	\setlength{\lineskip}{0pt}
 	\setlength{\lineskiplimit}{0pt}
 	\setlength{\baselineskip}{5mm plus 0pt minus 0pt}
@@ -41,7 +41,7 @@
 	\setlength{\parindent}{4mm}
 	%	\setlength{\ttradFontSize}{10pt}
 	%	\setlength{\ttradLineSkip}{4mm plus 0pt minus 0pt}
-	\setlength{\gregoLineSkip}{1.8cm plus 1mm minus 1mm}
+	\setlength{\gregoLineSkip}{1.8cm plus 0pt minus 1mm}
 }
 
 \def\psalteriumStyle{

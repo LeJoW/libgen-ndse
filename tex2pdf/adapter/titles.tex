@@ -11,13 +11,13 @@
 	\ifnum\thepage>1
 		\cleardoublepage
 	\fi
-	\vspace*{4mm}
+	\vspace*{2mm}
 	{
 		\titleSpaceLength=1.1em
 		\thispagestyle{empty}
 		{\centering \onehalfspacing \Huge\MakeUppercase{\decorativ #1}\par}
-		%\vspace{5mm}
-		{\centering\it\decorativ #2\par}
+		\vspace{5mm}
+		{\centering\it\decorativ\ttrad #2\par}
 	}
 	\global\def\dayTitleShort{#3}
 }
@@ -40,12 +40,12 @@
 }
 
 \newcommand{\lessonTitle}[2]{
-	%\needspace{5mm}
-	%\vspace{4mm}
+	\needspace{1cm}
+	\vspace{4mm}
 	\def\detail{#2}
 	\ifx\empty\detail
 		{\centering\decorativ #1\par}
-		%\vspace{2mm}
+		\vspace{2mm}
 	\else
 		{\hfill\decorativ#1\hfill\hfill{\it\decorativ #2}\hfill}
 	\fi
@@ -53,6 +53,6 @@
 
 \newcommand{\psalmTitle}[1]{%
 	\needspace{6mm}%
-	%\addvspace{2mm}
+	\addvspace{1.5mm}
 	{\centering\decorativ #1\par}%
 }

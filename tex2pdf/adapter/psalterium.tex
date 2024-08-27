@@ -1,6 +1,6 @@
 \newenvironment{psalterium}{%
 	\psalteriumStyle%
-}{}
+}{\vspace{1mm}}
 
 \newenvironment{psalm}{}{}
 
@@ -19,4 +19,4 @@
 	\end{tradColonnes}
 }
 
-\newcommand{\aloneDoxologie}[1]{#1}
+\newcommand{\aloneDoxologie}[1]{\setlength{\parskip}{0pt} #1}

@@ -1,5 +1,3 @@
-\directlua{dofile("\CurrentFilePath" .. '/logic.lua')}
-
 \newcommand*{\pdfnumberofpages}[1]{\directlua{%
 		tex.write(cantus.getPDFpagesCount("\luaescapestring{#1}"))%
 	}}
@@ -13,7 +11,7 @@
 }
 
 \newcounter{gabcCount}
-\newlength{\gregoLineSkip}
+\newdimen{\gregoLineSkip}
 \setlength{\gregoLineSkip}{1.8cm plus 2mm minus 2mm}
 \newcommand{\cantusInternal}[1]{%
 	\setcounter{gabcCount}{0}%
@@ -52,8 +50,8 @@
 	linecolor=white
 }
 
-\newlength{\frameHeight}
-\newlength{\emptyFrameHeight}
+\newdimen{\frameHeight}
+\newdimen{\emptyFrameHeight}
 \setlength{\emptyFrameHeight}{0pt}
 \newcommand{\sizedFrame}[2]{%
 \setlength{\frameHeight}{0pt}%
@@ -74,7 +72,7 @@
 	\par%
 }
 \newcommand{\cantusTRAD}[3][0]{%%
-	\needspace{2\gregoLineSkip}%
+	\needspace{1\gregoLineSkip}%
 	\resetHeightsList%%
 	\twosided[p]%%
 	\setcolumnwidth{,3.65cm}%%

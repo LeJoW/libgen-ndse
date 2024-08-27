@@ -1,4 +1,5 @@
 cantus = {}
+paragraphs = {}
 
 local function the(dimen)
     return tex.getdimen(dimen)
@@ -63,4 +64,16 @@ cantus.getAutoAdjustedGap = function(boxHeight)
     return getGap(boxHeight, function(line, accumulator)
         return accumulator > boxHeight
     end)
+end
+
+paragraphs.getSpaceToPushBottom = function()
+    local spaceLeft = (tex.pagegoal - tex.pagetotal) - the('capsHeight')
+    local baselineskip = tex.baselineskip.width
+    local lineCount = math.floor(spaceLeft / baselineskip)
+    local gap = spaceLeft - (baselineskip * lineCount)
+    local invertGap = gap - baselineskip
+    if gap > the('maxGapToBaselineAlign') and invertGap > the('minGapToBaselineAlign') and lineCount > 1 then
+        return invertGap
+    end
+    return gap
 end
