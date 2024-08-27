@@ -1,26 +1,15 @@
+\directlua{dofile("\CurrentFilePath" .. '/logic.lua')}
+
 \newcommand*{\pdfnumberofpages}[1]{\directlua{%
-		local doc = pdfe.open("\luaescapestring{#1}")
-		local pages
-		if (doc) then
-		pages = pdfe.getnofpages(doc)
-		else
-		pages = 0
-		end
-		tex.write(pages)
+		tex.write(cantus.getPDFpagesCount("\luaescapestring{#1}"))%
 	}}
 
 \newcommand{\storeObjHeight}[2]{\settoheight{#1}{\vbox{#2}}}
 
-\def\privateHeightsList{0pt}
-\newcommand{\resetHeightsList}{\def\privateHeightsList{0pt}}
-\newlength{\singleGregoLineHeight}
-\newlength{\singleGregoLineDepth}
+\newcommand{\resetHeightsList}{\directlua{cantus.resetHeightsList()}}
 \newcommand{\pushHeightOf}[1]{%
-	\settoheight{\singleGregoLineHeight}{\hbox{#1}}%
-	\settodepth{\singleGregoLineDepth}{\hbox{#1}}%
-	\addtolength{\singleGregoLineHeight}{\singleGregoLineDepth}%
-	\addtolength{\singleGregoLineHeight}{\gregoLineSkip}%
-	\global\edef\privateHeightsList{\privateHeightsList, \the\singleGregoLineHeight}%%%
+	\sbox0{#1}%
+	\directlua{cantus.pushLineHeight(tex.sp("\the\ht0"), tex.sp("\the\dp0"))}%
 }
 
 \newcounter{gabcCount}
@@ -42,37 +31,13 @@
 	}%
 }
 
-\newlength{\privateAutoSumForAccumulator}
-\newcommand{\autoPrintGapFromHeights}[2]{%
-	\setlength{\privateAutoSumForAccumulator}{-#2}%
-	\foreach \x in #1 {%
-			\addtolength{\privateAutoSumForAccumulator}{\x}%
-			\global\privateAutoSumForAccumulator=\privateAutoSumForAccumulator
-			\ifdim\privateAutoSumForAccumulator>0pt%
-				\breakforeach%
-			\fi%
-		}%
-	\addtolength{\privateAutoSumForAccumulator}{-\gregoLineSkip}%
-	\ifdim\privateAutoSumForAccumulator>0pt%
-		\vspace*{\privateAutoSumForAccumulator}%
-	\fi%
-}
+\newcommand{\autoGetGapFromHeights}[1]{\directlua{
+		tex.sprint(cantus.getAutoAdjustedGap(tex.sp("#1")) .. "sp")
+	}}
 
-\newlength{\privateSumForAccumulator}
-\newcommand{\printGapFromHeights}[2]{%
-	\setlength{\privateSumForAccumulator}{0pt}%
-	\foreach \x [count=\n] in #1 {%
-			\addtolength{\privateSumForAccumulator}{\x}%
-			\global\privateSumForAccumulator=\privateSumForAccumulator%
-			\ifnum\n=#2%
-				\breakforeach%
-			\fi%
-		}%
-	\addtolength{\privateSumForAccumulator}{-\gregoLineSkip}%
-	\ifdim\privateSumForAccumulator>0pt%
-		\vspace*{\privateSumForAccumulator}%
-	\fi%
-}
+\newcommand{\getGapFromHeights}[2]{\directlua{
+		tex.sprint(cantus.getLineAdjustedGap(tex.sp("#1"), tonumber("#2")) .. "sp")
+	}}
 
 \mdfdefinestyle{floatTradStyle}{
 	leftmargin=0pt,
@@ -92,27 +57,28 @@
 \setlength{\emptyFrameHeight}{0pt}
 \newcommand{\sizedFrame}[2]{%
 \setlength{\frameHeight}{0pt}%
-\storeObjHeight{\emptyFrameHeight}{{\begin{mdframed}[style=floatTradStyle]\end{mdframed}}}%
+\storeObjHeight{\emptyFrameHeight}{{\begin{mdframed}[style=floatTradStyle, innertopmargin=0pt]\end{mdframed}}}%
 \storeObjHeight{\frameHeight}{{\begin{mdframed}[style=floatTradStyle]#1\end{mdframed}}}%
 \addtolength{\frameHeight}{-\emptyFrameHeight}%
 \ifnum #2>0%
-	\def\gapToAdd{\printGapFromHeights{\privateHeightsList}{#2}}
+	\def\gapToAdd{0pt}%\getGapFromHeights{\the\frameHeight}{#2}}
 \else
-	\def\gapToAdd{\autoPrintGapFromHeights{\privateHeightsList}{\the\frameHeight}}
+	\def\gapToAdd{\autoGetGapFromHeights{\the\frameHeight}}
 \fi
-{\begin{mdframed}[style=floatTradStyle]#1\gapToAdd\end{mdframed}}%
+{\begin{mdframed}[style=floatTradStyle]#1\vspace{\gapToAdd}\end{mdframed}}%
 }
 
 \newcommand{\cantus}[1]{%
+	%\vspace{0pt plus\textheight}%
 	\cantusInternal{#1}%
 	\par%
 }
 \newcommand{\cantusTRAD}[3][0]{%%
+	\needspace{2\gregoLineSkip}%
 	\resetHeightsList%%
 	\twosided[p]%%
 	\setcolumnwidth{,3.65cm}%%
 	\setlength\columnseprule{0pt}%%
-	\renewcommand{\italic}[1]{\it\decorativ ##1}%
 	\vspace{\parskip}%
 	\begingroup%
 	\let\storeParskip\parskip%
@@ -124,7 +90,8 @@
 		\cantusInternal{#2}%%
 		\switchcolumn%%
 		\sloppy%
-		{\sizedFrame{\frenchpar{\ttrad #3}}{#1}}%
+		\ttrad%
+		{\sizedFrame{\frenchpar{#3}}{#1}}%
 	\end{paracol}%%
 	\endgroup%
 	\par%
