@@ -12,6 +12,18 @@ export class PsalmBuilder {
         italic: (text: string) => string;
         bold: (text: string) => string;
     };
+    accentuation: { [key: string]: string } = {
+        a: "á",
+        e: "é",
+        i: "í",
+        o: "ó",
+        u: "ú",
+        y: "ý",
+        æ: "ǽ",
+        œ: "œ́",
+        au: "áu",
+        iu: "íu",
+    };
 
     constructor(syllabifier: Syllabifier, adapter: Adapter) {
         this.syllabifier = syllabifier;
@@ -76,7 +88,8 @@ export class PsalmBuilder {
                     after = after.slice(1);
                 }
                 return rec(
-                    this.setUpPostTonicSyllabs(accent, after) + output,
+                    this.setUpPostTonicSyllabs({ before, accent, after }) +
+                        output,
                     accentsLeft - 1,
                     newBefore
                 );
@@ -87,8 +100,27 @@ export class PsalmBuilder {
             );
         };
 
-        const syllabs = this.syllabifier.getSyllabsOf(halfVerse);
-        return rec("", accents, syllabs);
+        const syllabs = this.syllabifier.getSyllabsOf(halfVerse + " ");
+        return rec("", accents, syllabs).trim();
+    }
+
+    isSpirit({ before, accent, after }: syllabSelection): boolean {
+        return (
+            this.isAccentuatedSyllab(accent) ||
+            (!this.isLastSyllab(accent) && this.isLastSyllab(after[0] ?? "")) ||
+            (this.isLastSyllab(before[before.length - 1] ?? "") &&
+                this.isLastSyllab(accent))
+        );
+    }
+
+    accentuate(syllab: string): string {
+        if (this.isAccentuatedSyllab(syllab)) {
+            return syllab;
+        }
+        return syllab.replace(
+            /([æœaeiouy]+)/,
+            (_, vowels: string): string => this.accentuation[vowels] ?? vowels
+        );
     }
 
     getLastAccent(syllabs: string[]): syllabSelection {
@@ -111,7 +143,14 @@ export class PsalmBuilder {
         return output;
     }
 
-    private setUpPostTonicSyllabs(accent: string, after: string[]): string {
+    private setUpPostTonicSyllabs({
+        before,
+        accent,
+        after,
+    }: syllabSelection): string {
+        if (this.isSpirit({ before, accent, after })) {
+            accent = this.accentuate(accent);
+        }
         return this.setSyllabStyle(accent, this.styles.bold) + after.join("");
     }
 
@@ -152,7 +191,7 @@ export class PsalmBuilder {
     }
 
     private isAccentuatedSyllab(syllab: string): boolean {
-        return /[áéíóúǽœ́]/i.test(syllab);
+        return /[áéíóúýǽœ́]/i.test(syllab);
     }
 
     private shiftSyllabsRight({
@@ -177,7 +216,7 @@ export class PsalmBuilder {
         syllab: string,
         style: (text: string) => string
     ): string {
-        return syllab.replace(/([\wáéíóúǽæœ́œ]+)/gi, (_, syllab) =>
+        return syllab.replace(/([\wáéíóúýǽæœ́œ]+)/gi, (_, syllab) =>
             style(syllab)
         );
     }

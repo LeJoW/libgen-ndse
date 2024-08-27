@@ -80,29 +80,87 @@ test("Accent detection", function () {
     );
 });
 
+test("Accentuate", function () {
+    expect(ps.accentuate("af")).toStrictEqual("áf");
+    expect(ps.accentuate("Af")).toStrictEqual("Af");
+    expect(ps.accentuate("sem")).toStrictEqual("sém");
+    expect(ps.accentuate("im")).toStrictEqual("ím");
+    expect(ps.accentuate("o")).toStrictEqual("ó");
+    expect(ps.accentuate("yl")).toStrictEqual("ýl");
+    expect(ps.accentuate("ær")).toStrictEqual("ǽr");
+    expect(ps.accentuate("auf")).toStrictEqual("áuf");
+    expect(ps.accentuate("Fíli")).toStrictEqual("Fíli");
+});
+
+test("Check latin accent", function () {
+    expect(
+        ps.isSpirit({ before: ["Ma"], accent: "gní", after: ["fi", "cat"] })
+    ).toStrictEqual(true);
+
+    expect(
+        ps.isSpirit({
+            before: ["spi", "ri", "tus "],
+            accent: "me",
+            after: ["us "],
+        })
+    ).toStrictEqual(true);
+
+    expect(
+        ps.isSpirit({
+            before: ["sté", "ri"],
+            accent: "lem ",
+            after: ["in"],
+        })
+    ).toStrictEqual(false);
+
+    expect(
+        ps.isSpirit({
+            before: ["et "],
+            accent: "nunc, ",
+            after: ["et "],
+        })
+    ).toStrictEqual(true);
+
+    expect(
+        ps.isSpirit({
+            before: ["et "],
+            accent: "æ",
+            after: ["qui"],
+        })
+    ).toStrictEqual(false);
+
+    expect(
+        ps.isSpirit({
+            before: ["mi", "ni "],
+            accent: "be",
+            after: ["ne"],
+        })
+    ).toStrictEqual(false);
+});
+
 test("half-verse setup", function () {
     expect(ps.setUpHalfVerse("et exquíram eam semper.", [0, 1])).toStrictEqual(
-        "et exquíram eam [sem]per."
+        "et exquíram eam [sém]per."
     );
 
     expect(ps.setUpHalfVerse("et exquíram eam semper.", [0, 2])).toStrictEqual(
-        "et exquíram [e]am [sem]per."
+        "et exquíram [é]am [sém]per."
     );
 
-    expect(ps.setUpHalfVerse("semper.", [0, 2])).toStrictEqual("[sem]per.");
+    expect(ps.setUpHalfVerse("semper.", [0, 2])).toStrictEqual("[sém]per.");
 
     expect(ps.setUpHalfVerse("et exquíram eam semper.", [1, 2])).toStrictEqual(
-        "et exquí(ram) [e]am [sem]per."
+        "et exquí(ram) [é]am [sém]per."
     );
 
     expect(ps.setUpHalfVerse("et exquíram eam semper.", [2, 2])).toStrictEqual(
-        "et ex(quíram) [e]am [sem]per."
+        "et ex(quíram) [é]am [sém]per."
     );
 
-    expect(ps.setUpHalfVerse("semper.", [2, 2])).toStrictEqual("[sem]per.");
+    expect(ps.setUpHalfVerse("semper.", [2, 2])).toStrictEqual("[sém]per.");
 
     expect(ps.setUpHalfVerse("et exquíram eam semper.", [4, 2])).toStrictEqual(
-        "(et) (exquíram) [e]am [sem]per."
+        "(et) (exquíram) [é]am [sém]per."
     );
 
     expect(ps.setUpHalfVerse("et exquíram eam semper.", [0, 0])).toStrictEqual(
@@ -120,7 +178,7 @@ test("verse setup", function () {
             { mediante: [0, 2], end: [2, 1] }
         )
     ).toStrictEqual(
-        "Legem pone mihi, Dómine, viam iustificati[ó]num tu[á]rum: * et exquíram (eam) [sem]per."
+        "Legem pone mihi, Dómine, viam iustificati[ó]num tu[á]rum: * et exquíram (eam) [sém]per."
     );
 
     expect(
@@ -133,7 +191,7 @@ test("verse setup", function () {
             { mediante: [0, 2], end: [2, 1] }
         )
     ).toStrictEqual(
-        "Illústra fáciem tuam super servum tuum, + salvum me fac in miseri[cór]dia [tu]a: * Dómine, non confúndar, quóniam (invo)[cá]vi te."
+        "Illústra fáciem tuam super servum tuum, + salvum me fac in miseri[cór]dia [tú]a: * Dómine, non confúndar, quóniam (invo)[cá]vi te."
     );
 });
 
@@ -158,10 +216,10 @@ test("all", function () {
             "1f"
         )
     ).toStrictEqual([
-        "Legem pone mihi, Dómine, viam iustificati[ó]num tu[á]rum: * et exquíram (eam) [sem]per.",
-        "Da mihi intelléctum, et scrutábor [le]gem [tu]am: * et custódiam illam in toto (corde) [me]o.",
-        "Glória [Pa]tri, et [Fí]lio, * et Spirí(tui) [Sanc]to.",
-        "Sicut erat in princípio, et [nunc], et [sem]per, * et in sǽcula sæcu(lórum). [A]men.",
+        "Legem pone mihi, Dómine, viam iustificati[ó]num tu[á]rum: * et exquíram (eam) [sém]per.",
+        "Da mihi intelléctum, et scrutábor [lé]gem [tú]am: * et custódiam illam in toto (corde) [mé]o.",
+        "Glória [Pá]tri, et [Fí]lio, * et Spirí(tui) [Sánc]to.",
+        "Sicut erat in princípio, et [núnc], et [sém]per, * et in sǽcula sæcu(lórum). [A]men.",
     ]);
     expect(
         ps.buildPsalm(
@@ -183,9 +241,9 @@ test("all", function () {
             "3b"
         )
     ).toStrictEqual([
-        "Legem pone mihi, Dómine, viam iustificati[ó]num tu[á]rum: * et exquíram [e]am [sem]per.",
-        "Da mihi intelléctum, et scrutábor [le]gem [tu]am: * et custódiam illam in toto [cor]de [me]o.",
-        "Glória [Pa]tri, et [Fíli]o, * et Spi[rí]tui [Sanc]to.",
-        "Sicut erat in princípio, et [nunc], et [sem]per, * et in sǽcula sæcu[ló]rum. [A]men.",
+        "Legem pone mihi, Dómine, viam iustificati[ó]num tu[á]rum: * et exquíram [é]am [sém]per.",
+        "Da mihi intelléctum, et scrutábor [lé]gem [tú]am: * et custódiam illam in toto [cór]de [mé]o.",
+        "Glória [Pá]tri, et [Fíli]o, * et Spi[rí]tui [Sánc]to.",
+        "Sicut erat in princípio, et [núnc], et [sém]per, * et in sǽcula sæcu[ló]rum. [A]men.",
     ]);
 });
