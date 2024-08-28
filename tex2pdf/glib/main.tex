@@ -5,6 +5,7 @@
 \usepackage{gregoriotex}
 \usepackage{wrapfig}
 \usepackage{twoopt}
+%\usepackage{lua-visual-debug}
 
 \input{\CurrentFilePath/../share}
 \input{\CurrentFilePath/config}
@@ -29,7 +30,12 @@
 }
 
 \let\oldGreannotation\greannotation
-\renewcommand{\greannotation}[1]{\oldGreannotation{\strut[1mm]#1}}
+\renewcommand{\greannotation}[1]{%
+	\oldGreannotation{%
+		{\vrule width0pt height2.8mm depth1.2mm}%
+		#1%
+	}%
+}
 
 \newcommand{\linesTrad}[1]{\begin{wrapfigure}[#1]{r}[2mm]{3.5cm}\end{wrapfigure}}
 
@@ -59,10 +65,10 @@
 }
 
 \newcommandtwoopt{\gabcAnt}[3][Anti-][phona]{
-	\greannotation{#1}
-	\greannotation{#2}
-	\grechangedim{annotationraise}{-3mm}{scalable}
-	\gresetinitiallines{1}
-	\grechangestyle{initial}{\color{white}}
-	\snippet{#3}
+	\greannotation{#1}%
+	\greannotation{#2}%
+	\grechangedim{annotationraise}{-3mm}{scalable}%
+	\gresetinitiallines{1}%
+	\greillumination{\null}%
+	\snippet{#3}%
 }
