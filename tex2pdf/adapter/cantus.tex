@@ -2,14 +2,6 @@
 		tex.write(cantus.getPDFpagesCount("\luaescapestring{#1}"))%
 	}}
 
-\newcommand{\storeObjHeight}[2]{\settoheight{#1}{\vbox{#2}}}
-
-\newcommand{\resetHeightsList}{\directlua{cantus.resetHeightsList()}}
-\newcommand{\pushHeightOf}[1]{%
-	\sbox0{#1}%
-	\directlua{cantus.pushLineHeight(tex.sp("\the\ht0"), tex.sp("\the\dp0"))}%
-}
-
 \newcounter{gabcCount}
 \newdimen{\gregoLineSkip}
 \setlength{\gregoLineSkip}{1.8cm plus 2mm minus 2mm}
@@ -22,75 +14,63 @@
 		\setlength{\lineskip}{0pt}%
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
 			\stepcounter{gabcCount}%
-			\def\gline{\vbox{\raisebox{-\gregoLineDepth}{\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}}}}%
-			\pushHeightOf{\gline}%
-			\gline\penalty0%
+			\vbox{\raisebox{-\gregoLineDepth}{\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}}}%
+			\penalty0%
 		}%
 	}%
 }
 
-\newcommand{\autoGetGapFromHeights}[1]{\directlua{
-		tex.sprint(cantus.getAutoAdjustedGap(tex.sp("#1")) .. "sp")
-	}}
-
-\newcommand{\getGapFromHeights}[2]{\directlua{
-		tex.sprint(cantus.getLineAdjustedGap(tex.sp("#1"), tonumber("#2")) .. "sp")
-	}}
-
-\mdfdefinestyle{floatTradStyle}{
-	leftmargin=0pt,
-	rightmargin=-1pt,
-	skipabove=0pt,
-	skipbelow=0pt,
-	innertopmargin=2mm,
-	innerleftmargin=2mm,
-	innerrightmargin=0pt,
-	innerbottommargin=0pt,
-	backgroundcolor=white,
-	linecolor=white
-}
-
-\newdimen{\frameHeight}
-\newdimen{\emptyFrameHeight}
-\setlength{\emptyFrameHeight}{0pt}
-\newcommand{\sizedFrame}[2]{%
-\setlength{\frameHeight}{0pt}%
-\storeObjHeight{\emptyFrameHeight}{{\begin{mdframed}[style=floatTradStyle, innertopmargin=0pt]\end{mdframed}}}%
-\storeObjHeight{\frameHeight}{{\begin{mdframed}[style=floatTradStyle]#1\end{mdframed}}}%
-\addtolength{\frameHeight}{-\emptyFrameHeight}%
-\ifnum #2>0%
-	\def\gapToAdd{0pt}%\getGapFromHeights{\the\frameHeight}{#2}}
-\else
-	\def\gapToAdd{\autoGetGapFromHeights{\the\frameHeight}}
-\fi
-{\begin{mdframed}[style=floatTradStyle]#1\vspace{\gapToAdd}\end{mdframed}}%
-}
-
 \newcommand{\cantus}[1]{%
-	%\vspace{0pt plus\textheight}%
 	\cantusInternal{#1}%
-	\par%
+	\prevdepth=-\maxdimen\null\par%
 }
 \newcommand{\cantusTRAD}[3][0]{%%
 	\needspace{1\gregoLineSkip}%
-	\resetHeightsList%%
-	\twosided[p]%%
-	\setcolumnwidth{,3.65cm}%%
-	\setlength\columnseprule{0pt}%%
-	\vspace{\parskip}%
-	\begingroup%
-	\let\storeParskip\parskip%
-	\setlength{\parskip}{0pt}%
-	\hrule width\textwidth height0pt depth0pt%
-	\begin{paracol}{2}%%
-		\prevdepth=-\maxdimen%
-		\setlength{\parskip}{\storeParskip}%
-		\cantusInternal{#2}%%
-		\switchcolumn%%
-		\sloppy%
-		\ttrad%
-		{\sizedFrame{\frenchpar{#3\nowidow}}{#1}}%
-	\end{paracol}%%
-	\endgroup%
-	\par%
+	\cantusTradFrame{%
+		\cantusInternal{#2}%
+	}{\sloppy\ttrad\frenchpar{#3\nowidow}}%
+	\prevdepth=-\maxdimen\null\par%
+}
+
+\newbox\cantusBox%
+\newbox\translationBox%
+\newcommand{\cantusTradFrame}[2]{%
+	\setbox\cantusBox=\vbox{#1}%
+	\hsize=3.5cm%
+	\setbox\translationBox=\vbox{#2}%
+	\hsize=\textwidth%
+	\beforeCols%
+	\expandCantusOverPages%
+}
+\def\beforeCols{%
+	\prevdepth=-\maxdimen\hbox{}\prevdepth=-\maxdimen%
+}
+\def\expandCantusOverPages{
+	\loop%
+	\setThisPageContent%
+	\ifvoid\cantusBox\else\penalty-10000\repeat%
+}
+\newdimen\spaceLeft%
+\newbox\pageBoxCantus%
+\newbox\pageBoxTranslation%
+\def\setThisPageContent{%
+	\spaceLeft=\textheight%
+	\advance\spaceLeft by-\pagetotal%
+	\setbox\pageBoxCantus=\vsplit\cantusBox to\spaceLeft%
+	\shrinkBoxIfNotFullPage\pageBoxCantus%
+	\setbox\pageBoxTranslation=\vsplit\translationBox to\ht\pageBoxCantus%
+	\ht\pageBoxTranslation=\ht\pageBoxCantus%
+	\hbox to\hsize{\box\pageBoxCantus\hskip-3.5cm\box\pageBoxTranslation}%
+}
+\def\shrinkBoxIfNotFullPage#1{%
+	\ifdim\pagetotal>0pt%
+		\shrinkBox#1%
+	\fi%
+	\ifvoid\cantusBox%
+		\shrinkBox#1%
+	\fi
+}
+\def\shrinkBox#1{%
+	\let\inputBoxToShrink#1%
+	\setbox\inputBoxToShrink=\vbox{\unvbox\inputBoxToShrink}%
 }

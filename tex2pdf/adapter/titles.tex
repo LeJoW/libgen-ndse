@@ -23,13 +23,14 @@
 }
 
 \newcommand{\officeTitle}[2]{
-\needspace{6mm}
-%\vspace*{8mm}
+\needspace{3.5cm}
+\vspace{0pt plus\textheight}
+\vspace*{8mm}
 {
 \titleSpaceLength=0.5em
 {\centering \uppercase{\it\decorativ #1}\par}
 }
-%\addvspace{5mm}
+\addvspace{5mm}
 \global\def\officeTitleShort{#2}
 }
 
@@ -40,7 +41,7 @@
 }
 
 \newcommand{\lessonTitle}[2]{
-	\needspace{1cm}
+	\needspace{3cm}
 	\vspace{4mm}
 	\def\detail{#2}
 	\ifx\empty\detail

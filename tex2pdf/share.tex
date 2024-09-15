@@ -1,7 +1,6 @@
 \usepackage[french, main=latin]{babel}
 \babelprovide[transforms = letters.noj]{latin}
 \usepackage[utf8]{inputenc}
-\usepackage[urw-decorativ]{mathdesign}
 \usepackage[T1]{fontenc}
 \usepackage{fontspec}
 \usepackage{newunicodechar}
@@ -21,7 +20,8 @@
 	ItalicFont=PlantinStd-LightItalic,
 	BoldItalicFont=PlantinStd-BoldItalic,
 	SmallCapsFont=Sabon,
-	SmallCapsFeatures={Letters=SmallCaps}
+	SmallCapsFeatures={Letters=SmallCaps},
+	Ligatures=TeX
 ]
 \newunicodechar{℣}{\mbox{V\kern-0.85em\reflectbox{\rotatebox[origin=c]{25}{∫}}\kern-0.05em}}
 \newunicodechar{℟}{\mbox{R\kern-0.5em\reflectbox{\rotatebox[origin=c]{30}{∫}}\kern-0.25em}}
@@ -30,9 +30,10 @@
 \newfontfamily\decorativ[
 	Numbers=OldStyle,
 	WordSpace=1.7,
-	ItalicFont=SabonItalic
+	ItalicFont=SabonItalic,
+	Ligatures=TeX
 ]{Sabon}
-\newfontfamily\courant{PlantinStd-Light}
+\newfontfamily\courant[Ligatures=TeX]{PlantinStd-Light}
 
 \fontsize{11.5pt}{5mm}\selectfont
 
