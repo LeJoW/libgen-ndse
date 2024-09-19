@@ -1,23 +1,31 @@
+\usepackage{wrapfig}
+
 \directlua{dofile("\CurrentFilePath" .. "/page-crop.lua")}
 
-\newcommand{\enablePageCropping}{\directlua{pageCrop.enable()}}
+\newdimen{\translationWidth}
+\translationWidth=3.5cm
+\newdimen{\translationGap}
+\translationGap=2mm
+\newdimen{\correction}
+\correction=.5mm
 
-\newcommand{\getHeightOfPage}[1]{\directlua{tex.sprint(pageCrop.getHeightOfPage(#1) .. "sp")}}
+\newcommand{\enablePageCropping}{\directlua{pageCrop.enable(
+		tex.getdimen('paperheight'),
+		tex.getdimen('paperwidth'),
+		tex.getdimen('translationWidth') + tex.getdimen('translationGap') - tex.getdimen('correction')
+		)}}
 
-\makeatletter
-\newcommand{\convert}[1]{\strip@pt\dimexpr0.996264009963#1\relax}
-\makeatother
+\newcommand{\getCropBoxOfPage}[1]{\directlua{tex.sprint(pageCrop.getCropBoxOfPage(#1))}}
 
-\makeatletter
-\newdimen{\new@pageheight}
-\newdimen{\given@pageheight}
 \AtBeginShipout{%
-\setlength{\given@pageheight}{\getHeightOfPage{\thepage}}%
-\new@pageheight=\dimexpr\pagegoal-\given@pageheight\relax%
-\edef\mypdfpageattr{/CropBox [0 \convert{\new@pageheight} \convert{\paperwidth} \convert{\paperheight}]}%
+\def\cropBox{\getCropBoxOfPage{\thepage}}%
+\edef\mypdfpageattr{/CropBox [\cropBox]}%
 \expandafter\pdfpageattr\expandafter{\mypdfpageattr}%
 }
-\makeatother
 
 \let\oldGreSetThisSyllable\GreSetThisSyllable
 \renewcommand{\GreSetThisSyllable}[5]{\oldGreSetThisSyllable{#1\strut[\gregoLineDepth]}{#2}{#3}{#4}{#5}}
+
+\newcommand{\linesTrad}[1]{%
+	\directlua{pageCrop.setLinesTrad(#1)}%
+	\begin{wrapfigure}[#1]{r}[\translationGap]{\translationWidth}\end{wrapfigure}}

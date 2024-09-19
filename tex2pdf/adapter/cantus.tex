@@ -11,24 +11,30 @@
 		\def\pdfFile{../../content/gabc/build/#1.pdf}%
 		\setlength{\parindent}{0pt}%
 		\setlength{\baselineskip}{\gregoLineSkip}%
-		\setlength{\lineskip}{0pt}%
+		\setlength{\lineskip}{0pt plus 1mm}%
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
 			\stepcounter{gabcCount}%
-			\vbox{\raisebox{-\gregoLineDepth}{\includegraphics[page=\thegabcCount, width=\textwidth]{\pdfFile}}}%
-			\penalty0%
+			\vbox{\raisebox{-\gregoLineDepth}{\includegraphics[page=\thegabcCount, scale=1]{\pdfFile}\hfill}}%
 		}%
 	}%
 }
 
 \newcommand{\cantus}[1]{%
+	\addvspace{\parskip}%
 	\cantusInternal{#1}%
 	\prevdepth=-\maxdimen\null\par%
 }
 \newcommand{\cantusTRAD}[3][0]{%%
-	\needspace{1\gregoLineSkip}%
+	\addvspace{\parskip}%
 	\cantusTradFrame{%
 		\cantusInternal{#2}%
-	}{\sloppy\ttrad\frenchpar{#3\nowidow}}%
+	}{%
+		\setlength{\parskip}{0pt}%
+		\sloppy\ttrad%
+		\vskip2mm%
+		\frenchpar{#3\nowidow}%
+		\vfill%
+	}%
 	\prevdepth=-\maxdimen\null\par%
 }
 
@@ -46,9 +52,8 @@
 	\prevdepth=-\maxdimen\hbox{}\prevdepth=-\maxdimen%
 }
 \def\expandCantusOverPages{
-	\loop%
 	\setThisPageContent%
-	\ifvoid\cantusBox\else\penalty-10000\repeat%
+	\ifvoid\cantusBox\else\penalty-10000\expandCantusOverPages\fi%
 }
 \newdimen\spaceLeft%
 \newbox\pageBoxCantus%
@@ -58,9 +63,13 @@
 	\advance\spaceLeft by-\pagetotal%
 	\setbox\pageBoxCantus=\vsplit\cantusBox to\spaceLeft%
 	\shrinkBoxIfNotFullPage\pageBoxCantus%
-	\setbox\pageBoxTranslation=\vsplit\translationBox to\ht\pageBoxCantus%
-	\ht\pageBoxTranslation=\ht\pageBoxCantus%
-	\hbox to\hsize{\box\pageBoxCantus\hskip-3.5cm\box\pageBoxTranslation}%
+	\ifdim\ht\pageBoxCantus>\spaceLeft%
+		\setbox\cantusBox=\vbox{\flushbottom\unvbox\pageBoxCantus\unvbox\cantusBox}%
+	\else%
+		\setbox\pageBoxTranslation=\vsplit\translationBox to\ht\pageBoxCantus%
+		\ht\pageBoxTranslation=\ht\pageBoxCantus%
+		\hbox to\hsize{\box\pageBoxCantus\hskip-3.5cm\box\pageBoxTranslation}%
+	\fi%
 }
 \def\shrinkBoxIfNotFullPage#1{%
 	\ifdim\pagetotal>0pt%
