@@ -15,17 +15,20 @@
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
 			\stepcounter{gabcCount}%
 			\vbox{\raisebox{-\gregoLineDepth}{\includegraphics[page=\thegabcCount, scale=1]{\pdfFile}\hfill}}%
+			\vskip0pt plus1sp%
 		}%
 	}%
 }
 
 \newcommand{\cantus}[1]{%
-	\addvspace{\parskip}%
+	\medskip%
 	\cantusInternal{#1}%
 	\prevdepth=-\maxdimen\null\par%
+	\smallskip%
 }
 \newcommand{\cantusTRAD}[3][0]{%%
-	\addvspace{\parskip}%
+	\medskip%
+	\message{=-=-=-=-=-=-=-=-=-=#2=-=-=-=-=-=-=-=-=-=-}%
 	\cantusTradFrame{%
 		\cantusInternal{#2}%
 	}{%
@@ -36,17 +39,25 @@
 		\vfill%
 	}%
 	\prevdepth=-\maxdimen\null\par%
+	\smallskip%
 }
 
 \newbox\cantusBox%
 \newbox\translationBox%
+\def\cantusParam{}%
+\def\translationParam{}%
 \newcommand{\cantusTradFrame}[2]{%
-	\setbox\cantusBox=\vbox{#1}%
-	\hsize=3.5cm%
-	\setbox\translationBox=\vbox{#2}%
-	\hsize=\textwidth%
+	\def\cantusParam{#1}%
+	\def\translationParam{#2}%
+	\resetBoxesContent%
 	\beforeCols%
 	\expandCantusOverPages%
+}
+\def\resetBoxesContent{%
+	\setbox\cantusBox=\vbox{\cantusParam}%
+	\hsize=3.5cm%
+	\setbox\translationBox=\vbox{\translationParam}%
+	\hsize=\textwidth%
 }
 \def\beforeCols{%
 	\prevdepth=-\maxdimen\hbox{}\prevdepth=-\maxdimen%
@@ -64,7 +75,7 @@
 	\setbox\pageBoxCantus=\vsplit\cantusBox to\spaceLeft%
 	\shrinkBoxIfNotFullPage\pageBoxCantus%
 	\ifdim\ht\pageBoxCantus>\spaceLeft%
-		\setbox\cantusBox=\vbox{\flushbottom\unvbox\pageBoxCantus\unvbox\cantusBox}%
+		\resetBoxesContent%
 	\else%
 		\setbox\pageBoxTranslation=\vsplit\translationBox to\ht\pageBoxCantus%
 		\ht\pageBoxTranslation=\ht\pageBoxCantus%
