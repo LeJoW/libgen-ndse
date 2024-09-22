@@ -34,7 +34,6 @@
 	}{%
 		\setlength{\parskip}{0pt}%
 		\sloppy\ttrad%
-		\vskip2mm%
 		\frenchpar{#3\nowidow}%
 		\vfill%
 	}%
@@ -66,17 +65,16 @@
 	\setThisPageContent%
 	\ifvoid\cantusBox\else\penalty-10000\expandCantusOverPages\fi%
 }
-\newdimen\spaceLeft%
 \newbox\pageBoxCantus%
 \newbox\pageBoxTranslation%
 \def\setThisPageContent{%
-	\spaceLeft=\textheight%
-	\advance\spaceLeft by-\pagetotal%
+	\updateSpaceLeft%
 	\setbox\pageBoxCantus=\vsplit\cantusBox to\spaceLeft%
 	\shrinkBoxIfNotFullPage\pageBoxCantus%
 	\ifdim\ht\pageBoxCantus>\spaceLeft%
 		\resetBoxesContent%
 	\else%
+		\setbox\translationBox=\vbox{\vskip2mm\unvbox\translationBox}%
 		\setbox\pageBoxTranslation=\vsplit\translationBox to\ht\pageBoxCantus%
 		\ht\pageBoxTranslation=\ht\pageBoxCantus%
 		\hbox to\hsize{\box\pageBoxCantus\hskip-3.5cm\box\pageBoxTranslation}%

@@ -22,15 +22,17 @@
 	\global\def\dayTitleShort{#3}
 }
 
-\newcommand{\officeTitle}[2]{
-\needspace{3.5cm}
-\vspace*{8mm}
-{
-\titleSpaceLength=0.5em
-{\centering \uppercase{\it\decorativ #1}\par}
+\newcommand{\officeTitle}[2]{%
+	\titleBox{%
+		\vspace*{2mm}%
+		\center{\uppercase{\it\decorativ #1}}%
+		\vspace{2mm}%
+	}%
+	\global\def\officeTitleShort{#2}%
 }
-\addvspace{5mm}
-\global\def\officeTitleShort{#2}
+
+\def\center#1{%
+{\centering #1\par}%
 }
 
 \newcommand{\sectionTitle}[1]{
@@ -40,7 +42,7 @@
 }
 
 \newcommand{\lessonTitle}[2]{
-	\needspace{3cm}
+	\needspace{2cm}
 	\vspace{4mm}
 	\def\detail{#2}
 	\ifx\empty\detail
@@ -52,7 +54,24 @@
 }
 
 \newcommand{\psalmTitle}[1]{%
-	\needspace{3cm}%
+	\needspace{2cm}%
 	\addvspace{1.5mm}
 	{\centering\decorativ #1\par}%
+}
+
+\def\titleBox#1{%
+	\setbox0=\hbox to\textwidth{#1}%
+	\updateSpaceLeft%
+	\advance\spaceLeft by-\ht0%
+	\ifdim\spaceLeft<2.4\gregoLineSkip%
+		\widePageEnd%
+		\penalty-10000%
+	\fi%
+	#1%
+}
+
+\def\widePageEnd{%
+	\vfill%
+	\hbox to \hsize{\hss\vrule width0.4\hsize height0.4pt depth0pt\hss}%
+	\vfill%
 }
