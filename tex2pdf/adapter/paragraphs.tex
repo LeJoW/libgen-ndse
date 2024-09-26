@@ -3,13 +3,19 @@
 \newenvironment{paragraphLettrine}[1]{\initial{#1}}{\par}
 
 \newenvironment{rubric}{
-	\setlength{\parskip}{2mm}%
+	\setlength{\parskip}{2mm plus0.5mm minus0.5mm}%
+	\smallskip%
 	\it\ttrad}{\par%
 }
 
-\newenvironment{remplacement}{\P~}{}
+\newenvironment{remplacement}{\begin{rubric}\rm\P~}{\end{rubric}}
 
-\newenvironment{lesson}{}{}
+\newenvironment{lesson}{%
+	\def\parIndent{%
+		\noindent%
+		\def\parIndent{}%
+	}%
+}{}
 
 \newcommand{\forcebreak}{\newline\indent}
 
@@ -19,7 +25,8 @@
 \setlength{\minGapToBaselineAlign}{-1.2mm}%
 \setlength{\maxGapToBaselineAlign}{3.5mm}%
 \newcommand{\colLA}[1]{#1\switchcolumn*}
-\newcommand{\colFR}[1]{\frenchpar{\ttrad #1}\switchcolumn}
+\def\parIndent{}%
+\newcommand{\colFR}[1]{\frenchpar{\ttrad\parIndent #1}\switchcolumn}
 \newcommand{\pushBottom}{%
 	\prevdepth=-\maxdimen\null%
 	\vspace{\directlua{tex.sprint(paragraphs.getSpaceToPushBottom() .. "sp")}}%

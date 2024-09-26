@@ -101,7 +101,7 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
             },
         },
         {
-            test: /^(?:&>){1}\s+([\s\S]+)/,
+            test: /^=>\s+([\S\s]+)/,
             callback: function remplacement(_, text) {
                 return new RemplacementRubric(text);
             },

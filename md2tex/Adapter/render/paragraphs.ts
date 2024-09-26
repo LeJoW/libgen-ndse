@@ -3,6 +3,7 @@ import {
     Lesson,
     ParagraphLettrine,
     ParagraphStd,
+    RemplacementRubric,
     Rubric,
 } from "../../Types/paragraphs";
 import { Adapter } from "../Adapter.i";
@@ -52,6 +53,11 @@ export const renderLessonTRAD = (adapter: Adapter) =>
         );
         par.setTranslation(translation);
         return adapter.engine.container("lesson", adapter.render(par));
+    };
+
+export const renderRemplacementRubric = ({ engine }: Adapter) =>
+    function ({ text }: RemplacementRubric): string {
+        return engine.container("remplacement", text);
     };
 
 export function fr(engine: Render, text: string): string {

@@ -21,6 +21,7 @@ import {
     renderLessonTRAD,
     renderParagraphLettrine,
     renderParagraphStdTRAD,
+    renderRemplacementRubric,
     renderRubric,
     renderRubricTRAD,
 } from "./render/paragraphs";
@@ -54,6 +55,7 @@ export const renderers = [
     renderParagraphLettrine,
     renderRubric,
     renderLesson,
+    renderRemplacementRubric,
 
     renderTableOfContents,
     renderGregoIndex,

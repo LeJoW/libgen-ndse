@@ -4,6 +4,7 @@
 	\vspace*{4mm}%
 	{\centering\fbseries\decorativ #1\par}%
 	\vspace*{3mm}%
+	\global\def\officeTitleShort{#1}%
 }
 
 \newenvironment{tableOfContents}{\thispagestyle{empty}}{}
@@ -15,7 +16,9 @@
 	\end{itemize}
 }
 
-\newcommand{\tableSectionTitle}[1]{{\small\scshape #1}}
+\newcommand{\tableSectionTitle}[1]{%
+	\global\def\officeTitleShort{#1}%
+	{\small\scshape #1}}
 \newcommand{\sectionEntry}[2]{\small\item[] #1\dotfill\pageref{#2}}
 
 
@@ -37,6 +40,7 @@
 \newcommand{\cantEntry}[2]{\small #1. #2.\par}
 
 \newenvironment{gregIndex}{
+	\bigskip%
 	\setlength\columnseprule{0.4pt}
 	\begin{multicols}{2}
 		}{
@@ -48,6 +52,6 @@
 	\end{itemize}
 }
 
-\newenvironment{gregAlphabeticGroup}{\addvspace{2mm}}{}
+\newenvironment{gregAlphabeticGroup}{\addvspace{2mm plus0.5mm minus0.5mm}}{}
 
 \newcommand{\gregEntry}[3]{\small\item[#1] #2\dotfill\pageref{#3}\hspace*{-3mm}}

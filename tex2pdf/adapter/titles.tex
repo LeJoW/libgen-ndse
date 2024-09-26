@@ -1,11 +1,6 @@
 \def\dayTitleShort{}
 \def\officeTitleShort{}
 
-\newdimen\titleSpaceLength
-\titleSpaceLength=\fontdimen2\font
-
-\newcommand{\titleSpace}{\hspace{\titleSpaceLength}}
-
 \newcommand{\dayTitle}[3]{
 	\thispagestyle{empty}
 	\ifnum\thepage>1
@@ -13,9 +8,8 @@
 	\fi
 	\vspace*{2mm}
 	{
-		\titleSpaceLength=1.1em
 		\thispagestyle{empty}
-		{\centering \onehalfspacing \Huge\MakeUppercase{\decorativ #1}\par}
+		{\centering \onehalfspacing \Huge\decorativ\uppercase{#1}\par}
 		\vspace{5mm}
 		{\centering\it\decorativ\ttrad #2\par}
 	}
@@ -23,16 +17,14 @@
 }
 
 \newcommand{\officeTitle}[2]{%
-	\titleBox{%
+	\setlength{\baselineskip}{7.5mm}%
+	\def\titleContent{%
 		\vspace*{2mm}%
-		\center{\uppercase{\it\decorativ #1}}%
+		{\centering\it\decorativ\uppercase{#1}\par}%
 		\vspace{2mm}%
 	}%
+	\titleBox{\titleContent}%
 	\global\def\officeTitleShort{#2}%
-}
-
-\def\center#1{%
-{\centering #1\par}%
 }
 
 \newcommand{\sectionTitle}[1]{
@@ -72,6 +64,6 @@
 
 \def\widePageEnd{%
 	\vfill%
-	\hbox to \hsize{\hss\vrule width0.4\hsize height0.4pt depth0pt\hss}%
+	\centerline{\vrule width0.4\hsize height0.4pt depth0pt}%
 	\vfill%
 }
