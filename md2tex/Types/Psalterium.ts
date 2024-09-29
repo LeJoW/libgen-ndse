@@ -1,11 +1,12 @@
 import { Cantus } from "./Cantus";
 import { GenericElement } from "./GenericElement";
+import { TextNode } from "./TextNode.i";
 import { PsalmTitle } from "./titles";
 
 export class Psalmus extends GenericElement {
     ton: string | null;
     psalmDivision: string;
-    versi: string[] = [];
+    versi: TextNode[] = [];
     intonation: Cantus | false = false;
     doxologie: boolean = true;
     mode: number | null = null;
@@ -14,10 +15,8 @@ export class Psalmus extends GenericElement {
     title: PsalmTitle | false = false;
     anchor: string | null = null;
 
-    translation: string[] | false = false;
-
     constructor(ton: string | null, psalmDivision: string) {
-        super(psalmDivision);
+        super();
         this.ton = ton;
         this.psalmDivision = psalmDivision;
         if (ton) {
@@ -25,16 +24,20 @@ export class Psalmus extends GenericElement {
         }
     }
 
-    setTranslation(title: string): void {
-        const psalmTitle = new PsalmTitle("");
+    setTranslation(title: TextNode): void {
+        const psalmTitle = new PsalmTitle(title);
         if (!this.title) {
             this.title = psalmTitle;
         }
-        this.title.setTranslation(title);
+        this.title.content.fr = title.fr;
     }
 
     setVersorumTranslation(versi: (string | undefined)[]): void {
-        this.translation = versi as string[];
+        versi.map((versus: string | undefined, index: number) => {
+            if (versus) {
+                this.versi[index].fr = versus;
+            }
+        });
     }
 }
 
@@ -42,11 +45,11 @@ export class Canticum extends Psalmus {}
 
 export class Psalterium extends GenericElement {
     ton: string | null = null;
-
+    translation: boolean = false;
     psalms: (Psalmus | Canticum)[] = [];
 
     constructor(ton: string | null) {
-        super(ton as string);
+        super();
         this.ton = ton;
     }
 

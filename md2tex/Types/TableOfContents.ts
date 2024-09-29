@@ -4,8 +4,6 @@ import { DayTitle, OfficeTitle } from "./titles";
 type tableEntry = { office: OfficeTitle; anchor: string };
 
 export class TableOfContents extends GenericElement {
-    lastDayTitle: string | null = null;
-
     contents: { day: DayTitle | null; entries: tableEntry[] }[] = [];
 
     addDay(title: DayTitle): void {
@@ -14,7 +12,7 @@ export class TableOfContents extends GenericElement {
     addOffice(office: OfficeTitle) {
         const anchor = this.generateAnchor(
             this.contents.length.toString(),
-            office.shortTitle
+            office.shortTitle.la
         );
         if (this.contents.length === 0) {
             this.contents.push({

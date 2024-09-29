@@ -49,16 +49,13 @@ export class Rules implements RulesInterface {
                 ? {
                       mask: /([\S\s]*)/,
                       replace: this.defaultCase,
-                      storeTranslation(element, translation: string) {
-                          element.setTranslation(translation);
-                      },
                   }
                 : {
                       mask: possibleConverters[0].test,
                       replace: possibleConverters[0].callback,
                   };
         if (
-            possibleConverters.length > 0 &&
+            possibleConverters[0] &&
             possibleConverters[0].saveTranslation
         ) {
             output.storeTranslation = possibleConverters[0].saveTranslation;

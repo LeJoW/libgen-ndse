@@ -1,4 +1,5 @@
 import { GenericElement } from "./GenericElement";
+import { TextNode } from "./TextNode.i";
 
 export class Cantus extends GenericElement {
     ton: string | undefined;
@@ -7,7 +8,7 @@ export class Cantus extends GenericElement {
     scorePath: string = "";
     anchor: string | null = null;
 
-    translationLinesCount: number | undefined;
+    translation: TextNode | false = false;
 
     constructor(file: string) {
         super();

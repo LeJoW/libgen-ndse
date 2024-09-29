@@ -24,7 +24,9 @@ export const renderPsalterium = (adapter: Adapter) =>
             psalmBody = [
                 adapter.engine.container(
                     "psalm",
-                    adapter.engine.join(firstPsalm.versi.slice(1))
+                    adapter.engine.join(
+                        firstPsalm.versi.slice(1).map((v) => v.la)
+                    )
                 ),
                 ...psalms.slice(1).map((psalm) => adapter.render(psalm)),
             ];
@@ -68,7 +70,7 @@ export const renderPsalmus = (adapter: Adapter) =>
             adapter.render(new ParagraphLettrine(versi[0])),
             adapter.engine.container(
                 "psalm",
-                adapter.engine.join(versi.slice(1))
+                adapter.engine.join(versi.slice(1).map((v) => v.la))
             ),
         ]);
     };
@@ -79,13 +81,10 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
         anchor,
         versi,
         doxologie,
-        translation,
         title,
-    }: Omit<Psalmus, "translation"> & {
-        translation: Exclude<Psalmus["translation"], false>;
-    }): string {
+    }: Psalmus): string {
         if (intonation) {
-            intonation.setTranslation(translation[0]);
+            intonation.translation = versi[0];
         }
         return adapter.engine.join([
             title ? adapter.render(title) : undefined,
@@ -103,10 +102,7 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
                         .map(function (verse, index) {
                             return adapter.engine.concat([
                                 adapter.engine.orphan("psalmFR", {
-                                    value:
-                                        translation[
-                                            index + (intonation ? 1 : 0)
-                                        ] ?? "",
+                                    value: verse.fr,
                                 }),
                                 adapter.engine.orphan("psalmLA", {
                                     value:
@@ -114,7 +110,7 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
                                             ? adapter.render(
                                                   new ParagraphLettrine(verse)
                                               )
-                                            : verse,
+                                            : verse.la,
                                 }),
                             ]);
                         })

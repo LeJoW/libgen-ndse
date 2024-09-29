@@ -4,7 +4,7 @@ import { Rules } from "./Rules";
 
 test("block-operators", function () {
     function replaceDefault(input: string): GenericElement {
-        return new GenericElement(input);
+        return new GenericElement();
     }
     const titleReplace = replaceDefault;
     function accentReplace(_: string): string {

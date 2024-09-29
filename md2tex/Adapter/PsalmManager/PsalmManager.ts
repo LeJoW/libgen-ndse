@@ -35,13 +35,12 @@ export class PsalmManager implements PsalmManagerInterface {
         );
     }
 
-    setUpPsalm(psalm: Psalmus): void {
+    getPsalm(psalm: Psalmus): { la: string[]; fr: (string | undefined)[] } {
         const rawPsalm = this.psalmList.getPsalm(psalm.psalmDivision);
-        psalm.versi = this.getLatinVersesOf(psalm, rawPsalm);
-        const frVersi = this.getFrenchVersesOf(rawPsalm);
-        if (frVersi.join("").trim().length > 0) {
-            psalm.setVersorumTranslation(this.getFrenchVersesOf(rawPsalm));
-        }
+        return {
+            la: this.getLatinVersesOf(psalm, rawPsalm),
+            fr: this.getFrenchVersesOf(rawPsalm),
+        };
     }
 
     private getLatinVersesOf(

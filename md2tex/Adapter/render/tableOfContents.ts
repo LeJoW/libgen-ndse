@@ -1,7 +1,6 @@
 import { Render } from "../../Render/Render.i";
 import { TableOfContents } from "../../Types/TableOfContents";
 import { Adapter } from "../Adapter.i";
-import { fr } from "./paragraphs";
 
 export const renderTableOfContents = (adapter: Adapter) =>
     function ({ contents }: TableOfContents): string {
@@ -27,14 +26,9 @@ function printTableOfContents(
                         day !== null
                             ? engine.orphan("tableSectionTitle", {
                                   day:
-                                      translate &&
-                                      day.translation &&
-                                      day.translation.shortTitle
-                                          ? fr(
-                                                engine,
-                                                day.translation.shortTitle
-                                            )
-                                          : day.shortTitle,
+                                      translate && day.shortTitle.fr
+                                          ? day.shortTitle.fr
+                                          : day.shortTitle.la,
                               })
                             : undefined,
                         entries.length > 0
@@ -45,13 +39,9 @@ function printTableOfContents(
                                           engine.orphan("sectionEntry", {
                                               office:
                                                   translate &&
-                                                  office.translation
-                                                      ? fr(
-                                                            engine,
-                                                            office.translation
-                                                                .shortTitle
-                                                        )
-                                                      : office.shortTitle,
+                                                  office.shortTitle.fr
+                                                      ? office.shortTitle.fr
+                                                      : office.shortTitle.la,
                                               anchor,
                                           })
                                       )

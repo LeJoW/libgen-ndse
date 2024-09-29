@@ -24,17 +24,29 @@ adapter.render = function (element: parStd | Title) {
     );
 };
 
-class parStd extends GenericElement {
+class TextElement extends GenericElement {
+    content: string;
+    translation: string | undefined;
+    constructor(input: string) {
+        super();
+        this.content = input;
+    }
+    setTranslation(translation: string) {
+        this.translation = translation;
+    }
+}
+
+class parStd extends TextElement {
     label = "std";
 }
-class Title extends GenericElement {
+class Title extends TextElement {
     label = "title";
 }
 
 export const id = (b: string) => new parStd(b);
 export const title = (_: string, b: string) => new Title(b);
 const saveTranslationDefault = function (
-    element: GenericElement,
+    element: TextElement,
     translation: string
 ) {
     element.setTranslation(translation);

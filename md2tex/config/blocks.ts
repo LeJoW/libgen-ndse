@@ -6,6 +6,7 @@ import {
     OfficeTitle,
     PsalmTitle,
     SectionTitle,
+    Title,
 } from "../Types/titles";
 import {
     Lesson,
@@ -19,12 +20,15 @@ import { GenericElement } from "../Types/GenericElement";
 import { GregoIndex } from "../Types/GregoIndex";
 import { incipits } from "./incipits";
 import { PsalmManager } from "../Adapter/PsalmManager/PsalmManager.i";
-import { GregError } from "../Types/GregError";
+import { TextNode } from "../Types/TextNode.i";
 
 const gregoIndex = new GregoIndex();
 const table = new TableOfContents();
 
-const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
+const blockConfig = <T extends TextNode>(
+    psalmManager: PsalmManager,
+    TextNodeConstructor: new (...args: any[]) => T
+): BlockConfigType => ({
     desc: [
         {
             test: /^(#+)\s+([\S\s]+?)\s*(?:<([\S\s]+?)>)?\s*(?:\{([\S\s]+?)\})?\s*$/i,
@@ -34,35 +38,49 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                 title,
                 summary = "",
                 subTitle = ""
-            ) {
+            ): Title {
+                const titleNode = new TextNodeConstructor(title);
+                const summaryNode = new TextNodeConstructor(summary);
+                const subTitleNode = new TextNodeConstructor(subTitle);
                 switch (titleLevel) {
                     case "##":
-                        const dayTitle = new DayTitle(title);
-                        dayTitle.dayClass = subTitle;
+                        const dayTitle = new DayTitle(titleNode);
+                        dayTitle.dayClass = subTitleNode;
                         if (summary.length > 0) {
-                            dayTitle.shortTitle = summary;
+                            dayTitle.shortTitle = summaryNode;
                         }
+                        titleNode.context = dayTitle;
+                        summaryNode.context = dayTitle;
+                        subTitleNode.context = dayTitle;
                         table.addDay(dayTitle);
                         return dayTitle;
                     case "###":
-                        const officeTitle = new OfficeTitle(title);
+                        const officeTitle = new OfficeTitle(titleNode);
                         if (summary.length > 0) {
-                            officeTitle.shortTitle = summary;
+                            officeTitle.shortTitle = summaryNode;
                         }
+                        titleNode.context = officeTitle;
+                        summaryNode.context = officeTitle;
                         table.addOffice(officeTitle);
                         return officeTitle;
                     case "####":
-                        const lessonTitle = new LessonTitle(title);
-                        lessonTitle.addendum = subTitle;
+                        const lessonTitle = new LessonTitle(titleNode);
+                        lessonTitle.addendum = subTitleNode;
+                        titleNode.context = lessonTitle;
+                        subTitleNode.context = lessonTitle;
                         return lessonTitle;
                     case "#####":
-                        return new PsalmTitle(title);
+                        const psTitle = new PsalmTitle(titleNode);
+                        titleNode.context = psTitle;
+                        return psTitle;
                     default:
-                        return new SectionTitle(title);
+                        const sectionTitle = new SectionTitle(titleNode);
+                        titleNode.context = sectionTitle;
+                        return sectionTitle;
                 }
             },
             saveTranslation: function (
-                titreElement: GenericElement,
+                titreElement: Title,
                 trad: string,
                 mask: RegExp
             ) {
@@ -73,51 +91,60 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                 const [, , title, summary, subTitle] = trad.match(
                     mask
                 ) as string[];
-                if (titreElement instanceof DayTitle && mask.test(trad)) {
-                    titreElement.setTranslation({
-                        title,
-                        dayClass: subTitle,
-                        shortTitle:
-                            summary && summary.length > 0 ? summary : title,
-                    });
+                if (titreElement instanceof DayTitle) {
+                    titreElement.content.fr = title;
+                    if (!titreElement.dayClass) {
+                        titreElement.dayClass = new TextNodeConstructor();
+                    }
+                    titreElement.dayClass.fr = subTitle;
+                    titreElement.shortTitle.fr =
+                        summary && summary.length > 0 ? summary : title;
                 } else if (titreElement instanceof OfficeTitle) {
-                    titreElement.setTranslation({
-                        title,
-                        shortTitle:
-                            summary && summary.length > 0 ? summary : title,
-                    });
+                    titreElement.content.fr = title;
+                    titreElement.shortTitle.fr =
+                        summary && summary.length > 0 ? summary : title;
                 } else {
-                    titreElement.setTranslation(title);
+                    titreElement.content.fr = title;
                 }
             },
         },
         {
             test: /^>{1}\s+([\s\S]+)/,
-            callback: function rubrique(_, text) {
-                return new Rubric(text.replace(/>/g, " "));
+            callback: function rubrique(_, text): Rubric {
+                const rubric = new Rubric(
+                    new TextNodeConstructor(text.replace(/>/g, " "))
+                );
+                rubric.text.context = rubric;
+                return rubric;
             },
-            saveTranslation(rubric, trad: string) {
-                rubric.setTranslation(trad);
+            saveTranslation(rubric: Rubric, trad: string) {
+                rubric.text.fr = trad;
             },
         },
         {
             test: /^=>\s+([\S\s]+)/,
-            callback: function remplacement(_, text) {
-                return new RemplacementRubric(text);
+            callback: function remplacement(_, text): RemplacementRubric {
+                const rrubric = new RemplacementRubric(
+                    new TextNodeConstructor(text)
+                );
+                rrubric.text.context = rrubric;
+                return rrubric;
             },
         },
         {
             test: /^:+\s*([\S\s]+)$/,
-            callback: function lecture(_, text) {
-                return new Lesson(text);
+            callback: function lecture(_, text): Lesson {
+                const lesson = new Lesson(new TextNodeConstructor(text));
+                lesson.text.context = lesson;
+                return lesson;
             },
-            saveTranslation: function (lesson, trad: string) {
-                lesson.setTranslation(trad);
+            saveTranslation: function (lesson: Lesson, trad: string) {
+                lesson.text.fr = trad;
             },
         },
         {
             test: /^!\[(.*)\]\(([\S]+)\)$/,
-            callback(_, label, file) {
+            callback(_, label, file): Cantus {
                 const matches = label.match(/(?:([1-8pi]+):)?(\w+):(.+)/);
                 let cantus = new Cantus(file);
 
@@ -145,8 +172,10 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
 
                 return cantus;
             },
-            saveTranslation: function (cantus, trad) {
-                cantus.setTranslation(trad);
+            saveTranslation: function (cantus: Cantus, trad) {
+                cantus.translation = new TextNodeConstructor();
+                cantus.translation.fr = trad;
+                cantus.translation.context = cantus;
             },
         },
         {
@@ -159,7 +188,6 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                         psalmDesc: string,
                         index: number
                     ): Psalterium {
-                        const numberLinesTrad = parseInt(linesTrad, 10);
                         const [, psalmDescription, title] = psalmDesc.match(
                             /^\s*(\S+?)\s*(?::\s*(.+))?\s*$/
                         ) as string[];
@@ -171,11 +199,28 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                             ? Psalmus
                             : Canticum;
                         const psalmus = new PsalmConstructor(acc.ton, psalm);
-                        psalmManager.setUpPsalm(psalmus);
+                        const { la, fr } = psalmManager.getPsalm(psalmus);
+                        psalmus.versi = la.map(function (
+                            verse: string,
+                            index: number
+                        ): TextNode {
+                            const output = new TextNodeConstructor(verse);
+                            output.context = psalmus;
+                            if (fr[index]) {
+                                output.fr = fr[index] as string;
+                            }
+                            return output;
+                        });
                         psalmus.doxologie = isDoxologie;
                         psalmus.title =
                             title && title.length > 0
-                                ? new PsalmTitle(title)
+                                ? (() => {
+                                      const out = new PsalmTitle(
+                                          new TextNodeConstructor(title)
+                                      );
+                                      out.content.context = out;
+                                      return out;
+                                  })()
                                 : false;
                         psalmus.incipit = incipits[psalm] ?? undefined;
                         psalmus instanceof Canticum
@@ -185,16 +230,13 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                             psalmus.intonation = new Cantus(
                                 `${psalmus.psalmDivision}-${acc.ton}`
                             );
-                            if (!isNaN(numberLinesTrad)) {
-                                psalmus.intonation.translationLinesCount = numberLinesTrad;
-                            }
                         }
                         acc.addPsalm(psalmus);
                         return acc;
                     },
                     new Psalterium(ton.length > 0 && ton != "0" ? ton : null));
             },
-            saveTranslation(psalterium, trad) {
+            saveTranslation(psalterium: Psalterium, trad) {
                 if (trad.trim() === "{}") {
                     psalterium.translation = true;
                     return;
@@ -203,9 +245,17 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                     title = title.trim();
                     if (title.length > 0) {
                         psalterium.translation = true;
-                        (psalterium as Psalterium).psalms[index].setTranslation(
-                            title
-                        );
+                        const psalm = psalterium.psalms[index];
+                        if (psalm.title === false) {
+                            const newTitle = new PsalmTitle(
+                                new TextNodeConstructor()
+                            );
+                            newTitle.content.context = psalm.title;
+                            psalm.title = newTitle;
+                        }
+                        if (psalm.title) {
+                            psalm.title.content.fr = title;
+                        }
                     }
                 });
             },
@@ -219,13 +269,15 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                     case "table-of-contents":
                         return table;
                     default:
-                        return new GenericElement(tag);
+                        return new GenericElement();
                 }
             },
         },
     ],
     defaultCase: function (paragraph: string) {
-        return new ParagraphStd(paragraph);
+        const p = new ParagraphStd(new TextNodeConstructor(paragraph));
+        p.text.context = p;
+        return p;
     },
 });
 

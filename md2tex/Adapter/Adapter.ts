@@ -41,7 +41,7 @@ export class Adapter implements AdapterInterface {
             if (error instanceof Error) {
                 return this.renderError(`Error : ${error.message}`);
             }
-            return this.renderError(`Unknown error : ${element.content}`);
+            return this.renderError(`Unknown error : ${element}`);
         }
     }
 
@@ -78,13 +78,13 @@ export class Adapter implements AdapterInterface {
 
     private getRenderFunctionTRAD(element: GenericElement) {
         const renderFunction = this.renderersTRAD[element.constructor.name];
-        return renderFunction != undefined && element.translation
+        return renderFunction != undefined
             ? renderFunction
             : this.getRenderFunction(element);
     }
 
     private defaultRender(element: GenericElement) {
-        return element.content;
+        return element.constructor.name;
     }
 
     private renderError(msg: string) {

@@ -10,21 +10,12 @@ export const renderCantus = ({ engine }: Adapter) =>
     };
 
 export const renderCantusTRAD = ({ engine }: Adapter) =>
-    function ({
-        scorePath,
-        anchor,
-        translation,
-        translationLinesCount,
-    }: Cantus): string {
+    function ({ scorePath, translation, anchor }: Cantus): string {
         return engine.concat([
             anchor ? engine.orphan("anchor", { href: anchor }) : undefined,
-            engine.orphan(
-                "cantusTRAD",
-                {
-                    scorePath: scorePath + "-fr",
-                    translation,
-                },
-                { translationLinesCount }
-            ),
+            engine.orphan("cantusTRAD", {
+                scorePath: scorePath + "-fr",
+                translation,
+            }),
         ]);
     };

@@ -10,5 +10,5 @@ export interface PsalmManager {
     cache: PsalmCache;
     psalmBuilder: PsalmBuilder;
 
-    setUpPsalm(psalm: Psalmus): void;
+    getPsalm(psalm: Psalmus): { la: string[]; fr: (string | undefined)[] };
 }

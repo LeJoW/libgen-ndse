@@ -1,44 +1,41 @@
 import { GenericElement } from "./GenericElement";
+import { TextNode } from "./TextNode.i";
 
 export class Title extends GenericElement {
-    title: string;
+    content: TextNode;
 
-    constructor(title: string) {
-        super(title);
-        this.title = title;
+    constructor(title: TextNode) {
+        super();
+        this.content = title;
     }
 }
 
 export class DayTitle extends Title {
-    shortTitle: string;
-    dayClass: string | null = null;
-    translation:
-        | { title: string; dayClass: string; shortTitle: string }
-        | false = false;
+    shortTitle: TextNode;
+    dayClass: TextNode | null = null;
 
-    constructor(title: string) {
+    constructor(title: TextNode) {
         super(title);
         this.shortTitle = title;
     }
 }
 
 export class OfficeTitle extends Title {
-    shortTitle: string;
+    shortTitle: TextNode;
     anchor: string | null = null;
-    translation: { title: string; shortTitle: string } | false = false;
 
-    constructor(title: string) {
+    constructor(title: TextNode) {
         super(title);
         this.shortTitle = title;
     }
 }
 
 export class LessonTitle extends Title {
-    addendum: string | null = null;
+    addendum: TextNode | null = null;
 
-    constructor(title: string) {
+    constructor(title: TextNode) {
         super(title);
-        this.title = title;
+        this.content = title;
     }
 }
 

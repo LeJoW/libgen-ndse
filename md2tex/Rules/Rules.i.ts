@@ -16,7 +16,7 @@ export type parser = {
     mask: RegExp;
     replace: matchCallback;
     storeTranslation?: (
-        element: ReturnType<parser["replace"]>,
+        element: GenericElement,
         translation: string,
         mask: RegExp
     ) => void;
@@ -27,7 +27,11 @@ export type BlockConfigType = {
     desc: {
         test: RegExp;
         callback: matchCallback;
-        saveTranslation?: parser["storeTranslation"];
+        saveTranslation?: (
+            element: any,
+            translation: string,
+            mask: RegExp
+        ) => void;
     }[];
     defaultCase: matchCallback;
 };

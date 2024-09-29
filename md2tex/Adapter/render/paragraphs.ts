@@ -6,25 +6,18 @@ import {
     RemplacementRubric,
     Rubric,
 } from "../../Types/paragraphs";
+import { TextNode } from "../../Types/TextNode.i";
 import { Adapter } from "../Adapter.i";
 
 export const renderParagraphStdTRAD = ({ engine }: Adapter) =>
-    function ({ text, translation }: ParagraphStd) {
-        return engine.container(
-            "tradColonnes",
-            engine.join([
-                engine.orphan("colFR", { content: translation }),
-                engine.orphan("colLA", {
-                    content: text,
-                }),
-            ])
-        );
+    function ({ text }: ParagraphStd) {
+        return printParagraphStdTRAD(text, engine);
     };
 
 export const renderParagraphLettrine = ({ engine }: Adapter) =>
     function ({ text }: ParagraphLettrine): string {
-        return engine.container("paragraphLettrine", text.slice(1), {
-            initial: text[0] || "",
+        return engine.container("paragraphLettrine", text.la.slice(1), {
+            initial: text.la[0] || "",
         });
     };
 
@@ -34,8 +27,8 @@ export const renderRubric = ({ engine }: Adapter) =>
     };
 
 export const renderRubricTRAD = ({ engine }: Adapter) =>
-    function ({ translation }: Rubric): string {
-        return engine.container("rubric", fr(engine, translation));
+    function ({ text }: Rubric): string {
+        return engine.container("rubric", text.fr);
     };
 
 export const renderLesson = (adapter: Adapter) =>
@@ -46,13 +39,9 @@ export const renderLesson = (adapter: Adapter) =>
         );
     };
 
-export const renderLessonTRAD = (adapter: Adapter) =>
-    function ({ text, translation }: Lesson): string {
-        const par = new ParagraphStd(
-            adapter.render(new ParagraphLettrine(text))
-        );
-        par.setTranslation(translation);
-        return adapter.engine.container("lesson", adapter.render(par));
+export const renderLessonTRAD = ({ engine }: Adapter) =>
+    function ({ text }: Lesson): string {
+        return engine.container("lesson", printParagraphStdTRAD(text, engine));
     };
 
 export const renderRemplacementRubric = ({ engine }: Adapter) =>
@@ -60,6 +49,14 @@ export const renderRemplacementRubric = ({ engine }: Adapter) =>
         return engine.container("remplacement", text);
     };
 
-export function fr(engine: Render, text: string): string {
-    return engine.orphan("frenchpar", { content: text });
+function printParagraphStdTRAD({ la, fr }: TextNode, engine: Render): string {
+    return engine.container(
+        "tradColonnes",
+        engine.join([
+            engine.orphan("colFR", { content: fr }),
+            engine.orphan("colLA", {
+                content: la,
+            }),
+        ])
+    );
 }

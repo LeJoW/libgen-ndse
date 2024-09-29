@@ -1,11 +1,12 @@
 import { GenericElement } from "./GenericElement";
+import { TextNode } from "./TextNode.i";
 
 export class ParagraphStd extends GenericElement {
-    text: string;
+    text: TextNode;
 
-    constructor(text: string) {
-        super(text);
-        this.text = this.content;
+    constructor(text: TextNode) {
+        super();
+        this.text = text;
     }
 }
 
