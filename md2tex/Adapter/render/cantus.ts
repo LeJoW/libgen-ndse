@@ -15,7 +15,7 @@ export const renderCantusTRAD = ({ engine }: Adapter) =>
             anchor ? engine.orphan("anchor", { href: anchor }) : undefined,
             engine.orphan("cantusTRAD", {
                 scorePath: scorePath + "-fr",
-                translation,
+                translation: translation ? translation.fr : "",
             }),
         ]);
     };

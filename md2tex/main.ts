@@ -14,8 +14,6 @@ import { TexRender } from "./Render/TexRender";
 import { Adapter } from "./Adapter/Adapter";
 import { PsalmManager } from "./Adapter/PsalmManager/PsalmManager";
 
-import { TextNode as TextNodeBase } from "./Types/TextNode";
-
 const program = new Command();
 const tex = new TexRender();
 const adapter = new Adapter(tex);
@@ -28,10 +26,8 @@ const psalmManager = new PsalmManager(
     adapter
 );
 
-class TextNode extends TextNodeBase {}
-
 const rules = new Rules(
-    blockConfig(psalmManager, TextNode),
+    blockConfig(psalmManager),
     strConfig(adapter)
 );
 rules.preprocessor = preprocess;

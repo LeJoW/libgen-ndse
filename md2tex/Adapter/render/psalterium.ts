@@ -118,7 +118,7 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
             ),
             ...(doxologie ? versi.slice(-2) : []).map(function (verse): string {
                 return adapter.engine.orphan("aloneDoxologie", {
-                    content: verse,
+                    content: verse.la,
                 });
             }),
         ]);

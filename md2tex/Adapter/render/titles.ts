@@ -39,7 +39,7 @@ export const renderOfficeTitleTRAD = ({ engine }: Adapter) =>
             engine,
             content.fr ? content.fr : content.la,
             anchor,
-            shortTitle.la
+            shortTitle.fr ? shortTitle.fr : shortTitle.la
         );
     };
 

@@ -20,15 +20,12 @@ import { GenericElement } from "../Types/GenericElement";
 import { GregoIndex } from "../Types/GregoIndex";
 import { incipits } from "./incipits";
 import { PsalmManager } from "../Adapter/PsalmManager/PsalmManager.i";
-import { TextNode } from "../Types/TextNode.i";
+import { TextNode } from "../Types/TextNode";
 
 const gregoIndex = new GregoIndex();
 const table = new TableOfContents();
 
-const blockConfig = <T extends TextNode>(
-    psalmManager: PsalmManager,
-    TextNodeConstructor: new (...args: any[]) => T
-): BlockConfigType => ({
+const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
     desc: [
         {
             test: /^(#+)\s+([\S\s]+?)\s*(?:<([\S\s]+?)>)?\s*(?:\{([\S\s]+?)\})?\s*$/i,
@@ -39,9 +36,9 @@ const blockConfig = <T extends TextNode>(
                 summary = "",
                 subTitle = ""
             ): Title {
-                const titleNode = new TextNodeConstructor(title);
-                const summaryNode = new TextNodeConstructor(summary);
-                const subTitleNode = new TextNodeConstructor(subTitle);
+                const titleNode = new TextNode(title);
+                const summaryNode = new TextNode(summary);
+                const subTitleNode = new TextNode(subTitle);
                 switch (titleLevel) {
                     case "##":
                         const dayTitle = new DayTitle(titleNode);
@@ -94,7 +91,7 @@ const blockConfig = <T extends TextNode>(
                 if (titreElement instanceof DayTitle) {
                     titreElement.content.fr = title;
                     if (!titreElement.dayClass) {
-                        titreElement.dayClass = new TextNodeConstructor();
+                        titreElement.dayClass = new TextNode();
                     }
                     titreElement.dayClass.fr = subTitle;
                     titreElement.shortTitle.fr =
@@ -112,7 +109,7 @@ const blockConfig = <T extends TextNode>(
             test: /^>{1}\s+([\s\S]+)/,
             callback: function rubrique(_, text): Rubric {
                 const rubric = new Rubric(
-                    new TextNodeConstructor(text.replace(/>/g, " "))
+                    new TextNode(text.replace(/>/g, " "))
                 );
                 rubric.text.context = rubric;
                 return rubric;
@@ -124,9 +121,7 @@ const blockConfig = <T extends TextNode>(
         {
             test: /^=>\s+([\S\s]+)/,
             callback: function remplacement(_, text): RemplacementRubric {
-                const rrubric = new RemplacementRubric(
-                    new TextNodeConstructor(text)
-                );
+                const rrubric = new RemplacementRubric(new TextNode(text));
                 rrubric.text.context = rrubric;
                 return rrubric;
             },
@@ -134,7 +129,7 @@ const blockConfig = <T extends TextNode>(
         {
             test: /^:+\s*([\S\s]+)$/,
             callback: function lecture(_, text): Lesson {
-                const lesson = new Lesson(new TextNodeConstructor(text));
+                const lesson = new Lesson(new TextNode(text));
                 lesson.text.context = lesson;
                 return lesson;
             },
@@ -173,9 +168,9 @@ const blockConfig = <T extends TextNode>(
                 return cantus;
             },
             saveTranslation: function (cantus: Cantus, trad) {
-                cantus.translation = new TextNodeConstructor();
-                cantus.translation.fr = trad;
-                cantus.translation.context = cantus;
+                cantus.text = new TextNode();
+                cantus.text.fr = trad;
+                cantus.text.context = cantus;
             },
         },
         {
@@ -204,7 +199,7 @@ const blockConfig = <T extends TextNode>(
                             verse: string,
                             index: number
                         ): TextNode {
-                            const output = new TextNodeConstructor(verse);
+                            const output = new TextNode(verse);
                             output.context = psalmus;
                             if (fr[index]) {
                                 output.fr = fr[index] as string;
@@ -216,7 +211,7 @@ const blockConfig = <T extends TextNode>(
                             title && title.length > 0
                                 ? (() => {
                                       const out = new PsalmTitle(
-                                          new TextNodeConstructor(title)
+                                          new TextNode(title)
                                       );
                                       out.content.context = out;
                                       return out;
@@ -247,11 +242,9 @@ const blockConfig = <T extends TextNode>(
                         psalterium.translation = true;
                         const psalm = psalterium.psalms[index];
                         if (psalm.title === false) {
-                            const newTitle = new PsalmTitle(
-                                new TextNodeConstructor()
-                            );
-                            newTitle.content.context = psalm.title;
+                            const newTitle = new PsalmTitle(new TextNode());
                             psalm.title = newTitle;
+                            newTitle.content.context = psalm.title;
                         }
                         if (psalm.title) {
                             psalm.title.content.fr = title;
@@ -275,7 +268,7 @@ const blockConfig = <T extends TextNode>(
         },
     ],
     defaultCase: function (paragraph: string) {
-        const p = new ParagraphStd(new TextNodeConstructor(paragraph));
+        const p = new ParagraphStd(new TextNode(paragraph));
         p.text.context = p;
         return p;
     },

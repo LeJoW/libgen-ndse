@@ -8,7 +8,7 @@ export class Cantus extends GenericElement {
     scorePath: string = "";
     anchor: string | null = null;
 
-    translation: TextNode | false = false;
+    text: TextNode | false = false;
 
     constructor(file: string) {
         super();

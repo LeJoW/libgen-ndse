@@ -4,6 +4,7 @@ import { Rules } from "../Rules/Rules";
 import { GenericElement } from "../Types/GenericElement";
 import { Adapter } from "../Adapter/Adapter";
 import { TexRender } from "../Render/TexRender";
+import { TextNode } from "../Types/TextNode";
 
 export const adapter = new Adapter(new TexRender());
 adapter.textStyles.bold = function (text) {
@@ -17,22 +18,23 @@ adapter.symbols.star = " *";
 adapter.render = function (element: parStd | Title) {
     return (
         (this.translation && element.translation
-            ? `trad: ${element.translation}\n`
+            ? `trad: ${element.content.fr}\n`
             : "") +
         `${element.label}: ` +
-        element.content
+        element.content.la
     );
 };
 
 class TextElement extends GenericElement {
-    content: string;
-    translation: string | undefined;
-    constructor(input: string) {
+    content: TextNode;
+    translation: boolean = false;
+    constructor(input: TextNode) {
         super();
         this.content = input;
+        this.content.context = this;
     }
-    setTranslation(translation: string) {
-        this.translation = translation;
+    setTranslation() {
+        this.translation = true;
     }
 }
 
@@ -43,13 +45,18 @@ class Title extends TextElement {
     label = "title";
 }
 
-export const id = (b: string) => new parStd(b);
-export const title = (_: string, b: string) => new Title(b);
+export const id = (b: string) => {
+    return new parStd(new TextNode(b));
+};
+export const title = (_: string, b: string) => {
+    return new Title(new TextNode(b));
+};
 const saveTranslationDefault = function (
     element: TextElement,
     translation: string
 ) {
-    element.setTranslation(translation);
+    element.setTranslation();
+    element.content.fr = translation;
 };
 
 export const rules = new Rules(

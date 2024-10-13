@@ -2,6 +2,7 @@ import { Document } from "../Document/Document.i";
 import { Adapter } from "../Adapter/Adapter.i";
 import { Rules } from "../Rules/Rules.i";
 import { GenericElement } from "../Types/GenericElement.i";
+import { TextNode } from "../Types/TextNode.i";
 
 export default class Parser {
     private rules: Rules;
@@ -46,14 +47,26 @@ export default class Parser {
             }, input);
     }
 
+    parseElementTextNodes(element: GenericElement): GenericElement {
+        element.TextNodes.map((node: TextNode) => {
+            node.la = this.parseString(node.la);
+            if (node.fr) {
+                node.fr = this.parseString(node.fr);
+            }
+        });
+        return element;
+    }
+
     parse(doc: Document): string {
         try {
             return this.parseBlocks(doc)
                 .map(({ block, mask, replace, parseTranslation }) =>
-                    this.parseString(block).replace(mask, (...params) => {
+                    block.replace(mask, (...params) => {
                         const element = replace(...params);
                         if (parseTranslation) parseTranslation(element);
-                        return this.adapter.render(element);
+                        return this.adapter.render(
+                            this.parseElementTextNodes(element)
+                        );
                     })
                 )
                 .join("\n\n");

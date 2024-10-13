@@ -11,6 +11,9 @@ import { Adapter } from "../Adapter.i";
 
 export const renderParagraphStdTRAD = ({ engine }: Adapter) =>
     function ({ text }: ParagraphStd) {
+        if (!text.fr) {
+            return text.la;
+        }
         return printParagraphStdTRAD(text, engine);
     };
 
