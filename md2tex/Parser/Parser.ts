@@ -28,9 +28,10 @@ export default class Parser {
                 parseTranslation:
                     storeTranslation && translation
                         ? (element: GenericElement) => {
+                              element.translation = true;
                               return storeTranslation(
                                   element,
-                                  this.parseString(translation),
+                                  translation,
                                   mask
                               );
                           }

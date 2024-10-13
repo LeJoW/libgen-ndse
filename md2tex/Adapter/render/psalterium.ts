@@ -84,7 +84,8 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
         title,
     }: Psalmus): string {
         if (intonation) {
-            intonation.translation = versi[0];
+            intonation.translation = true;
+            intonation.text = versi[0];
         }
         return adapter.engine.join([
             title ? adapter.render(title) : undefined,

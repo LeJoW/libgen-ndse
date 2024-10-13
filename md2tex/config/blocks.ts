@@ -241,12 +241,14 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                     if (title.length > 0) {
                         psalterium.translation = true;
                         const psalm = psalterium.psalms[index];
+                        psalm.translation = true;
                         if (psalm.title === false) {
                             const newTitle = new PsalmTitle(new TextNode());
                             psalm.title = newTitle;
                             newTitle.content.context = psalm.title;
                         }
                         if (psalm.title) {
+                            psalm.title.translation = true;
                             psalm.title.content.fr = title;
                         }
                     }

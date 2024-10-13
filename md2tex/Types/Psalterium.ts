@@ -45,7 +45,6 @@ export class Canticum extends Psalmus {}
 
 export class Psalterium extends GenericElement {
     ton: string | null = null;
-    translation: boolean = false;
     psalms: (Psalmus | Canticum)[] = [];
 
     constructor(ton: string | null) {
