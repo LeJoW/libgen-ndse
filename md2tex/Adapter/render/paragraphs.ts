@@ -9,19 +9,19 @@ import {
 import { TextNode } from "../../Types/TextNode.i";
 import { Adapter } from "../Adapter.i";
 
+export const renderParagraphStd = () =>
+    function ({ text }: ParagraphStd) {
+        return text.la.trim();
+    };
+
 export const renderParagraphStdTRAD = ({ engine }: Adapter) =>
     function ({ text }: ParagraphStd) {
-        if (!text.fr) {
-            return text.la;
-        }
         return printParagraphStdTRAD(text, engine);
     };
 
 export const renderParagraphLettrine = ({ engine }: Adapter) =>
     function ({ text }: ParagraphLettrine): string {
-        return engine.container("paragraphLettrine", text.la.slice(1), {
-            initial: text.la[0] || "",
-        });
+        return printParagraphLettrine(text.la, engine);
     };
 
 export const renderRubric = ({ engine }: Adapter) =>
@@ -34,23 +34,38 @@ export const renderRubricTRAD = ({ engine }: Adapter) =>
         return engine.container("rubric", text.fr);
     };
 
-export const renderLesson = (adapter: Adapter) =>
+export const renderLesson = ({ engine }: Adapter) =>
     function ({ text }: Lesson): string {
-        return adapter.engine.container(
+        return engine.container(
             "lesson",
-            adapter.render(new ParagraphLettrine(text))
+            printParagraphLettrine(text.la, engine)
         );
     };
 
 export const renderLessonTRAD = ({ engine }: Adapter) =>
     function ({ text }: Lesson): string {
-        return engine.container("lesson", printParagraphStdTRAD(text, engine));
+        return engine.container(
+            "lesson",
+            printParagraphStdTRAD(
+                {
+                    la: printParagraphLettrine(text.la, engine),
+                    fr: text.fr,
+                } as TextNode,
+                engine
+            )
+        );
     };
 
 export const renderRemplacementRubric = ({ engine }: Adapter) =>
     function ({ text }: RemplacementRubric): string {
         return engine.container("remplacement", text);
     };
+
+function printParagraphLettrine(text: string, engine: Render): string {
+    return engine.container("paragraphLettrine", text.slice(1), {
+        initial: text[0] || "",
+    });
+}
 
 function printParagraphStdTRAD({ la, fr }: TextNode, engine: Render): string {
     return engine.container(

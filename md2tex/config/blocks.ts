@@ -37,25 +37,24 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                 subTitle = ""
             ): Title {
                 const titleNode = new TextNode(title);
-                const summaryNode = new TextNode(summary);
+                const summaryNode = new TextNode(
+                    summary.length > 0 ? summary : title
+                );
                 const subTitleNode = new TextNode(subTitle);
                 switch (titleLevel) {
                     case "##":
-                        const dayTitle = new DayTitle(titleNode);
+                        const dayTitle = new DayTitle(titleNode, summaryNode);
                         dayTitle.dayClass = subTitleNode;
-                        if (summary.length > 0) {
-                            dayTitle.shortTitle = summaryNode;
-                        }
                         titleNode.context = dayTitle;
                         summaryNode.context = dayTitle;
                         subTitleNode.context = dayTitle;
                         table.addDay(dayTitle);
                         return dayTitle;
                     case "###":
-                        const officeTitle = new OfficeTitle(titleNode);
-                        if (summary.length > 0) {
-                            officeTitle.shortTitle = summaryNode;
-                        }
+                        const officeTitle = new OfficeTitle(
+                            titleNode,
+                            summaryNode
+                        );
                         titleNode.context = officeTitle;
                         summaryNode.context = officeTitle;
                         table.addOffice(officeTitle);
@@ -88,8 +87,8 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                 const [, , title, summary, subTitle] = trad.match(
                     mask
                 ) as string[];
+                titreElement.content.fr = title;
                 if (titreElement instanceof DayTitle) {
-                    titreElement.content.fr = title;
                     if (!titreElement.dayClass) {
                         titreElement.dayClass = new TextNode();
                     }
@@ -97,11 +96,8 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                     titreElement.shortTitle.fr =
                         summary && summary.length > 0 ? summary : title;
                 } else if (titreElement instanceof OfficeTitle) {
-                    titreElement.content.fr = title;
                     titreElement.shortTitle.fr =
                         summary && summary.length > 0 ? summary : title;
-                } else {
-                    titreElement.content.fr = title;
                 }
             },
         },

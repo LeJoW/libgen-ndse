@@ -14,9 +14,9 @@ export class DayTitle extends Title {
     shortTitle: TextNode;
     dayClass: TextNode | null = null;
 
-    constructor(title: TextNode) {
+    constructor(title: TextNode, shortTitle: TextNode) {
         super(title);
-        this.shortTitle = title;
+        this.shortTitle = shortTitle;
     }
 }
 
@@ -24,9 +24,9 @@ export class OfficeTitle extends Title {
     shortTitle: TextNode;
     anchor: string | null = null;
 
-    constructor(title: TextNode) {
+    constructor(title: TextNode, shortTitle: TextNode) {
         super(title);
-        this.shortTitle = title;
+        this.shortTitle = shortTitle;
     }
 }
 

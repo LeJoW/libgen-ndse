@@ -20,6 +20,7 @@ import {
     renderLesson,
     renderLessonTRAD,
     renderParagraphLettrine,
+    renderParagraphStd,
     renderParagraphStdTRAD,
     renderRemplacementRubric,
     renderRubric,
@@ -52,6 +53,7 @@ export const renderers = [
     renderPsalmus,
     renderPsalterium,
 
+    renderParagraphStd,
     renderParagraphLettrine,
     renderRubric,
     renderLesson,
