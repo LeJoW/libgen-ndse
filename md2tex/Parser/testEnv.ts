@@ -27,7 +27,6 @@ adapter.render = function (element: parStd | Title) {
 
 class TextElement extends GenericElement {
     content: TextNode;
-    translation: boolean = false;
     constructor(input: TextNode) {
         super();
         this.content = input;

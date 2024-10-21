@@ -83,10 +83,6 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
         doxologie,
         title,
     }: Psalmus): string {
-        if (intonation) {
-            intonation.translation = true;
-            intonation.text = versi[0];
-        }
         return adapter.engine.join([
             title ? adapter.render(title) : undefined,
             anchor

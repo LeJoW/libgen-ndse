@@ -24,14 +24,6 @@ export class Psalmus extends GenericElement {
         }
     }
 
-    setTranslation(title: TextNode): void {
-        const psalmTitle = new PsalmTitle(title);
-        if (!this.title) {
-            this.title = psalmTitle;
-        }
-        this.title.content.fr = title.fr;
-    }
-
     setVersorumTranslation(versi: (string | undefined)[]): void {
         versi.map((versus: string | undefined, index: number) => {
             if (versus) {
@@ -50,6 +42,16 @@ export class Psalterium extends GenericElement {
     constructor(ton: string | null) {
         super();
         this.ton = ton;
+    }
+
+    set translation(isSet: boolean) {
+        super.translation = isSet;
+        this.psalms.map(function (psalm) {
+            psalm.translation = isSet;
+        });
+    }
+    get translation(): boolean {
+        return super.translation;
     }
 
     addPsalm(psalm: Psalmus | Canticum) {

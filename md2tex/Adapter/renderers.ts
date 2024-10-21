@@ -35,6 +35,8 @@ const renderHymnus = (adapter: Adapter) => renderCantus(adapter);
 const renderAntiphona = (adapter: Adapter) => renderCantus(adapter);
 const renderResponsorium = (adapter: Adapter) => renderCantus(adapter);
 
+const renderCanticum = (adapter: Adapter) => renderPsalmus(adapter);
+
 const renderSectionTitle = (adapter: Adapter) => renderTitle(adapter);
 
 export const renderers = [
@@ -51,6 +53,7 @@ export const renderers = [
     renderResponsorium,
 
     renderPsalmus,
+    renderCanticum,
     renderPsalterium,
 
     renderParagraphStd,

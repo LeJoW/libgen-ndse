@@ -47,7 +47,7 @@ export const renderLessonTitle = ({ engine }: Adapter) =>
     function ({ content, addendum }: LessonTitle): string {
         return engine.orphan("lessonTitle", {
             content: content.la,
-            ref: addendum ?? "",
+            ref: addendum?.la ?? "",
         });
     };
 
@@ -55,7 +55,7 @@ export const renderLessonTitleTRAD = ({ engine }: Adapter) =>
     function ({ addendum, content }: LessonTitle): string {
         return engine.orphan("lessonTitle", {
             translation: content.fr,
-            ref: addendum?.fr ?? "",
+            ref: addendum?.la ?? "",
         });
     };
 

@@ -26,7 +26,7 @@ export const renderParagraphLettrine = ({ engine }: Adapter) =>
 
 export const renderRubric = ({ engine }: Adapter) =>
     function ({ text }: Rubric): string {
-        return engine.container("rubric", text);
+        return engine.container("rubric", text.la);
     };
 
 export const renderRubricTRAD = ({ engine }: Adapter) =>
@@ -58,7 +58,7 @@ export const renderLessonTRAD = ({ engine }: Adapter) =>
 
 export const renderRemplacementRubric = ({ engine }: Adapter) =>
     function ({ text }: RemplacementRubric): string {
-        return engine.container("remplacement", text);
+        return engine.container("remplacement", text.la);
     };
 
 function printParagraphLettrine(text: string, engine: Render): string {
