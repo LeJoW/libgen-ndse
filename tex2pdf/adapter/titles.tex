@@ -56,7 +56,10 @@
 	\updateSpaceLeft%
 	\advance\spaceLeft by-\ht0%
 	\ifdim\spaceLeft<2.4\gregoLineSkip%
-		\widePageEnd%
+		\ifdim\spaceLeft>1cm%
+			\nobreak%
+			\widePageEnd%
+		\fi
 		\penalty-10000%
 	\fi%
 	#1%
