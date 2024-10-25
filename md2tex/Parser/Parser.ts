@@ -1,15 +1,17 @@
 import { Document } from "../Document/Document.i";
 import { Adapter } from "../Adapter/Adapter.i";
-import { Rules } from "../Rules/Rules.i";
+import { converter, Rules } from "../Rules/Rules.i";
 import { GenericElement } from "../Types/GenericElement.i";
 import { TextNode } from "../Types/TextNode.i";
 
 export default class Parser {
     private rules: Rules;
+    private stringConverters: converter[];
     private adapter: Adapter;
 
     constructor(rules: Rules, adapter: Adapter) {
         this.rules = rules;
+        this.stringConverters = rules.getStringConverters();
         this.adapter = adapter;
     }
 
@@ -40,12 +42,17 @@ export default class Parser {
         });
     }
 
-    parseString(input: string): string {
-        return this.rules
-            .getStringConverters()
-            .reduce(function (acc: string, { mask, replace }): string {
+    parseString(input: string, strLang: "la" | "fr"): string {
+        return this.stringConverters.reduce(function (
+            acc: string,
+            { mask, replace, lang }
+        ): string {
+            if (strLang === lang) {
                 return acc.replace(mask, replace);
-            }, input);
+            }
+            return acc;
+        },
+        input);
     }
 
     parseElementTextNodes(element: GenericElement): GenericElement {
@@ -54,9 +61,9 @@ export default class Parser {
     }
 
     parseTextNode = (node: TextNode): TextNode => {
-        node.la = this.parseString(node.la);
+        node.la = this.parseString(node.la, "la");
         if (node.fr) {
-            node.fr = this.parseString(node.fr);
+            node.fr = this.parseString(node.fr, "fr");
         }
         return node;
     };

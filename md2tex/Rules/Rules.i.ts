@@ -21,7 +21,11 @@ export type parser = {
         mask: RegExp
     ) => void;
 };
-type converter = { mask: RegExp; replace: replaceCallback };
+export type converter = {
+    mask: RegExp;
+    replace: replaceCallback;
+    lang: "fr" | "la";
+};
 
 export type TypeConfig = {
     test: RegExp;
@@ -34,7 +38,12 @@ export type BlockConfigType = {
     defaultCase: matchCallback;
 };
 
-export type StringConfigType = { test: RegExp; callback: replaceCallback }[];
+export type LangStringConfig = { test: RegExp; callback: replaceCallback }[];
+export type StringConfigType = {
+    la: LangStringConfig;
+    fr: LangStringConfig;
+    all: LangStringConfig;
+};
 
 export interface Rules {
     preprocessor: (block: string) => string[];

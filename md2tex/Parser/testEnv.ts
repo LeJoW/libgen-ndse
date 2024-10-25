@@ -69,30 +69,34 @@ export const rules = new Rules(
         ],
         defaultCase: id,
     },
-    [
-        {
-            test: /([éá])/g,
-            callback: function (_, c) {
-                const chars: { [key: string]: string } = {
-                    é: "e",
-                    á: "a",
-                };
-                return "\\'" + chars[c];
+    {
+        fr: [],
+        la: [],
+        all: [
+            {
+                test: /([éá])/g,
+                callback: function (_, c) {
+                    const chars: { [key: string]: string } = {
+                        é: "e",
+                        á: "a",
+                    };
+                    return "\\'" + chars[c];
+                },
             },
-        },
-        {
-            test: /\*([\S\s]+)\*/g,
-            callback: function (_, text) {
-                return `{\\it ${text}}`;
+            {
+                test: /\*([\S\s]+)\*/g,
+                callback: function (_, text) {
+                    return `{\\it ${text}}`;
+                },
             },
-        },
-        {
-            test: /_{1}([^_]+)_{1}/g,
-            callback(_, text) {
-                return adapter.textStyles.italic(text);
+            {
+                test: /_{1}([^_]+)_{1}/g,
+                callback(_, text) {
+                    return adapter.textStyles.italic(text);
+                },
             },
-        },
-    ]
+        ],
+    }
 );
 rules.preprocessor = preprocess;
 rules.translater = translate;

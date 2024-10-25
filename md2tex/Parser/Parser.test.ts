@@ -25,10 +25,12 @@ But set a title :
         },
     ]);
 
-    expect(parser.parseString("é")).toStrictEqual("\\'e");
-    expect(parser.parseString("á")).toStrictEqual("\\'a");
-    expect(parser.parseString("á et é")).toStrictEqual("\\'a et \\'e");
-    expect(parser.parseString("á *et* é")).toStrictEqual("\\'a {\\it et} \\'e");
+    expect(parser.parseString("é", "la")).toStrictEqual("\\'e");
+    expect(parser.parseString("á", "la")).toStrictEqual("\\'a");
+    expect(parser.parseString("á et é", "la")).toStrictEqual("\\'a et \\'e");
+    expect(parser.parseString("á *et* é", "la")).toStrictEqual(
+        "\\'a {\\it et} \\'e"
+    );
 
     expect(parser.parse(doc))
         .toStrictEqual(`std: Nothing to see {\\it here}. But set a title :

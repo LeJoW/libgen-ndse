@@ -21,7 +21,7 @@ test("block-operators", function () {
             ],
             defaultCase: replaceDefault,
         },
-        [{ test: /(é)/, callback: accentReplace }]
+        { fr: [], all: [], la: [{ test: /(é)/, callback: accentReplace }] }
     );
     engine.translater = translate;
 
@@ -44,6 +44,7 @@ test("block-operators", function () {
         {
             mask: /(é)/,
             replace: accentReplace,
+            lang: "la"
         },
     ]);
 

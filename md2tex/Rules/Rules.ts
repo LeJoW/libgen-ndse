@@ -5,6 +5,8 @@ import {
     StringConfigType,
     translatedBlock,
     parser,
+    LangStringConfig,
+    converter,
 } from "./Rules.i";
 
 export class Rules implements RulesInterface {
@@ -54,18 +56,31 @@ export class Rules implements RulesInterface {
                       mask: possibleConverters[0].test,
                       replace: possibleConverters[0].callback,
                   };
-        if (
-            possibleConverters[0] &&
-            possibleConverters[0].saveTranslation
-        ) {
+        if (possibleConverters[0] && possibleConverters[0].saveTranslation) {
             output.storeTranslation = possibleConverters[0].saveTranslation;
         }
         return output;
     }
 
-    getStringConverters() {
-        return this.strConverters.map(function ({ test, callback }) {
-            return { mask: test, replace: callback };
+    buildConverters(
+        converters: LangStringConfig,
+        lang: "la" | "fr"
+    ): converter[] {
+        return converters.map(function ({ test, callback }): converter {
+            return {
+                mask: test,
+                replace: callback,
+                lang: lang,
+            };
         });
+    }
+
+    getStringConverters() {
+        this.strConverters.fr.push(...this.strConverters.all);
+        this.strConverters.la.push(...this.strConverters.all);
+        return [
+            ...this.buildConverters(this.strConverters.la, "la"),
+            ...this.buildConverters(this.strConverters.fr, "fr"),
+        ];
     }
 }
