@@ -7,8 +7,8 @@ export class PsalmBuilder {
     syllabifier: Syllabifier;
     symbols = { cross: " +", star: " *" };
     styles = {
-        italic: (text: string) => `string`,
-        bold: (text: string) => `string`,
+        italic: (text: string) => `*${text}*`,
+        bold: (text: string) => `**${text}**`,
     };
     accentuation: { [key: string]: string } = {
         a: "á",

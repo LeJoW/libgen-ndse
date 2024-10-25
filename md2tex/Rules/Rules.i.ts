@@ -23,16 +23,14 @@ export type parser = {
 };
 type converter = { mask: RegExp; replace: replaceCallback };
 
+export type TypeConfig = {
+    test: RegExp;
+    callback: matchCallback;
+    saveTranslation?: (element: any, translation: string, mask: RegExp) => void;
+};
+
 export type BlockConfigType = {
-    desc: {
-        test: RegExp;
-        callback: matchCallback;
-        saveTranslation?: (
-            element: any,
-            translation: string,
-            mask: RegExp
-        ) => void;
-    }[];
+    desc: TypeConfig[];
     defaultCase: matchCallback;
 };
 

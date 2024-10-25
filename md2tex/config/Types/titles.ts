@@ -1,3 +1,4 @@
+import { TypeConfig } from "../../Rules/Rules.i";
 import { TableOfContents } from "../../Types/TableOfContents";
 import { TextNode } from "../../Types/TextNode";
 import {
@@ -9,7 +10,7 @@ import {
     Title,
 } from "../../Types/titles";
 
-export const titlesConfig = (table: TableOfContents) => ({
+export const titlesConfig = (table: TableOfContents): TypeConfig => ({
     test: /^(#+)\s+([\S\s]+?)\s*(?:<([\S\s]+?)>)?\s*(?:\{([\S\s]+?)\})?\s*$/i,
     callback: function titre(
         _,
@@ -66,6 +67,7 @@ export const titlesConfig = (table: TableOfContents) => ({
         if (titreElement instanceof DayTitle) {
             if (!titreElement.dayClass) {
                 titreElement.dayClass = new TextNode();
+                titreElement.dayClass.context = titreElement;
             }
             titreElement.dayClass.fr = subTitle;
             titreElement.shortTitle.fr =

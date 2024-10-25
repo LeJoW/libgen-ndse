@@ -1,4 +1,5 @@
 import { PsalmManager } from "../../Adapter/PsalmManager/PsalmManager.i";
+import { TypeConfig } from "../../Rules/Rules.i";
 import { Cantus } from "../../Types/Cantus";
 import { GregoIndex } from "../../Types/GregoIndex";
 import { Psalterium, Psalmus, Canticum } from "../../Types/Psalterium";
@@ -9,7 +10,7 @@ import { incipits } from "../incipits";
 export const psalteriumConfig = (
     gregoIndex: GregoIndex,
     psalmManager: PsalmManager
-) => ({
+):TypeConfig => ({
     test: /^@(?:(\d+))?(?:\((\S+)\))?\[([\S\s]+)\]/,
     callback(_, linesTrad, ton, psaumes): Psalterium {
         return psaumes
@@ -35,6 +36,7 @@ export const psalteriumConfig = (
                 ): TextNode {
                     const output = new TextNode(verse);
                     output.context = psalmus;
+                    acc.TextNodes.push(output);
                     if (fr[index]) {
                         output.fr = fr[index] as string;
                     }

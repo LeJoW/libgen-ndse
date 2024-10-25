@@ -1,7 +1,8 @@
+import { TypeConfig } from "../../Rules/Rules.i";
 import { Lesson, RemplacementRubric, Rubric } from "../../Types/paragraphs";
 import { TextNode } from "../../Types/TextNode";
 
-export const rubricConfig = {
+export const rubricConfig: TypeConfig = {
     test: /^>{1}\s+([\s\S]+)/,
     callback: function rubrique(_, text): Rubric {
         const rubric = new Rubric(new TextNode(text.replace(/>/g, " ")));
@@ -13,7 +14,7 @@ export const rubricConfig = {
     },
 };
 
-export const remplacementConfig = {
+export const remplacementConfig: TypeConfig = {
     test: /^=>\s+([\S\s]+)/,
     callback: function remplacement(_, text): RemplacementRubric {
         const rrubric = new RemplacementRubric(new TextNode(text));
@@ -22,7 +23,7 @@ export const remplacementConfig = {
     },
 };
 
-export const lectioConfig = {
+export const lectioConfig: TypeConfig = {
     test: /^:+\s*([\S\s]+)$/,
     callback: function lecture(_, text): Lesson {
         const lesson = new Lesson(new TextNode(text));

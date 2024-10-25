@@ -1,8 +1,9 @@
+import { TypeConfig } from "../../Rules/Rules.i";
 import { Cantus, Antiphona, Hymnus, Responsorium } from "../../Types/Cantus";
 import { GregoIndex } from "../../Types/GregoIndex";
 import { TextNode } from "../../Types/TextNode";
 
-export const cantusConfig = (gregoIndex: GregoIndex) => ({
+export const cantusConfig = (gregoIndex: GregoIndex): TypeConfig => ({
     test: /^!\[(.*)\]\(([\S]+)\)$/,
     callback(_, label, file): Cantus {
         const matches = label.match(/(?:([1-8pi]+):)?(\w+):(.+)/);
