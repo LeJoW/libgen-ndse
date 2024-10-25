@@ -10,6 +10,12 @@ const symbols: { [char: string]: keyof Adapter["symbols"] } = {
 
 const strConfig = (adapter: Adapter): StringConfigType => [
     {
+        test: /(?:)/,
+        callback: function (_, __, text) {
+            return text;
+        },
+    },
+    {
         test: /\s*((\+)|(\\\*))/g,
         callback: function (_, symbol) {
             return (
@@ -18,14 +24,15 @@ const strConfig = (adapter: Adapter): StringConfigType => [
         },
     },
     {
-        test: /(_{1}([\S\s]+)_{1})/g,
-        callback: function (_, all, text, offset, ctx) {
-            if (/^!/.test(ctx)) {
-                return all;
-            }
-            return /^>/.test(ctx)
-                ? adapter.textStyles.roman(text)
-                : adapter.textStyles.italic(text);
+        test: /\*{2}([\S\s]+?)\*{2}/g,
+        callback: function (_, text) {
+            return adapter.textStyles.bold(text);
+        },
+    },
+    {
+        test: /[\*_]{1}([\S\s]+?)[\*_]{1}/g,
+        callback: function (_, text) {
+            return adapter.textStyles.italic(text);
         },
     },
     {
