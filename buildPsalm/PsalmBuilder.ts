@@ -1,16 +1,14 @@
 import { Syllabifier } from "./Syllabifier.i";
 import { tonType, tons } from "./tons";
-import { Adapter } from "../md2tex/Adapter/Adapter.i";
 
 type syllabSelection = { before: string[]; accent: string; after: string[] };
 
 export class PsalmBuilder {
     syllabifier: Syllabifier;
-    adapter: Adapter;
-    symbols: { cross: string; star: string };
-    styles: {
-        italic: (text: string) => string;
-        bold: (text: string) => string;
+    symbols = { cross: " +", star: " *" };
+    styles = {
+        italic: (text: string) => `string`,
+        bold: (text: string) => `string`,
     };
     accentuation: { [key: string]: string } = {
         a: "á",
@@ -25,17 +23,8 @@ export class PsalmBuilder {
         iu: "íu",
     };
 
-    constructor(syllabifier: Syllabifier, adapter: Adapter) {
+    constructor(syllabifier: Syllabifier) {
         this.syllabifier = syllabifier;
-        this.adapter = adapter;
-        this.symbols = {
-            cross: this.adapter.symbols.nbsp + this.adapter.symbols.cross,
-            star: this.adapter.symbols.nbsp + this.adapter.symbols.star,
-        };
-        this.styles = {
-            italic: this.adapter.textStyles.italic,
-            bold: this.adapter.textStyles.bold,
-        };
     }
 
     buildPsalm(verses: string[][], ton: string): string[] {

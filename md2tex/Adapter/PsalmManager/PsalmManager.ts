@@ -8,30 +8,24 @@ import { Adapter } from "../Adapter";
 import { PsalmManager as PsalmManagerInterface } from "./PsalmManager.i";
 
 export class PsalmManager implements PsalmManagerInterface {
-    adapter: Adapter;
     psalmList: PsalmList;
     cache: PsalmCache;
     psalmBuilder: PsalmBuilder;
 
-    constructor(
-        {
-            psalmListPath,
-            psalmCachePath,
-            syllabifierDicPath,
-        }: {
-            psalmListPath: string;
-            psalmCachePath: string;
-            syllabifierDicPath: string;
-        },
-        adapter: Adapter
-    ) {
+    constructor({
+        psalmListPath,
+        psalmCachePath,
+        syllabifierDicPath,
+    }: {
+        psalmListPath: string;
+        psalmCachePath: string;
+        syllabifierDicPath: string;
+    }) {
         const system = new System();
         this.psalmList = new PsalmList(psalmListPath, system);
         this.cache = new PsalmCache(psalmCachePath, system);
-        this.adapter = adapter;
         this.psalmBuilder = new PsalmBuilder(
-            new Syllabifier(syllabifierDicPath),
-            this.adapter
+            new Syllabifier(syllabifierDicPath)
         );
     }
 

@@ -1,18 +1,12 @@
 import { PsalmBuilder } from "./PsalmBuilder";
 import { Syllabifier } from "./Syllabifier";
-import { TexRender } from "../md2tex/Render/TexRender";
-import { Adapter } from "../md2tex/Adapter/Adapter";
-
-const adapter = new Adapter(new TexRender());
-adapter.textStyles.italic = (text: string) => `(${text})`;
-adapter.textStyles.bold = (text: string) => `[${text}]`;
-adapter.symbols.cross = "+";
-adapter.symbols.star = "*";
-adapter.symbols.nbsp = " ";
 
 const syllabifier = new Syllabifier("tex2pdf/hyphen/hyph_la_VA_all.dic");
 
-const ps = new PsalmBuilder(syllabifier, adapter);
+const ps = new PsalmBuilder(syllabifier);
+
+ps.styles.bold = (text: string) => `[${text}]`;
+ps.styles.italic = (text: string) => `(${text})`;
 
 test("Accent detection", function () {
     expect(ps.getLastAccent(["sem", "per"])).toStrictEqual({

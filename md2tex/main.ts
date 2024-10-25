@@ -17,19 +17,13 @@ import { PsalmManager } from "./Adapter/PsalmManager/PsalmManager";
 const program = new Command();
 const tex = new TexRender();
 const adapter = new Adapter(tex);
-const psalmManager = new PsalmManager(
-    {
-        psalmListPath: "buildPsalm/psalms",
-        psalmCachePath: "buildPsalm/cache",
-        syllabifierDicPath: "tex2pdf/hyphen/hyph_la_VA_all.dic",
-    },
-    adapter
-);
+const psalmManager = new PsalmManager({
+    psalmListPath: "buildPsalm/psalms",
+    psalmCachePath: "buildPsalm/cache",
+    syllabifierDicPath: "tex2pdf/hyphen/hyph_la_VA_all.dic",
+});
 
-const rules = new Rules(
-    blockConfig(psalmManager),
-    strConfig(adapter)
-);
+const rules = new Rules(blockConfig(psalmManager), strConfig(adapter));
 rules.preprocessor = preprocess;
 rules.translater = translate;
 const parser = new Parser(rules, adapter);

@@ -1,4 +1,3 @@
-import { readFileSync } from "fs";
 import { PsalmList as PsalmListInterface } from "./PsalmList.i";
 import { System } from "./System.i";
 
