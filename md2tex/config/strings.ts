@@ -18,6 +18,12 @@ const strConfig = (adapter: Adapter): StringConfigType => ({
             },
         },
         {
+            test: /(quǽsumus)/g,
+            callback: function () {
+                return "quǽ\\-su\\-mus";
+            },
+        },
+        {
             test: /\s*((\+)|(\\\*))/g,
             callback: function (_, symbol) {
                 return (

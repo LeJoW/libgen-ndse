@@ -2,9 +2,13 @@
 \def\officeTitleShort{}
 
 \newcommand{\dayTitle}[3]{
-	\thispagestyle{empty}
 	\ifnum\thepage>1
-		\cleardoublepage
+		\vfill%
+		\pagebreak%
+		\ifodd\thepage\else%
+			\null\thispagestyle{empty}%
+			\pagebreak%
+		\fi
 	\fi
 	\vspace*{2mm}
 	{
@@ -19,12 +23,13 @@
 \newcommand{\officeTitle}[2]{%
 	\setlength{\baselineskip}{7.5mm}%
 	\def\titleContent{%
-		\vspace*{2mm}%
+		\vspace*{3mm}%
 		{\centering\it\decorativ\uppercase{#1}\par}%
-		\vspace{2mm}%
+		\vspace{3mm}%
 	}%
 	\titleBox{\titleContent}%
 	\global\def\officeTitleShort{#2}%
+	\nobreak%
 }
 
 \newcommand{\sectionTitle}[1]{
@@ -35,7 +40,7 @@
 
 \newcommand{\lessonTitle}[2]{
 	\needspace{2cm}
-	\vspace{4mm}
+	\vspace*{4mm}
 	\def\detail{#2}
 	\ifx\empty\detail
 		{\centering\decorativ #1\par}

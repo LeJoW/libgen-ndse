@@ -36,6 +36,7 @@ export class Adapter implements AdapterInterface {
             ? this.getRenderFunctionTRAD(element)
             : this.getRenderFunction(element);
         try {
+            element = this.renderTextNodesOf(element);
             return renderFunction(element);
         } catch (error) {
             if (error instanceof Error) {
@@ -43,6 +44,16 @@ export class Adapter implements AdapterInterface {
             }
             return this.renderError(`Unknown error : ${element}`);
         }
+    }
+
+    private renderTextNodesOf(element: GenericElement) {
+        element.TextNodes.map((node) => {
+            if (node.fr) {
+                node.fr = this.engine.orphan("frenchpar", { text: node.fr });
+            }
+            return node;
+        });
+        return element;
     }
 
     private initializeSymbols() {
