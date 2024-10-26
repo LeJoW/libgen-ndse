@@ -7,6 +7,7 @@ const ps = new PsalmBuilder(syllabifier);
 
 ps.styles.bold = (text: string) => `[${text}]`;
 ps.styles.italic = (text: string) => `(${text})`;
+ps.symbols.star = " *";
 
 test("Accent detection", function () {
     expect(ps.getLastAccent(["sem", "per"])).toStrictEqual({

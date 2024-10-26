@@ -23,7 +23,8 @@
 \newcommand{\officeTitle}[2]{%
 	\setlength{\baselineskip}{7.5mm}%
 	\def\titleContent{%
-		\vspace*{3mm}%
+		\vspace{2mm}%
+		\vspace*{1mm}%
 		{\centering\it\decorativ\uppercase{#1}\par}%
 		\vspace{3mm}%
 	}%
@@ -40,7 +41,8 @@
 
 \newcommand{\lessonTitle}[2]{
 	\needspace{2cm}
-	\vspace*{4mm}
+	\vspace{2mm}
+	\vspace*{1mm}
 	\def\detail{#2}
 	\ifx\empty\detail
 		{\centering\decorativ #1\par}

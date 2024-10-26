@@ -65,3 +65,21 @@
 		}{%
 	\end{multicols}%
 }
+
+\def\addl{\futurelet\next\doaddl}
+\def\rml{\futurelet\next\dorml}
+\def\doaddl{\doaddrm{1}}
+\def\dorml{\doaddrm{-1}}
+\def\doaddrm#1{%
+\def\multaddrm{\doaddrmopt#1}%
+\ifx[\next%]
+\expandafter\multaddrm%
+\else%
+\multaddrm[1]%
+\fi%
+}
+\def\doaddrmopt#1[#2]{\dimen0=#1\baselineskip%
+	\vstrut{#2\dimen0}}
+
+\def\vstrut#1{\hrule height#1 width0pt depth0pt\null\par%
+	\prevdepth=-\maxdimen\noindent}

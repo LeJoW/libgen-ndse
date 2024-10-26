@@ -48,10 +48,8 @@ export class Adapter implements AdapterInterface {
 
     private renderTextNodesOf(element: GenericElement) {
         element.TextNodes.map((node) => {
-            if (node.fr) {
-                node.fr = this.engine.orphan("frenchpar", { text: node.fr });
-            }
-            return node;
+            node.render.fr = (fr) =>
+                fr ? this.engine.orphan("frenchpar", { text: fr }) : "";
         });
         return element;
     }
