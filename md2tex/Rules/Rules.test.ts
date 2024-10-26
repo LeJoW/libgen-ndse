@@ -25,26 +25,23 @@ test("block-operators", function () {
     );
     engine.translater = translate;
 
-    expect(
-        JSON.stringify(engine.getBlockConverter("Lambda text"))
-    ).toStrictEqual(
-        JSON.stringify({
-            mask: /([\S\s]*)/,
-            replace: replaceDefault,
-            storeTranslation: function () {},
-        })
-    );
+    expect(engine.getBlockConverter("Lambda text")).toStrictEqual({
+        mask: /([\S\s]*)/,
+        replace: replaceDefault,
+        storeTranslation: expect.any(Function),
+    });
 
     expect(engine.getBlockConverter("# Title text")).toStrictEqual({
         mask: /^#+/,
         replace: titleReplace,
+        storeTranslation: expect.any(Function),
     });
 
     expect(engine.getStringConverters()).toStrictEqual([
         {
             mask: /(é)/,
             replace: accentReplace,
-            lang: "la"
+            lang: "la",
         },
     ]);
 

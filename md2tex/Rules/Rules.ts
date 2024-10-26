@@ -12,6 +12,7 @@ import {
 export class Rules implements RulesInterface {
     private desc: BlockConfigType["desc"];
     private defaultCase: BlockConfigType["defaultCase"];
+    private defaultCaseSaveTranslation: BlockConfigType["defaultCaseSaveTranslation"];
     private strConverters: StringConfigType;
 
     preprocessor = function (block: string) {
@@ -23,11 +24,14 @@ export class Rules implements RulesInterface {
     };
 
     constructor(
-        { desc, defaultCase }: BlockConfigType,
+        { desc, defaultCase, defaultCaseSaveTranslation }: BlockConfigType,
         strConfig: StringConfigType
     ) {
         this.desc = desc;
         this.defaultCase = defaultCase;
+        this.defaultCaseSaveTranslation = defaultCaseSaveTranslation
+            ? defaultCaseSaveTranslation
+            : function () {};
         this.strConverters = strConfig;
     }
 
@@ -58,6 +62,8 @@ export class Rules implements RulesInterface {
                   };
         if (possibleConverters[0] && possibleConverters[0].saveTranslation) {
             output.storeTranslation = possibleConverters[0].saveTranslation;
+        } else {
+            output.storeTranslation = this.defaultCaseSaveTranslation;
         }
         return output;
     }

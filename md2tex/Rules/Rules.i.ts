@@ -36,6 +36,7 @@ export type TypeConfig = {
 export type BlockConfigType = {
     desc: TypeConfig[];
     defaultCase: matchCallback;
+    defaultCaseSaveTranslation?: TypeConfig["saveTranslation"];
 };
 
 export type LangStringConfig = { test: RegExp; callback: replaceCallback }[];

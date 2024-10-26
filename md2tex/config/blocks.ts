@@ -44,6 +44,12 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
         p.text.context = p;
         return p;
     },
+    defaultCaseSaveTranslation: function (
+        paragraph: ParagraphStd,
+        translation: string
+    ) {
+        paragraph.text.fr = translation;
+    },
 });
 
 export default blockConfig;
