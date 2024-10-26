@@ -36,13 +36,13 @@ const strConfig = (adapter: Adapter): StringConfigType => ({
     fr: [],
     all: [
         {
-            test: /\*{2}([\S\s]+?)\*{2}/g,
+            test: /\*{2}([^*]+)\*{2}/g,
             callback: function (_, text) {
                 return adapter.textStyles.bold(text);
             },
         },
         {
-            test: /[\*_]{1}([\S\s]+?)[\*_]{1}/g,
+            test: /[\*_]{1}([^*]+)[\*_]{1}/g,
             callback: function (_, text) {
                 return adapter.textStyles.italic(text);
             },

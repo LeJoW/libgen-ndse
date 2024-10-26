@@ -17,10 +17,10 @@ pdf:
 pdf-fr:
 	cd $(WORK_DIR) && lualatex --output-directory=build core-fr.tex
 
-parse: $(JSON_FILES_FROM_TXT) $(MARKDOWN)/*.md | $(SOURCE)
+parse: $(COPIED_LATEX_FILES) $(JSON_FILES_FROM_TXT) $(MARKDOWN)/*.md | $(SOURCE)
 	node dist/md2tex/main.js parse ../content/md.list -o $(SOURCE)/parsed.tex
 
-parse-fr: $(JSON_FILES_FROM_TXT) $(MARKDOWN)/*.md | $(SOURCE)
+parse-fr: $(COPIED_LATEX_FILES) $(JSON_FILES_FROM_TXT) $(MARKDOWN)/*.md | $(SOURCE)
 	node dist/md2tex/main.js parse -t ../content/md.list -o $(SOURCE)/parsed-fr.tex
 
 print: $(WORK_DIR)/core.tex
