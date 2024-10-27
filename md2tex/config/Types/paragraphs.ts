@@ -1,6 +1,6 @@
 import { TypeConfig } from "../../Rules/Rules.i";
 import { Lesson, RemplacementRubric, Rubric } from "../../Types/paragraphs";
-import { TextNode } from "../../Types/TextNode";
+import { TextNode } from "../blocks";
 
 export const rubricConfig: TypeConfig = {
     test: /^>{1}\s+([\s\S]+)/,

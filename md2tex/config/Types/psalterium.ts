@@ -3,7 +3,7 @@ import { TypeConfig } from "../../Rules/Rules.i";
 import { Cantus } from "../../Types/Cantus";
 import { GregoIndex } from "../../Types/GregoIndex";
 import { Psalterium, Psalmus, Canticum } from "../../Types/Psalterium";
-import { TextNode } from "../../Types/TextNode";
+import { TextNode } from "../blocks";
 import { PsalmTitle } from "../../Types/titles";
 import { incipits } from "../incipits";
 

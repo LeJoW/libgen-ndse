@@ -21,7 +21,7 @@ function isProclitic(word: string): boolean {
 }
 
 function trimWord(str: string): string {
-    return str.replace(/([^a-záéíóúýǽœ́])/gi, "");
+    return str.replace(/([^a-záéíóúýǽœ́æœ])/gi, "");
 }
 
 const diacritics = (function (list) {

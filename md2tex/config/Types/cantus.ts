@@ -1,7 +1,7 @@
 import { TypeConfig } from "../../Rules/Rules.i";
 import { Cantus, Antiphona, Hymnus, Responsorium } from "../../Types/Cantus";
 import { GregoIndex } from "../../Types/GregoIndex";
-import { TextNode } from "../../Types/TextNode";
+import { TextNode } from "../blocks";
 
 export const cantusConfig = (gregoIndex: GregoIndex): TypeConfig => ({
     test: /^!\[(.*)\]\(([\S]+)\)$/,

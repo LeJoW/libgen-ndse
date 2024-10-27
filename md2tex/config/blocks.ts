@@ -4,7 +4,7 @@ import { ParagraphStd } from "../Types/paragraphs";
 import { GenericElement } from "../Types/GenericElement";
 import { GregoIndex } from "../Types/GregoIndex";
 import { PsalmManager } from "../Adapter/PsalmManager/PsalmManager.i";
-import { TextNode } from "../Types/TextNode";
+import { TextNode as TextNodeBase } from "../Types/TextNode";
 import { titlesConfig } from "./Types/titles";
 import {
     lectioConfig,
@@ -13,9 +13,20 @@ import {
 } from "./Types/paragraphs";
 import { cantusConfig } from "./Types/cantus";
 import { psalteriumConfig } from "./Types/psalterium";
+import { Hyphens } from "../Types/Hyphens";
 
+const hyphens = new Hyphens();
 const gregoIndex = new GregoIndex();
 const table = new TableOfContents();
+
+export class TextNode extends TextNodeBase {
+    constructor(text?: string) {
+        super(text);
+        if (text) {
+            hyphens.registerString(text);
+        }
+    }
+}
 
 const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
     desc: [
@@ -33,6 +44,8 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
                         return gregoIndex;
                     case "table-of-contents":
                         return table;
+                    case "hyphens":
+                        return hyphens;
                     default:
                         return new GenericElement();
                 }

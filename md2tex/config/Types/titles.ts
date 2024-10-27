@@ -1,6 +1,6 @@
 import { TypeConfig } from "../../Rules/Rules.i";
 import { TableOfContents } from "../../Types/TableOfContents";
-import { TextNode } from "../../Types/TextNode";
+import { TextNode } from "../blocks";
 import {
     DayTitle,
     LessonTitle,

@@ -30,6 +30,7 @@ import { renderCantus, renderCantusTRAD } from "./render/cantus";
 import { renderTableOfContents } from "./render/tableOfContents";
 import { renderGregoIndex } from "./render/gregoIndex";
 import { Adapter } from "./Adapter.i";
+import { renderHyphens } from "./render/hyphens";
 
 const renderHymnus = (adapter: Adapter) => renderCantus(adapter);
 const renderAntiphona = (adapter: Adapter) => renderCantus(adapter);
@@ -64,6 +65,7 @@ export const renderers = [
 
     renderTableOfContents,
     renderGregoIndex,
+    renderHyphens,
 ];
 
 const renderHymnusTRAD = (adapter: Adapter) => renderCantusTRAD(adapter);

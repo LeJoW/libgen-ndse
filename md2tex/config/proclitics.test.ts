@@ -15,6 +15,7 @@ test("remove accents", function () {
 test("proclitic Detection", function () {
     expect(detectProclitic("ét")).toBe(true);
     expect(detectProclitic("Útinam")).toBe(true);
+    expect(detectProclitic("Quántæ")).toBe(true);
 });
 
 test("Proclitics", function () {
