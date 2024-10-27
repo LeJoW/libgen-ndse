@@ -12,6 +12,12 @@ const symbols: { [char: string]: keyof Adapter["symbols"] } = {
 const strConfig = (adapter: Adapter): StringConfigType => ({
     la: [
         {
+            test: /(j)/gi,
+            callback: function (_, char) {
+                return char === "j" ? "i" : "I";
+            },
+        },
+        {
             test: /^([\S\s]*)$/,
             callback: function (_, text) {
                 return removeProcliticsAccents(text);

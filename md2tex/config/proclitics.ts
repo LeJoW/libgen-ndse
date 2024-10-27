@@ -1,4 +1,4 @@
-const proclitics = ["ád", "ét", "quóniam"];
+import { default as proclitics } from "./proclitics-list";
 
 export function removeProcliticsAccents(text: string): string {
     return text
@@ -13,7 +13,7 @@ export function removeProcliticsAccents(text: string): string {
 }
 
 function detectProclitic(str: string): boolean {
-    return isProclitic(trimWord(str));
+    return isProclitic(removeAccents(trimWord(str)).toLowerCase());
 }
 
 function isProclitic(word: string): boolean {
@@ -24,7 +24,21 @@ function trimWord(str: string): string {
     return str.replace(/([^a-záéíóúýǽœ́])/gi, "");
 }
 
-const diacritics = {
+const diacritics = (function (list) {
+    return {
+        ...list,
+        ...Object.entries(list).reduce(function (
+            acc,
+            [withAccent, withoutAccent]
+        ) {
+            return {
+                ...acc,
+                [withAccent.toUpperCase()]: withoutAccent.toUpperCase(),
+            };
+        },
+        {}),
+    };
+})({
     á: "a",
     é: "e",
     í: "i",
@@ -33,11 +47,11 @@ const diacritics = {
     ý: "y",
     ǽ: "æ",
     œ́: "œ",
-};
+});
 function removeAccents(str: string): string {
-    return str.replace(/([áéíóúýǽœ́])/, function (char) {
+    return str.replace(/([áéíóúýǽœ́])/i, function (char) {
         return diacritics[char as keyof typeof diacritics] || char;
     });
 }
 
-export const testFunctions = { trimWord, isProclitic };
+export const testFunctions = { trimWord, detectProclitic, removeAccents };
