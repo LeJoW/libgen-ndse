@@ -72,11 +72,10 @@ paragraphs.getSpaceToPushBottom = function()
     local lineCount = math.floor(spaceLeft / baselineskip)
     local gap = spaceLeft - (baselineskip * lineCount)
     local invertGap = gap - baselineskip
-    if lineCount > 1 then
-        if gap > the('maxGapToBaselineAlign') and invertGap > the('minGapToBaselineAlign') then
+    if invertGap > the('minGapToBaselineAlign') then
+        if math.abs(invertGap) < gap then
             return invertGap
         end
-        return gap
     end
-    return invertGap
+    return gap
 end
