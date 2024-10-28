@@ -20,7 +20,7 @@ export class Hyphens extends GenericElement {
     getHyphenatedList(): string[] {
         const list = this.words.join("\n");
         return execSync(
-            `echo "${list}" | example tex2pdf/hyphen/hyph_la_VA_all.dic /dev/stdin`
+            `echo "${list}" | example tex2pdf/hyphen/hyph_la_VA.dic /dev/stdin`
         )
             .toString()
             .trim()
