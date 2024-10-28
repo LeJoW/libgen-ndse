@@ -23,9 +23,6 @@
 \expandafter\pdfpageattr\expandafter{\mypdfpageattr}%
 }
 
-\let\oldGreSetThisSyllable\GreSetThisSyllable
-\renewcommand{\GreSetThisSyllable}[5]{\oldGreSetThisSyllable{#1\strut[\gregoLineDepth]}{#2}{#3}{#4}{#5}}
-
 \newcommand{\linesTrad}[1]{%
 	\directlua{pageCrop.setLinesTrad(#1)}%
 	\begin{wrapfigure}[#1]{r}[\translationGap]{\translationWidth}\end{wrapfigure}}

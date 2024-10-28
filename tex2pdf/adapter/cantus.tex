@@ -15,7 +15,7 @@
 		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
 			\stepcounter{gabcCount}%
 			\hbox to \textwidth{\lower\gregoLineDepth\hbox{\includegraphics[page=\thegabcCount, scale=1]{\pdfFile}}\hfill}%
-			\vskip0pt plus1sp%
+			\vskip0pt plus1sp minus1sp%
 		}%
 	}%
 }
