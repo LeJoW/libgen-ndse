@@ -34,8 +34,16 @@
 	Ligatures=TeX
 ]{Sabon}
 \newfontfamily\courant[Ligatures=TeX]{PlantinStd-Light}
+\newfontfamily\courantSM{PlantinStd}[
+	BoldFont=PlantinStd-Bold,
+	ItalicFont=PlantinStd-Italic,
+	BoldItalicFont=PlantinStd-BoldItalic,
+	SmallCapsFont=Sabon,
+	SmallCapsFeatures={Letters=SmallCaps},
+	Ligatures=TeX
+]
 
-\fontsize{11.5pt}{5mm}\selectfont
+\fontsize{11.5pt}{5mm}\courant
 
 \newdimen{\gregoLineDepth}
 \gregoLineDepth=2mm
