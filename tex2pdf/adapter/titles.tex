@@ -2,6 +2,7 @@
 \def\officeTitleShort{}
 
 \newcommand{\dayTitle}[3]{
+	\prevdepth=-\maxdimen%
 	\ifnum\thepage>1
 		\vfill%
 		\pagebreak%
@@ -21,6 +22,7 @@
 }
 
 \newcommand{\officeTitle}[2]{%
+	\prevdepth=-\maxdimen%
 	\setlength{\baselineskip}{7.5mm}%
 	\def\titleContent{%
 		\vspace{2mm}%

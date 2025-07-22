@@ -28,19 +28,21 @@
 }
 \newcommand{\cantusTRAD}[3][0]{%%
 	\medskip%
-	\message{=-=-=-=-=-=-=-=-=-=#2=-=-=-=-=-=-=-=-=-=-}%
+	\message{=-=-=-=-=-=-=-=-=-= #2 =-=-=-=-=-=-=-=-=-=-}%
 	\cantusTradFrame{%
 		\cantusInternal{#2}%
 	}{%
 		\setlength{\parskip}{0pt}%
 		\sloppy\ttrad%
-		\frenchpar{\noindent#3\nowidow}%
+		\frenchpar{\noindent#3}%
 		\vfill%
 	}%
 	\prevdepth=-\maxdimen\null\par%
 	\smallskip%
 }
 
+\newdimen{\cantusTradWidth}%
+\setlength{\cantusTradWidth}{3.5cm}%
 \newbox\cantusBox%
 \newbox\translationBox%
 \def\cantusParam{}%
@@ -54,7 +56,7 @@
 }
 \def\resetBoxesContent{%
 	\setbox\cantusBox=\vbox{\cantusParam}%
-	\hsize=3.5cm%
+	\hsize=\cantusTradWidth%
 	\setbox\translationBox=\vbox{\translationParam}%
 	\hsize=\textwidth%
 }
@@ -67,6 +69,8 @@
 }
 \newbox\pageBoxCantus%
 \newbox\pageBoxTranslation%
+\newdimen{\cantusTradTopSkip}%
+\setlength{\cantusTradTopSkip}{2mm}%
 \def\setThisPageContent{%
 	\updateSpaceLeft%
 	\setbox\pageBoxCantus=\vsplit\cantusBox to\spaceLeft%
@@ -74,10 +78,10 @@
 	\ifdim\ht\pageBoxCantus>\spaceLeft%
 		\resetBoxesContent%
 	\else%
-		\setbox\translationBox=\vbox{\vskip2mm\unvbox\translationBox}%
+		\setbox\translationBox=\vbox{\vskip\cantusTradTopSkip\unvbox\translationBox}%
 		\setbox\pageBoxTranslation=\vsplit\translationBox to\ht\pageBoxCantus%
 		\ht\pageBoxTranslation=\ht\pageBoxCantus%
-		\hbox to\hsize{\box\pageBoxCantus\hskip-3.5cm\box\pageBoxTranslation}%
+		\hbox to\hsize{\box\pageBoxCantus\hskip-\cantusTradWidth\box\pageBoxTranslation}%
 	\fi%
 }
 \def\shrinkBoxIfNotFullPage#1{%

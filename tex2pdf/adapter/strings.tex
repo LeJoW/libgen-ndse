@@ -1,6 +1,8 @@
 \newcommand{\V}{℣.~}
 \newcommand{\R}{℟.~}
-\newcommand{\initial}[1]{\lettrine[lines=2, loversize=0.15, slope=0.6em]{\decorativ #1}{}}
+\newcommand{\initial}[1]{%
+	\def\inputLetter{#1}%
+	\lettrine[lines=2, loversize=0.15, slope=0.6em]{\decorativ \inputLetter}{}}
 \newcommand{\gstella}{\textborn}
 \newcommand{\gcrux}{\textdagger}
 \newcommand{\italic}[1]{{\textit{#1}}}

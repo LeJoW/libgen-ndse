@@ -23,18 +23,15 @@ const strConfig = (adapter: Adapter): StringConfigType => ({
                 return removeProcliticsAccents(text);
             },
         },
-        {
-            test: /\s*((\+)|(\\\*))/g,
-            callback: function (_, symbol) {
-                return (
-                    adapter.symbols.nbsp +
-                    adapter.symbols[symbols[symbol.trim()]]
-                );
-            },
-        },
     ],
     fr: [],
     all: [
+        {
+            test: /((\+)|(\\\*))/g,
+            callback: function (_, symbol) {
+                return adapter.symbols[symbols[symbol.trim()]];
+            },
+        },
         {
             test: /[\*_]{2}([^*]+?)[\*_]{2}/g,
             callback: function (_, text) {

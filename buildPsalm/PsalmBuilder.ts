@@ -5,7 +5,7 @@ type syllabSelection = { before: string[]; accent: string; after: string[] };
 
 export class PsalmBuilder {
     syllabifier: Syllabifier;
-    symbols = { cross: " +", star: " \\*" };
+    symbols = { cross: "~+", star: "~\\*" };
     styles = {
         italic: (text: string) => `*${text}*`,
         bold: (text: string) => `**${text}**`,

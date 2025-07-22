@@ -3,6 +3,7 @@
 \newenvironment{paragraphLettrine}[1]{\initial{#1}}{\par}
 
 \newenvironment{rubric}{
+	\renewcommand{\italic}[1]{\rm ##1}
 	\setlength{\parskip}{2mm plus0.5mm minus0.5mm}%
 	\smallskip%
 	\it\ttrad}{\par%
