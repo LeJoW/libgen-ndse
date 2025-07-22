@@ -2,6 +2,7 @@ import { Render } from "./Render.i";
 
 const symbols: { [symb: string]: string } = {
     nbsp: "~",
+    discretionary: "\\-",
 };
 
 export class TexRender implements Render {

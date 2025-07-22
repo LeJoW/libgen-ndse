@@ -5,7 +5,7 @@ type syllabSelection = { before: string[]; accent: string; after: string[] };
 
 export class PsalmBuilder {
     syllabifier: Syllabifier;
-    symbols = { cross: "~+", star: "~\\*" };
+    symbols = { cross: "~+", star: "~\\*", discretionary: "=" };
     styles = {
         italic: (text: string) => `*${text}*`,
         bold: (text: string) => `**${text}**`,
@@ -89,7 +89,7 @@ export class PsalmBuilder {
             );
         };
 
-        const syllabs = this.syllabifier.getSyllabsOf(halfVerse + " ");
+        const syllabs = this.hyphenate(halfVerse + " ", 2, 3);
         return rec("", accents, syllabs).trim();
     }
 
@@ -130,6 +130,55 @@ export class PsalmBuilder {
             return this.shiftSyllabsRight(output);
         }
         return output;
+    }
+
+    hyphenate(input: string, leftMin: number, rightMin: number): string[] {
+        return this.syllabifier
+            .getSyllabsOf(input)
+            .reduce(
+                (acc: string[][], syllab: string): string[][] => {
+                    acc[0].push(syllab);
+                    if (this.isEndingSyllab(syllab)) {
+                        acc.unshift([]);
+                    }
+                    return acc;
+                },
+                [[]]
+            )
+            .reverse()
+            .map((word: string[]): string[] => {
+                if (word.length < 2) return word;
+                const firstSyllab = word[0];
+                const regularSyllabs = word.slice(1, -1);
+                const lastSyllab = word[word.length - 1];
+                return [
+                    firstSyllab +
+                        (this.syllabLetterCount(firstSyllab) < leftMin ||
+                        (word.length === 2 &&
+                            this.syllabLetterCount(lastSyllab) < rightMin)
+                            ? ""
+                            : this.symbols.discretionary),
+                    ...regularSyllabs.map((syllab: string, i): string => {
+                        if (
+                            i + 1 < regularSyllabs.length ||
+                            this.syllabLetterCount(lastSyllab) >= rightMin
+                        ) {
+                            return syllab + this.symbols.discretionary;
+                        }
+                        return syllab;
+                    }),
+                    ...(word.length > 1 ? [lastSyllab] : []),
+                ];
+            })
+            .flat();
+    }
+
+    private isEndingSyllab(syllab: string) {
+        return /\s$/.test(syllab);
+    }
+
+    private syllabLetterCount(syllab: string): number {
+        return syllab.replace(/^([a-záéíóúýǽœ́æœ]+)[\S\s]*$/i, "$1").length;
     }
 
     private setUpPostTonicSyllabs({
@@ -205,8 +254,9 @@ export class PsalmBuilder {
         syllab: string,
         style: (text: string) => string
     ): string {
-        return syllab.replace(/([\wáéíóúýǽæœ́œ]+)/gi, (_, syllab) =>
-            style(syllab)
-        );
+        syllab = syllab.replaceAll(this.symbols.discretionary, "@");
+        return syllab
+            .replace(/([\wáéíóúýǽæœ́œ@]+)/gi, (_, syllab) => style(syllab))
+            .replaceAll("@", this.symbols.discretionary);
     }
 }
