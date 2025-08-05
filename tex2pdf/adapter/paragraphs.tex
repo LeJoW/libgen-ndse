@@ -1,3 +1,5 @@
+\input adapter/balanced-cols
+
 \newenvironment{paragraphStd}{}{}
 
 \newenvironment{paragraphLettrine}[1]{\initial{#1}}{\par}
@@ -38,7 +40,7 @@
 	\vspace{\topSepRuleTradSpace}%
 	\pushBottom%
 	\setlength{\parskip}{0pt}%
-	\setlength{\topSepRuleTradSpace}{\dimexpr\baselineskip-\capsHeight}%
+	\setlength{\topSepRuleTradSpace}{\dimexpr\baselineskip-\capheight}%
 	\begingroup%
 	\let\storeParskip\parskip%
 	\setlength{\parskip}{0pt}%
@@ -54,15 +56,7 @@
 }
 
 \newenvironment{colonnes}{%
-	\goodbreak
-	\vspace{\parskip}%
-	\pushBottom%
-	\vspace{-1pt}%
-	\setlength{\parskip}{0pt}%
-	\hrule width\textwidth height0pt depth0pt%
-	\begin{multicols}{2}%
-		}{%
-	\end{multicols}%
+}{%
 }
 
 \def\addl{\futurelet\next\doaddl}

@@ -67,7 +67,7 @@ cantus.getAutoAdjustedGap = function(boxHeight)
 end
 
 paragraphs.getSpaceToPushBottom = function()
-    local spaceLeft = (tex.pagegoal - tex.pagetotal) - the('capsHeight')
+    local spaceLeft = (tex.pagegoal - tex.pagetotal) - the('capheight')
     local baselineskip = tex.baselineskip.width
     local lineCount = math.floor(spaceLeft / baselineskip)
     local gap = spaceLeft - (baselineskip * lineCount)

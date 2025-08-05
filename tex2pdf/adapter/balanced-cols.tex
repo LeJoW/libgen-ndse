@@ -1,0 +1,59 @@
+\def\balancedcolstyle{\tolerance=10000}
+
+\newdimen\colwidth%
+\newdimen\rulewidth%
+\newdimen\colsgap%
+\rulewidth=.4pt%
+\colsgap=2.5mm%
+\colwidth=\textwidth%
+\advance\colwidth by -\rulewidth%
+\advance\colwidth by -2\colsgap%
+\divide\colwidth by 2%
+
+\makeatletter
+\newbox\balanced@col%
+\long\def\balancedcols#1{%
+	\hrule height0pt%
+	\setbox\balanced@col=\vbox{\hsize=\colwidth\balancedcolstyle \vbox to 1cm{}#1}%
+	\setbox0=\vsplit\balanced@col to 1cm%
+	\balanced@expandColsOverPages%
+}
+
+\def\balanced@expandColsOverPages{%
+	\balanced@setThisPageContent%
+	\ifvoid\balanced@col\else\eject\balanced@expandColsOverPages\fi%
+}
+
+\newbox\balanced@leftCol%
+\newbox\balanced@rightCol%
+\def\balanced@setThisPageContent{%
+	\ifdim\pagetotal>\textheight\eject\fi%
+	\balanced@updateCropHeight%
+	\balanced@build\balanced@leftCol from \balanced@col%
+	\balanced@build\balanced@rightCol from \balanced@col%
+	\setbox0=\vbox{\hbox{%
+			\box\balanced@leftCol%
+			\hskip\colsgap\vrule width\rulewidth\hskip\colsgap%
+			\box\balanced@rightCol}}%
+	\ht0=\dp0\dp0=0pt%
+	\box0%
+}
+
+\newdimen\balanced@cropHeight%
+\def\balanced@updateCropHeight{%
+	\dimen0=\textheight%
+	\advance\dimen0 by -\pagetotal%
+	\balanced@cropHeight=\ht\balanced@col%
+	\divide\balanced@cropHeight by 2%
+	\advance\balanced@cropHeight by .5\baselineskip%
+	\ifdim\dimen0<\balanced@cropHeight\balanced@cropHeight=\dimen0\fi%
+}
+
+\def\balanced@build#1from#2{%
+\let\inputBox#2%
+\let\outputBox#1%
+\setbox\outputBox=\vsplit\inputBox to\balanced@cropHeight%
+\setbox\outputBox=\vtop{\unvbox\outputBox}%
+\ht\outputBox=-\splittopskip%
+}
+\makeatother

@@ -38,10 +38,9 @@ export const renderPsalterium = (adapter: Adapter) =>
             "psalterium",
             adapter.engine.join([
                 ...beforePsalmBody,
-                adapter.engine.container(
-                    "psalmBody",
-                    adapter.engine.join(psalmBody)
-                ),
+                adapter.engine.orphan("balancedcols", {
+                    content: adapter.engine.join(psalmBody),
+                }),
             ])
         );
     };
