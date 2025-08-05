@@ -1,4 +1,5 @@
 \input adapter/balanced-cols
+\input adapter/bi-cols
 
 \newenvironment{paragraphStd}{}{}
 
@@ -25,35 +26,16 @@
 \newdimen{\topSepRuleTradSpace}%
 \newdimen{\minGapToBaselineAlign}%
 \minGapToBaselineAlign=-2mm%
-\newcommand{\colLA}[1]{#1\switchcolumn*}
+\def\bicolsoutstyle{\ttrad\parIndent}
+\def\bicolsinstyle{}
+\newcommand{\colLA}[1]{#1}
 \def\parIndent{}%
-\newcommand{\colFR}[1]{\frenchpar{\ttrad\parIndent #1}\switchcolumn}
+\newcommand{\colFR}[1]{\frenchpar{\ttrad\parIndent #1}}
 \newcommand{\pushBottom}{%
 	\prevdepth=-\maxdimen\null%
 	\vspace{\directlua{tex.sprint(paragraphs.getSpaceToPushBottom() .. "sp")}}%
 }
-\newenvironment{tradColonnes}{%
-	\needspace{3\baselineskip}%
-	\twosided%
-	\columnratio{0.5}%
-	\vspace{\parskip}%
-	\vspace{\topSepRuleTradSpace}%
-	\pushBottom%
-	\setlength{\parskip}{0pt}%
-	\setlength{\topSepRuleTradSpace}{\dimexpr\baselineskip-\capheight}%
-	\begingroup%
-	\let\storeParskip\parskip%
-	\setlength{\parskip}{0pt}%
-	\hrule width\textwidth height0pt depth0pt%
-	\begin{paracol}{2}%
-		\setlength{\parskip}{\storeParskip}%
-		\sloppy%
-		{\strut[0pt]\vspace*{-\topSepRuleTradSpace}\switchcolumn}%
-		{\strut[0pt]\vspace*{-\topSepRuleTradSpace}\switchcolumn*}%
-		}{%
-	\end{paracol}%
-	\endgroup%
-}
+\newenvironment{tradColonnes}{\beginbicols}{\endbicols}
 
 \newenvironment{colonnes}{%
 }{%

@@ -1,0 +1,86 @@
+\def\bicolsoutstyle{}
+\def\bicolsinstyle{}
+
+\newdimen\colwidth%
+\newdimen\rulewidth%
+\newdimen\colsgap%
+\rulewidth=.4pt%
+\colsgap=2.5mm%
+\colwidth=\textwidth%
+\advance\colwidth by -\rulewidth%
+\advance\colwidth by -2\colsgap%
+\divide\colwidth by 2%
+
+\makeatletter
+\newif\ifbicols@mustInsertVSpace%
+\def\beginbicols{%
+	\begingroup%
+	\bicols@mustInsertVSpacefalse}
+\def\endbicols{\endgroup}
+
+\newbox\bicols@outbox%
+\newbox\bicols@inbox%
+\long\def\bicolsrow#1#2{
+	\setbox\bicols@outbox=\vtop{\hsize=\colwidth%
+		\linewidth=\hsize%
+		\bicolsoutstyle #1}
+	\setbox\bicols@inbox=\vtop{\hsize=\colwidth%
+		\linewidth=\hsize%
+		\bicolsinstyle #2}
+	\bicols@insertVSpace%
+	\bicols@expandColsOverPages%
+	\bicols@mustInsertVSpacetrue%
+}
+
+\newif\ifbicols@voidCols%
+\def\bicols@expandColsOverPages{%
+	\hrule height0pt%
+	\bicols@setThisPageContent%
+	\bicols@checkColsContent\ifbicols@voidCols\else%
+		\penalty-10000%
+		\bicols@expandColsOverPages%
+	\fi%
+}
+
+\def\bicols@checkColsContent{%
+	\bicols@voidColstrue%
+	\ifvoid\bicols@outbox\else\bicols@voidColsfalse\fi%
+	\ifvoid\bicols@inbox\else\bicols@voidColsfalse\fi%
+}
+
+\newdimen\bicols@spaceLeft%
+\newbox\bicols@outPage%
+\newbox\bicols@inPage%
+\def\bicols@setThisPageContent{
+	\bicols@checkSpaceLeft%
+	\bicols@setUpBox\bicols@outPage from\bicols@outbox%
+	\bicols@setUpBox\bicols@inPage from\bicols@inbox%
+	\hbox to\hsize{\box\bicols@outPage\hskip\colsgap\vrule width\rulewidth\hskip\colsgap\box\bicols@inPage}
+}
+
+\def\bicols@checkSpaceLeft{%
+	\bicols@spaceLeft=\pagegoal%
+	\advance\bicols@spaceLeft by-\pagetotal%
+}
+
+\splittopskip=6.94444pt%
+\def\bicols@setUpBox#1from#2{%
+\let\bicols@outputBox#1%
+\let\bicols@inputBox#2%
+\setbox\bicols@outputBox=\vsplit\bicols@inputBox to\bicols@spaceLeft%
+\setbox\bicols@outputBox=\vtop{\unvbox\bicols@outputBox}%
+}
+
+\newdimen\bicols@rowskip%
+\bicols@rowskip=\parskip%
+\def\bicols@insertVSpace{%
+	\ifbicols@mustInsertVSpace%
+		\advance\bicols@rowskip by\prevdepth
+		\prevdepth=-\maxdimen%
+		\hbox to\hsize{%
+			\vbox to\bicols@rowskip{\hbox to\colwidth{}}%
+			\hskip\colsgap\vrule width\rulewidth%
+		}%
+	\fi%
+}
+\makeatother
