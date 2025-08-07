@@ -14,7 +14,9 @@
 \newbox\balanced@col%
 \long\def\balancedcols#1{%
 	\hrule height0pt%
-	\setbox\balanced@col=\vbox{\hsize=\colwidth\balancedcolstyle \vbox to 1cm{}#1}%
+	\setbox\balanced@col=\vbox{\hsize=\colwidth%
+		\linewidth=\hsize%
+		\balancedcolstyle \vbox to 1cm{}#1}%
 	\setbox0=\vsplit\balanced@col to 1cm%
 	\balanced@expandColsOverPages%
 }
@@ -29,13 +31,20 @@
 \def\balanced@setThisPageContent{%
 	\ifdim\pagetotal>\textheight\eject\fi%
 	\balanced@updateCropHeight%
+	\balanced@resetDepthStorage%
 	\balanced@build\balanced@leftCol from \balanced@col%
 	\balanced@build\balanced@rightCol from \balanced@col%
+	\balanced@makepage%
+}
+
+\def\balanced@makepage{%
 	\setbox0=\vbox{\hbox{%
 			\box\balanced@leftCol%
 			\hskip\colsgap\vrule width\rulewidth\hskip\colsgap%
 			\box\balanced@rightCol}}%
-	\ht0=\dp0\dp0=0pt%
+	\dimen0=\dp0%
+	\advance\dimen0 by -\balanced@depthStorage%
+	\ht0=\dimen0\dp0=\balanced@depthStorage%
 	\box0%
 }
 
@@ -53,7 +62,15 @@
 \let\inputBox#2%
 \let\outputBox#1%
 \setbox\outputBox=\vsplit\inputBox to\balanced@cropHeight%
+\setbox0=\vbox{\unvcopy\outputBox}%
+\balanced@updateDepthStorageWith{\dp0}%
 \setbox\outputBox=\vtop{\unvbox\outputBox}%
 \ht\outputBox=-\splittopskip%
+}
+
+\newdimen\balanced@depthStorage%
+\def\balanced@resetDepthStorage{\balanced@depthStorage=0pt}
+\def\balanced@updateDepthStorageWith#1{%
+	\ifdim#1>\balanced@depthStorage\balanced@depthStorage=#1\fi
 }
 \makeatother
