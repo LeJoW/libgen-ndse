@@ -1,4 +1,4 @@
-\def\balancedcolstyle{\tolerance=10000}
+\def\balancedcolstyle{}
 
 \newdimen\colwidth%
 \newdimen\rulewidth%
@@ -13,12 +13,14 @@
 \makeatletter
 \newbox\balanced@col%
 \long\def\balancedcols#1{%
+	\begingroup%
 	\hrule height0pt%
 	\setbox\balanced@col=\vbox{\hsize=\colwidth%
 		\linewidth=\hsize%
 		\balancedcolstyle \vbox to 1cm{}#1}%
 	\setbox0=\vsplit\balanced@col to 1cm%
 	\balanced@expandColsOverPages%
+	\endgroup%
 }
 
 \def\balanced@expandColsOverPages{%
@@ -29,6 +31,7 @@
 \newbox\balanced@leftCol%
 \newbox\balanced@rightCol%
 \def\balanced@setThisPageContent{%
+	\vbox to 0pt{}%
 	\ifdim\pagetotal>\textheight\eject\fi%
 	\balanced@updateCropHeight%
 	\balanced@resetDepthStorage%
@@ -62,8 +65,7 @@
 \let\inputBox#2%
 \let\outputBox#1%
 \setbox\outputBox=\vsplit\inputBox to\balanced@cropHeight%
-\setbox0=\vbox{\unvcopy\outputBox}%
-\balanced@updateDepthStorageWith{\dp0}%
+\balanced@updateDepthStorageWith{\dp\outputBox}%
 \setbox\outputBox=\vtop{\unvbox\outputBox}%
 \ht\outputBox=-\splittopskip%
 }

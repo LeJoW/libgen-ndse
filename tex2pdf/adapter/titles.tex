@@ -11,7 +11,6 @@
 			\pagebreak%
 		\fi
 	\fi
-	\vspace*{2mm}
 	{
 		\thispagestyle{empty}
 		{\centering \onehalfspacing \Huge\decorativ\uppercase{#1}\par}
@@ -25,10 +24,7 @@
 	\prevdepth=-\maxdimen%
 	\setlength{\baselineskip}{7.5mm}%
 	\def\titleContent{%
-		\vspace{2mm}%
-		\vspace*{1mm}%
 		{\centering\it\decorativ\uppercase{#1}\par}%
-		\vspace{3mm}%
 	}%
 	\titleBox{\titleContent}%
 	\global\def\officeTitleShort{#2}%
@@ -36,28 +32,22 @@
 }
 
 \newcommand{\sectionTitle}[1]{
-	%\addvspace{5mm}
 	{\centering\uppercase{#1}\par}
-	%\addvspace{7mm}
 	\global\def\dayTitleShort{#1}%
 }
 
 \newcommand{\lessonTitle}[2]{
-	\needspace{2cm}
-	\vspace{2mm}
-	\vspace*{1mm}
+	%\needspace{2cm}
 	\def\detail{#2}
 	\ifx\empty\detail
 		{\centering\decorativ #1\par}
-		\vspace{2mm}
 	\else
 		{\hfill\decorativ#1\hfill\hfill{\it\decorativ #2}\hfill}
 	\fi
 }
 
 \newcommand{\psalmTitle}[1]{%
-	\needspace{2cm}%
-	\addvspace{1.5mm}
+	%\needspace{2cm}%
 	{\centering\decorativ #1\par}%
 }
 

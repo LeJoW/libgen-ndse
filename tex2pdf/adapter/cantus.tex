@@ -2,33 +2,33 @@
 		tex.write(cantus.getPDFpagesCount("\luaescapestring{#1}"))%
 	}}
 
-\newcounter{gabcCount}
 \newdimen{\gregoLineSkip}
 \setlength{\gregoLineSkip}{1.8cm plus 2mm minus 2mm}
 \newcommand{\cantusInternal}[1]{%
-	\setcounter{gabcCount}{0}%
-	{%
-		\def\pdfFile{../../content/gabc/build/#1.pdf}%
-		\setlength{\parindent}{0pt}%
-		\setlength{\baselineskip}{\gregoLineSkip}%
-		\setlength{\lineskip}{0pt plus 1mm}%
-		\whiledo{\value{gabcCount}<\pdfnumberofpages{\pdfFile}}{%
-			\stepcounter{gabcCount}%
-			\hbox to \textwidth{\lower\gregoLineDepth\hbox{\includegraphics[page=\thegabcCount, scale=1]{\pdfFile}}\hfill}%
-			\vskip0pt plus1sp minus1sp%
-		}%
-	}%
+	\prevdepth=-\maxdimen%
+	\begingroup%
+	\def\pdfFile{../../content/gabc/build/#1.pdf}%
+	\setlength{\parindent}{0pt}%
+	\setlength{\baselineskip}{\gregoLineSkip}%
+	\setlength{\lineskip}{0pt plus 1mm}%
+	\loopoverpages{0}{\pdfnumberofpages{\pdfFile}}%
+	\endgroup%
+}
+
+\def\loopoverpages#1#2{%
+	\begingroup%
+	\count0=#1
+	\count1=#2%
+	\advance\count0 by 1%
+	\hbox to \textwidth{\lower\gregoLineDepth\hbox{\includegraphics[page=\count0, scale=1]{\pdfFile}}\hfill}%
+	\ifnum\count0<\count1\loopoverpages{\the\count0}{\the\count1}\fi%
+	\endgroup%
 }
 
 \newcommand{\cantus}[1]{%
-	\medskip%
 	\cantusInternal{#1}%
-	\prevdepth=-\maxdimen\null\par%
-	\smallskip%
 }
 \newcommand{\cantusTRAD}[3][0]{%%
-	\medskip%
-	\message{=-=-=-=-=-=-=-=-=-= #2 =-=-=-=-=-=-=-=-=-=-}%
 	\cantusTradFrame{%
 		\cantusInternal{#2}%
 	}{%
@@ -37,8 +37,6 @@
 		\frenchpar{\noindent#3}%
 		\vfill%
 	}%
-	\prevdepth=-\maxdimen\null\par%
-	\smallskip%
 }
 
 \newdimen{\cantusTradWidth}%
@@ -51,21 +49,19 @@
 	\def\cantusParam{#1}%
 	\def\translationParam{#2}%
 	\resetBoxesContent%
-	\beforeCols%
+	%\beforeCols%
 	\expandCantusOverPages%
 }
 \def\resetBoxesContent{%
 	\setbox\cantusBox=\vbox{\cantusParam}%
-	\hsize=\cantusTradWidth%
-	\setbox\translationBox=\vbox{\translationParam}%
-	\hsize=\textwidth%
+	\setbox\translationBox=\vbox{\hsize=\cantusTradWidth \translationParam}%
 }
 \def\beforeCols{%
 	\prevdepth=-\maxdimen\hbox{}\prevdepth=-\maxdimen%
 }
 \def\expandCantusOverPages{
 	\setThisPageContent%
-	\ifvoid\cantusBox\else\penalty-10000\expandCantusOverPages\fi%
+	\ifvoid\cantusBox\else\eject\expandCantusOverPages\fi%
 }
 \newbox\pageBoxCantus%
 \newbox\pageBoxTranslation%

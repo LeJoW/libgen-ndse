@@ -15,34 +15,24 @@
 
 \setlength\columnsep{5mm}
 \setlength\columnseprule{0.4pt}
-\renewcommand{\multicolmindepthstring}{}
-\setlength\multicolsep{0pt}
 \setlength{\splittopskip}{0pt}
-\setlength\premulticols{0pt}
 
 \newenvironment{body}{
-	\fontdimen2\font=1ex
-	\fontdimen3\font=0.8ex
-	\fontdimen4\font=0.5ex
-	\pretolerance=-1
-
-	\begin{justify}
-		\flushbottom%
-		\bodyStyle%
-		\settoheight{\capheight}{ABCDEFGHIJKLMNOPQRST}%
-		\settodepth{\descentdepth}{pqg}%
-		\fontsize{11pt}{5mm}\selectfont%
-		}{
-	\end{justify}
+	\def\balancedcolstyle{\sloppy}
+	\bodyStyle%
+	\settoheight{\capheight}{ABCDEFGHIJKLMNOPQRST}%
+	\settodepth{\descentdepth}{pqg}%
+	\fontsize{11pt}{4.07407mm}\selectfont%
+}{
 }
 
 \def\bodyStyle{
 	\setlength{\parsep}{0pt}
-	\setlength{\parskip}{4mm plus 2mm minus 1mm}
+	\setlength{\parskip}{0pt}%4mm plus 2mm minus 1mm}
 	\setlength{\lineskip}{0pt}
 	\setlength{\lineskiplimit}{0pt}
-	\setlength{\baselineskip}{5mm plus 0pt minus 0pt}
-	\setlength\topskip{8.5pt}%
+	\setlength{\baselineskip}{4.07407mm plus 0pt minus 0pt}
+	\setlength\topskip{8pt}%
 	\setlength{\parindent}{4mm}
 	%	\setlength{\ttradFontSize}{10pt}
 	%	\setlength{\ttradLineSkip}{4mm plus 0pt minus 0pt}
@@ -50,7 +40,7 @@
 }
 
 \def\psalteriumStyle{
-	\setlength{\parskip}{2mm}%
+	\setlength{\parskip}{0pt}%2mm}%
 }
 
 \setlength{\ttradFontSize}{9pt}
