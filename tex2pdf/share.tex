@@ -12,7 +12,7 @@
 	{}          % Keep the punctuation 
 }
 
-\newcommand{\frenchpar}[1]{\begin{selectlanguage}{french}#1\end{selectlanguage}}
+\newcommand{\frenchpar}[1]{#1}
 \newcommand{\fbseries}{\unskip\setBold[0.1]\aftergroup\unsetBold\aftergroup\ignorespaces}
 
 \setmainfont{PlantinStd-Light}[
@@ -44,7 +44,7 @@
 ]
 
 \newdimen{\gregoLineDepth}
-\gregoLineDepth=2mm
+\gregoLineDepth=3mm
 
 \makeatletter
 %{\relax\ifmmode\copy\strutbox[#1]\else\unhcopy\strutbox[#1]\fi}

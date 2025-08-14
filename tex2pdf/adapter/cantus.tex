@@ -2,25 +2,27 @@
 		tex.write(cantus.getPDFpagesCount("\luaescapestring{#1}"))%
 	}}
 
-\newdimen{\gregoLineSkip}
-\setlength{\gregoLineSkip}{1.8cm plus 2mm minus 2mm}
+\newskip\gregoLineSkip
+\gregoLineSkip=1.8cm% plus 2mm minus 2mm%
 \newcommand{\cantusInternal}[1]{%
 	\prevdepth=-\maxdimen%
 	\begingroup%
 	\def\pdfFile{../../content/gabc/build/#1.pdf}%
-	\setlength{\parindent}{0pt}%
-	\setlength{\baselineskip}{\gregoLineSkip}%
-	\setlength{\lineskip}{0pt plus 1mm}%
+	\parindent=0pt%
+	\baselineskip=\gregoLineSkip%
+	\lineskip=0pt plus 1mm%
 	\loopoverpages{0}{\pdfnumberofpages{\pdfFile}}%
 	\endgroup%
 }
 
 \def\loopoverpages#1#2{%
 	\begingroup%
-	\count0=#1
+	\count0=#1%
 	\count1=#2%
 	\advance\count0 by 1%
-	\hbox to \textwidth{\lower\gregoLineDepth\hbox{\includegraphics[page=\count0, scale=1]{\pdfFile}}\hfill}%
+	\setbox0=\vbox{\includegraphics[page=\count0, scale=1]{\pdfFile}\hfill}%
+	\adjustdepth0%
+	\box0%
 	\ifnum\count0<\count1\loopoverpages{\the\count0}{\the\count1}\fi%
 	\endgroup%
 }
@@ -39,56 +41,72 @@
 	}%
 }
 
-\newdimen{\cantusTradWidth}%
-\setlength{\cantusTradWidth}{3.5cm}%
+\newdimen\cantusTradWidth%
+\cantusTradWidth=3.5cm%
 \newbox\cantusBox%
 \newbox\translationBox%
-\def\cantusParam{}%
-\def\translationParam{}%
-\newcommand{\cantusTradFrame}[2]{%
-	\def\cantusParam{#1}%
-	\def\translationParam{#2}%
-	\resetBoxesContent%
-	%\beforeCols%
+\def\cantusTradFrame#1#2{%
+	\setbox\cantusBox=\vtop{#1}%
+	\setbox\translationBox=\vtop{\hsize=\cantusTradWidth #2}%
+	\dimen0=\pagetotal%
+	\advance\dimen0 by 1.1\gregoLineSkip%
+	\ifdim\dimen0>\textheight\eject\fi%
 	\expandCantusOverPages%
 }
-\def\resetBoxesContent{%
-	\setbox\cantusBox=\vbox{\cantusParam}%
-	\setbox\translationBox=\vbox{\hsize=\cantusTradWidth \translationParam}%
-}
-\def\beforeCols{%
-	\prevdepth=-\maxdimen\hbox{}\prevdepth=-\maxdimen%
-}
-\def\expandCantusOverPages{
-	\setThisPageContent%
+\def\expandCantusOverPages{%
+	\ifvoid\translationBox\unvbox\cantusBox\else\setThisPageContent\fi%
 	\ifvoid\cantusBox\else\eject\expandCantusOverPages\fi%
 }
 \newbox\pageBoxCantus%
 \newbox\pageBoxTranslation%
-\newdimen{\cantusTradTopSkip}%
-\setlength{\cantusTradTopSkip}{2mm}%
+\newdimen\cantusTradTopSkip%
+\cantusTradTopSkip=0pt%
 \def\setThisPageContent{%
+	\begingroup%
+	\setbox0=\copy\cantusBox%
 	\updateSpaceLeft%
-	\setbox\pageBoxCantus=\vsplit\cantusBox to\spaceLeft%
-	\shrinkBoxIfNotFullPage\pageBoxCantus%
-	\ifdim\ht\pageBoxCantus>\spaceLeft%
-		\resetBoxesContent%
+	\setbox\pageBoxCantus=\vsplit0 to \spaceLeft%
+	\setbox\pageBoxCantus=\vtop{\unvbox\pageBoxCantus}%
+	\dimen0=\ht\pageBoxCantus\advance\dimen0 by \dp\pageBoxCantus%
+	\ifdim\dimen0>\spaceLeft%
+	\dimen0=0pt%
+	\loop\ifdim\dimen0<\spaceLeft\advance\dimen0 by \gregoLineSkip\repeat%
+		\advance\dimen0 by -2cm%
+		\setbox\pageBoxCantus=\vsplit\cantusBox to \dimen0%
 	\else%
-		\setbox\translationBox=\vbox{\vskip\cantusTradTopSkip\unvbox\translationBox}%
-		\setbox\pageBoxTranslation=\vsplit\translationBox to\ht\pageBoxCantus%
-		\ht\pageBoxTranslation=\ht\pageBoxCantus%
-		\hbox to\hsize{\box\pageBoxCantus\hskip-\cantusTradWidth\box\pageBoxTranslation}%
+		\setbox\pageBoxCantus=\vsplit\cantusBox to \spaceLeft%
 	\fi%
-}
-\def\shrinkBoxIfNotFullPage#1{%
-	\ifdim\pagetotal>0pt%
-		\shrinkBox#1%
+	\setbox\pageBoxCantus=\vtop{\unvbox\pageBoxCantus}%
+	\ifdim\ht\pageBoxCantus=0pt%
+		\dimen0=\dp\pageBoxCantus%
+		\advance\dimen0 by -\cantusTradTopSkip%
+		\setbox\pageBoxTranslation=\vsplit\translationBox to \dimen0%
+		\ht\pageBoxTranslation=-\cantusTradTopSkip%
+	\else%
+		\dimen0=3\ttradLineSkip%
+		\advance\dimen0 by \dp\pageBoxCantus%
+		\setbox\pageBoxTranslation=\vsplit\translationBox to \dimen0%
+		\setbox\pageBoxTranslation=\vtop{\unvbox\pageBoxTranslation}%
+		\dimen0=\ht\pageBoxTranslation%
+		\advance\dimen0 by 3\ttradLineSkip%
+		\ht\pageBoxTranslation=\dimen0%
 	\fi%
-	\ifvoid\cantusBox%
-		\shrinkBox#1%
-	\fi
+	\setbox0=\vbox{\hbox to\hsize{\box\pageBoxCantus\hskip-\cantusTradWidth\box\pageBoxTranslation}}%
+	\adjustdepth0%
+	\ifdim\ht0>\spaceLeft%
+		\dimen0=\spaceLeft%
+		\advance\dimen0 by -3mm%
+		\hrule height\dimen0%
+	\else\box0\fi%
+	\endgroup%
 }
-\def\shrinkBox#1{%
-	\let\inputBoxToShrink#1%
-	\setbox\inputBoxToShrink=\vbox{\unvbox\inputBoxToShrink}%
+
+\def\adjustdepth#1{%
+	\begingroup%
+	\dimen0=\ht#1%
+	\advance\dimen0 by \dp#1%
+	\advance\dimen0 by -\gregoLineDepth%
+	\ht#1=\dimen0%
+	\dp#1=\gregoLineDepth%
+	\endgroup%
 }
