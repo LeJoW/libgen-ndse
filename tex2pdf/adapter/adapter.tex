@@ -1,14 +1,6 @@
-\directlua{dofile("\CurrentFilePath" .. '/logic.lua')}
-
-\input{adapter/titles}
-\input{adapter/paragraphs}
-\input{adapter/cantus}
-\input{adapter/psalterium}
-\input{adapter/strings}
-\input{adapter/tables}
-
-\newdimen\spaceLeft%
-\def\updateSpaceLeft{%
-	\spaceLeft=\textheight%
-	\advance\spaceLeft by-\pagetotal%
-}
+\input adapter/titles
+\input adapter/paragraphs
+\input adapter/cantus
+\input adapter/psalterium
+\input adapter/strings
+%\input adapter/tables

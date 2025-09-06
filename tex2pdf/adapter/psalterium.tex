@@ -1,16 +1,10 @@
-\newenvironment{psalterium}{%
-	\psalteriumStyle%
-}{}
+\def\beginpsalterium{}
+\def\endpsalterium{}
 
-\newenvironment{psalm}{\parskip=0pt}% plus 1pt minus 1pt}{}
+\def\beginpsalm{}
+\def\endpsalm{}
 
-\newcommand{\psalmLA}[1]{\colLA{#1}}
-\newcommand{\psalmFR}[1]{\colFR{#1}}
+\def\beginpsalmTrad{}
+\def\endpsalmTrad{}
 
-\newenvironment{psalmTrad}{
-	\begin{tradColonnes}
-		}{
-	\end{tradColonnes}
-}
-
-\newcommand{\aloneDoxologie}[1]{\setlength{\parskip}{0pt} #1}
+\def\aloneDoxologie#1{{\parskip=0pt #1}}

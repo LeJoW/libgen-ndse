@@ -1,0 +1,50 @@
+\long\def\begindoublecolumns#1\enddoublecolumns{\begingroup
+	\updatefreespace
+	\doublecolumnsetup
+	\storecontent{#1}
+	\ifbalancecolumns
+		\balancecolumns\else\doublecolumns\fi\pagesofar
+	\donextpage
+	\endgroup \pagegoal=\vsize}
+
+\long\def\storecontent#1{
+	\splittopskip=\topskip \splitmaxdepth=0pt
+	\setbox155=\vbox{\kern1cm #1}
+	\setbox0=\vsplit155 to 1cm}
+
+\newif\ifshoudbalancecolumns
+\def\ifbalancecolumns{
+	\begingroup
+	\setbox0=\vbox{\unvcopy155}
+	\dimen0=\freespace
+	\advance\dimen0 by -.5\ht0
+	\ifdim\dimen0<0pt\global\shoudbalancecolumnsfalse\else\global\shoudbalancecolumnstrue\fi
+	\endgroup
+	\ifshoudbalancecolumns}
+
+\def\doublecolumns{\splittopskip=\topskip \splitmaxdepth=0pt
+	\setbox155=\vbox{\penalty0\unvbox155}
+	\setbox0=\vsplit155 upto \freespace
+	\setbox155=\vbox{\penalty0\unvbox155}
+	\setbox2=\vsplit155 upto \freespace}
+
+\def\balancecolumns{\setbox0=\vbox{\unvbox155} \dimen0=\ht0
+	\advance\dimen0 by \topskip\advance\dimen0 by -\baselineskip
+	\divide\dimen0 by2 \splittopskip=\topskip
+	{\vbadness=10000 \loop \global\setbox3=\copy0
+		\global\setbox1=\vsplit3 to\dimen0
+		\ifdim\ht3>\dimen0 \global\advance\dimen0 by1pt \repeat}
+	\setbox0=\vbox to\dimen0{\unvbox1} \setbox2=\vbox to\dimen0{\unvbox3}}
+
+\def\pagesofar{
+	\dimen0=\dp0 \dimen2=\dp2
+	\setbox0=\vtop{\unvbox0} \setbox2=\vtop{\unvbox2} \wd0=\hsize \wd2=\hsize
+	\setbox1=\vbox{\hbox to \textwidth{\box0\hfil\vrule height\columnruleht\hfil\box2}}
+	\dimen1=\if\dp0>\dp2\dimen0\else\dimen2\fi
+	\dimen0=\ht1\advance\dimen0 by \dp1\advance\dimen0 by -\dimen1
+	\ht1=\dimen0 \dp1=\dimen1
+	\box1}
+
+\def\donextpage{
+	\ifvoid155\penalty0\else
+		\eject\begindoublecolumns\unvbox155\enddoublecolumns\fi}

@@ -1,0 +1,49 @@
+\def\lettrine#1{%
+	\noindent%
+	\begingroup%
+	\lettrinesettup{#1}
+	\count1=0%
+	\count10=10%
+	\def\pslist{}%
+	\loop%
+	\advance\count1 by 1%
+	\advance\count10 by 1%
+	\dimen\count10=\hsize%
+	\advance\dimen\count10 by -\dimen\count1%
+	\edef\pslist{\pslist\space\the\dimen\count1 \space\the\dimen\count10}%
+	\ifnum\count1<\count0\repeat%
+	\advance\count0 by 1%
+	\global\parshape=\count0 \pslist 0pt \hsize%
+	\setbox0=\hbox to0pt{\hskip-\dimen1\lower\dimen0\hbox{\lettrinefont #1}\hss}%
+	\dp0=0pt \box0%
+	\endgroup%
+}
+
+\def\lettrinesettup#1{%
+	\dimen0=1.05\baselineskip% Height
+	\count0=2% Number of lines
+	\dimen1=22pt%   line 1
+	\dimen2=22pt%   line 2
+	\expandafter\ifx\csname lettrineexception#1\endcsname\relax\else%
+		\csname lettrineexception#1\endcsname%
+	\fi%
+}
+
+\def\lettrineexceptionÆ{%
+\dimen1=32pt%
+\dimen2=32pt%
+}
+\def\lettrineexceptionÁ{%
+\dimen1=20pt%
+\dimen2=25pt%
+}
+\def\lettrineexceptionL{%
+	\dimen1=13pt%
+}
+\def\lettrineexceptionQ{%
+	\dimen0=1.5\baselineskip%
+	\count0=3%
+	\dimen1=25pt%
+	\dimen2=30pt%
+	\dimen3=30pt%
+}

@@ -1,0 +1,51 @@
+\newbox\voidbox
+\newdimen\columnruleht
+\newdimen\colsgap
+\colsgap=5mm
+
+\def\doublecolumnsetup{
+	\dimen0=\textwidth
+	\advance\dimen0 by -\colsgap
+	\divide\dimen0 by 2
+	\hsize=\dimen0
+	\vsize=2\textheight
+	\hbadness=10000
+	\updatecolumnruleht
+}
+
+\def\updatecolumnruleht{\begingroup\regularfont
+	\columnruleht=-\topskip
+	\advance\columnruleht by 1ex
+	\global\columnruleht=\columnruleht
+	\endgroup}
+
+\newdimen\freespace
+\def\updatefreespace{{\output={\unvbox255\penalty0}\eject}
+	\freespace=\textheight
+	\advance\freespace by -\pagetotal
+	\advance\freespace by -\pagedepth}
+
+\input luaotfload.sty
+\font\displayfont=file:Sabon.ttf at 35pt
+\font\headerfont=file:Sabon.ttf:script=latn;opsz=14;+liga; at 14.4pt
+\font\lettrinefont=file:Sabon.ttf at 30pt
+\font\regularfont=file:PlantinStd-Light.otf:script=latn;+liga at 11pt
+\font\boldfont=file:PlantinStd-Bold.otf:script=latn;+liga at 11pt
+\font\frfont=file:PlantinStd.otf:script=latn;+liga at 9pt
+
+\catcode`ǽ=\active
+\defǽ{\expandafter\ifx\the\font\regularfont {æ\hbox to 0pt{\kern-0.5em´\hss}}\else \char"01FD\fi}
+
+\newlanguage\lalang
+\language\lalang
+\input libgen/lang/latin.dic.tex
+
+\newlanguage\frlang
+\language\frlang
+\input hyph-fr.tex
+
+\def\headerstyle{\headerfont}
+\baselineskip=4mm plus 0pt
+\parskip=4mm plus 2mm minus 1mm
+%\clubpenalty=1000
+%\widowpenalty=1000

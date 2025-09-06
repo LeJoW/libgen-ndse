@@ -1,0 +1,14 @@
+\catcode`@=11
+\newwrite\reffile
+\openout\reffile=\jobname.aux
+
+\openin1=\jobname.aux
+\ifeof1\else\input \jobname.aux\fi\closein1
+
+\def\writelabel#1#2{%
+	\write\reffile{\string\def\string\label@#1{#2}}%
+}
+
+\def\label#1{\writelabel{#1}{\the\pageno}}
+\def\pageref#1{\csname label@#1\endcsname}
+\catcode`@=12

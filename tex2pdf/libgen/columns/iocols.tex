@@ -1,0 +1,63 @@
+\newif\ifinsertskip
+
+\def\beginiocolumnns{\begingroup
+	\doublecolumnsetup \insertskipfalse}
+\def\endiocolumns{\endgroup \pagegoal=\vsize}
+
+\newbox\outcolumn
+\newbox\incolumn
+\long\def\colout#1\colin#2\colpar{%
+	\prevdepth=-\maxdimen
+	\begingroup%
+	\storecol #1 in \outcolumn
+	\storecol #2 in \incolumn
+	\updatefreespace%
+	\buildpagesofar%
+	\insertinterrowskip%
+	\box0%
+	\buildnextpage%
+	\endgroup%
+}
+
+\long\def\storecol#1 in #2{
+	\splittopskip=\topskip \splitmaxdepth=0pt
+	\setbox#2=\vbox{\kern1cm #1}
+	\setbox0=\vsplit#2 to 1cm}
+
+\def\insertinterrowskip{\ifinsertskip%
+\begingroup%
+\setbox0=\hbox to \textwidth{\hfil\vrule depth5mm\hfil}%
+\ht0=0pt \dp0=0pt \box0 \prevdepth=-\maxdimen%
+\endgroup%
+\vskip0pt plus 5pt%
+\fi}
+
+\def\buildpagesofar{\splittopskip=\topskip \splitmaxdepth=0pt%
+	\dimen0=\updatefreespace
+	\setbox0=\vsplit\outcolumn upto \dimen0%
+	\setbox2=\vsplit\incolumn upto \dimen0%
+	\configurepage%
+}
+
+\def\configurepage{\dimen0=\dp0 \dimen2=\dp2%
+	\setbox0=\vtop{\unvbox0}	\setbox2=\vtop{\unvbox2}%
+	\dimen0=\finaldepth%
+	\wd0=\hsize \wd2=\hsize%
+	\setbox0=\vbox{\hbox to \textwidth{\box0\hfil\vrule height\columnruleht\hfil\box2}}%
+	\dimen1=\ht0 \advance\dimen1 by \dp0 \advance\dimen1 by -\dimen0%
+	\ht0=\dimen1 \dp0=\dimen0}
+
+\def\buildnextpage{\ifvoidiocols
+		\global\insertskiptrue\penalty0\else\insertskipfalse
+		\eject\colout\unvbox\outcolumn\colin\unvbox\incolumn\colpar\fi
+}
+
+\newif\ifemptyiocols
+\def\ifvoidiocols{
+	\emptyiocolstrue
+	\ifvoid\outcolumn\else\emptyiocolsfalse\fi
+	\ifvoid\incolumn\else\emptyiocolsfalse\fi
+	\ifemptyiocols
+}
+
+\def\finaldepth{\ifdim\dp0>\dp2 \dimen0\else\dimen2\fi}

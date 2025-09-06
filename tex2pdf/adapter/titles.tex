@@ -1,72 +1,12 @@
 \def\dayTitleShort{}
 \def\officeTitleShort{}
 
-\newcommand{\dayTitle}[3]{
-	\prevdepth=-\maxdimen%
-	\ifnum\thepage>1
-		\vfill%
-		\pagebreak%
-		\ifodd\thepage\else%
-			\null\thispagestyle{empty}%
-			\pagebreak%
-		\fi
-	\fi
-	{
-		\thispagestyle{empty}
-		{\centering \onehalfspacing \Huge\decorativ\uppercase{#1}\par}
-		\vspace{5mm}
-		{\centering\it\decorativ\ttrad #2\par}
-	}
-	\global\def\dayTitleShort{#3}
-}
+\def\dayTitle#1#2#3{}
 
-\newcommand{\officeTitle}[2]{%
-	\prevdepth=-\maxdimen%
-	\setlength{\baselineskip}{7.5mm}%
-	\def\titleContent{%
-		{\centering\it\decorativ\uppercase{#1}\par}%
-	}%
-	\titleBox{\titleContent}%
-	\global\def\officeTitleShort{#2}%
-	\nobreak%
-}
+\def\officeTitle#1#2{}
 
-\newcommand{\sectionTitle}[1]{
-	{\centering\uppercase{#1}\par}
-	\global\def\dayTitleShort{#1}%
-}
+\def\sectionTitle#1{}
 
-\newcommand{\lessonTitle}[2]{
-	%\needspace{2cm}
-	\def\detail{#2}
-	\ifx\empty\detail
-		{\centering\decorativ #1\par}
-	\else
-		{\hfill\decorativ#1\hfill\hfill{\it\decorativ #2}\hfill}
-	\fi
-}
+\def\lessonTitle#1#2{}
 
-\newcommand{\psalmTitle}[1]{%
-	%\needspace{2cm}%
-	{\centering\decorativ #1\par}%
-}
-
-\def\titleBox#1{%
-	\setbox0=\hbox to\textwidth{#1}%
-	\updateSpaceLeft%
-	\advance\spaceLeft by-\ht0%
-	\ifdim\spaceLeft<2.4\gregoLineSkip%
-		\ifdim\spaceLeft>1cm%
-			\nobreak%
-			\widePageEnd%
-		\fi
-		\penalty-10000%
-	\fi%
-	#1%
-}
-
-\def\widePageEnd{%
-	\vfill%
-	\centerline{\vrule width0.4\hsize height0.4pt depth0pt}%
-	\vfill%
-}
+\def\psalmTitle#1{}

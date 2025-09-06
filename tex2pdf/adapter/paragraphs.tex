@@ -1,62 +1,22 @@
-\input adapter/balanced-cols
+\def\beginparagraphStd{}
+\def\endparagraphStd{}
 
-\newenvironment{paragraphStd}{}{}
+\def\beginrubric{}
+\def\endrubric{}
 
-\newenvironment{paragraphLettrine}[1]{\initial{#1}}{\par}
+\def\beginremplacement{\beginrubric\rm\P~}
+\def\endremplacement{\endrubric}
 
-\newenvironment{rubric}{
-	\renewcommand{\italic}[1]{\rm ##1}
-	\setlength{\parskip}{0pt}%2mm plus0.5mm minus0.5mm}%
-	\it\ttrad}{\par%
-}
+\def\beginlesson{}
+\def\endlesson{}
 
-\newenvironment{remplacement}{\begin{rubric}\rm\P~}{\end{rubric}}
+\def\forcebreak{\break\indent}
 
-\newenvironment{lesson}{%
-	\def\parIndent{%
-		\noindent%
-		\def\parIndent{}%
-	}%
-}{}
+\def\begintradColonnes{}
+\def\endtradColonnes{}
 
-\newcommand{\forcebreak}{\newline\indent}
-
-\newdimen{\topSepRuleTradSpace}%
-\newdimen{\minGapToBaselineAlign}%
-\minGapToBaselineAlign=-2mm%
-\newcommand{\colLA}[1]{#1\switchcolumn*}
-\def\parIndent{}%
-\newcommand{\colFR}[1]{\frenchpar{\ttrad\parIndent #1}\switchcolumn}
-\newcommand{\pushBottom}{%
-	\prevdepth=-\maxdimen\null%
-	\vspace{\directlua{tex.sprint(paragraphs.getSpaceToPushBottom() .. "sp")}}%
-}
-\newenvironment{tradColonnes}{%
-	%\needspace{3\baselineskip}%
-	\twosided%
-	\columnratio{0.5}%
-	\vspace{\parskip}%
-	\vspace{\topSepRuleTradSpace}%
-	\pushBottom%
-	\setlength{\parskip}{0pt}%
-	\setlength{\topSepRuleTradSpace}{\dimexpr\baselineskip-\capheight}%
-	\begingroup%
-	\let\storeParskip\parskip%
-	\setlength{\parskip}{0pt}%
-	\hrule width\textwidth height0pt depth0pt%
-	\begin{paracol}{2}%
-		\setlength{\parskip}{\storeParskip}%
-		\sloppy%
-		{\strut[0pt]\vspace*{-\topSepRuleTradSpace}\switchcolumn}%
-		{\strut[0pt]\vspace*{-\topSepRuleTradSpace}\switchcolumn*}%
-		}{%
-	\end{paracol}%
-	\endgroup%
-}
-
-\newenvironment{colonnes}{%
-}{%
-}
+\def\begincolonnes{}
+\def\endcolonnes{}
 
 \def\addl{\futurelet\next\doaddl}
 \def\rml{\futurelet\next\dorml}

@@ -15,7 +15,7 @@ pdf:
 	cd $(WORK_DIR) && lualatex --output-directory=build core.tex
 
 pdf-fr:
-	cd $(WORK_DIR) && lualatex --output-directory=build core-fr.tex
+	cd $(WORK_DIR) && luatex --halt-on-error --output-dir=build core-fr.tex
 
 parse: $(COPIED_LATEX_FILES) $(JSON_FILES_FROM_TXT) $(MARKDOWN)/*.md | $(SOURCE)
 	node dist/md2tex/main.js parse ../content/md.list -o $(SOURCE)/parsed.tex

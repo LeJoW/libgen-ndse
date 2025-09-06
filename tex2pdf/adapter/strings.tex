@@ -1,19 +1,14 @@
-\newcommand{\V}{℣.~}
-\newcommand{\R}{℟.~}
-\newcommand{\initial}[1]{%
-	\def\inputLetter{#1}%
-	\lettrine[lines=2, loversize=0.15, slope=0.6em]{\decorativ \inputLetter}{}}
-\newcommand{\gstella}{\textborn}
-\newcommand{\gcrux}{\textdagger}
-\newcommand{\italic}[1]{{\textit{#1}}}
-\newcommand{\bold}[1]{{\textbf{#1}}}
-\renewcommand{\roman}[1]{{\textrm{#1}}}
-\newcommand{\smallCaps}[1]{#1}
-\newcommand{\upper}[1]{\textsuperscript{#1}}
+\catcode`℣=\active \def℣{}
+\catcode`℟=\active \def℟{}
+\def\V{℣.~}
+\def\R{℟.~}
 
-\newdimen{\ttradLineSkip}
-\setlength{\ttradLineSkip}{4mm plus 0pt minus 0pt}
-\newdimen{\ttradFontSize}
-\setlength{\ttradFontSize}{10pt}
-\newcommand{\ttrad}{\fontsize{\ttradFontSize}{\ttradLineSkip}\courantSM}
-\newcommand{\textTranslation}[1]{\ttrad #1}
+\let\gstella\textborn
+\let\gcrux\textdagger
+\def\italic{}
+\def\bold{}
+\def\roman{}
+\def\smallCaps{}
+\def\upper{}
+
+\def\frenchtext{\frfont\baselineskip=11pt}

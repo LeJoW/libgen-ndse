@@ -1,0 +1,25 @@
+\long\def\begintranslation#1\endtranslation of cantus #2{\storepartialpage
+		\selectpdf{#2}%
+		\dimen0=\pdffirstht\advance\dimen0 by -3mm\advance\dimen0 by -3\baselineskip%
+		\setbox\translationbox=\vbox{\hsize=\translationwidth \hbadness=9000 \tolerance=9999 \vrule height\dimen0 depth0pt width0pt #1}%
+		\rawcantus}
+
+\def\cantus#1{\selectpdf{#1}\rawcantus}
+
+\def\rawcantus{\begingroup
+	\maxdepth=3mm
+	\baselineskip=1.8cm plus 1pt
+	\printpdf
+	\endgroup}
+
+\def\printpdf{%
+	\count100=\pdflength%
+	\loop%
+	\hbox to \textwidth{\lower3mm\hbox{\printnextpdfpage}\hfil}%
+	\ifnum\count100>1\advance \count100 by -1\repeat%
+}
+
+\def\selectpdf#1{\directlua{libgen.pdf.open('#1')}}
+\def\pdflength{\directlua{tex.print(libgen.pdf.nof_pages())}}
+\def\pdffirstht{\directlua{tex.print(libgen.pdf.first_page_height())}pt}
+\def\printnextpdfpage{\directlua{libgen.pdf.print_next_page()}}
