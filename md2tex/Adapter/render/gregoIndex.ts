@@ -117,7 +117,7 @@ function renderOccurrences(engine: Render, list: Psalmus[]) {
                     : undefined,
             ].join("");
         })
-        .join("\\,; ");
+        .join("\\thinspace; ");
 }
 
 function renderCantorumIndex(
@@ -126,47 +126,53 @@ function renderCantorumIndex(
 ) {
     return engine.container(
         "gregIndex",
-        engine.join(
-            Object.entries(index).map(function ([type, list]) {
-                if (list.length === 0) {
-                    return engine.concat([]);
-                }
-                return engine.join([
-                    engine.orphan("tableTitle", {
-                        value:
-                            (translation ? titlesTRAD : titles)[type as string][
-                                list.length > 1 ? 0 : 1
-                            ] ?? type,
-                    }),
-                    engine.container(
-                        "gregList",
-                        engine.join(
-                            list.map(function (alphabeticGroup) {
-                                return engine.container(
-                                    "gregAlphabeticGroup",
-                                    engine.join(
-                                        alphabeticGroup.map(function ({
-                                            ton,
-                                            mode,
-                                            incipit,
-                                            anchor,
-                                        }) {
-                                            return engine.orphan("gregEntry", {
-                                                mode:
-                                                    mode && !isNaN(mode)
-                                                        ? mode
-                                                        : ton,
+        engine.container(
+            "doublecolumns",
+            engine.join(
+                Object.entries(index).map(function ([type, list]) {
+                    if (list.length === 0) {
+                        return engine.concat([]);
+                    }
+                    return engine.join([
+                        engine.orphan("tableTitle", {
+                            value:
+                                (translation ? titlesTRAD : titles)[
+                                    type as string
+                                ][list.length > 1 ? 0 : 1] ?? type,
+                        }),
+                        engine.container(
+                            "gregList",
+                            engine.join(
+                                list.map(function (alphabeticGroup) {
+                                    return engine.container(
+                                        "gregAlphabeticGroup",
+                                        engine.join(
+                                            alphabeticGroup.map(function ({
+                                                ton,
+                                                mode,
                                                 incipit,
                                                 anchor,
-                                            });
-                                        })
-                                    )
-                                );
-                            })
-                        )
-                    ),
-                ]);
-            })
+                                            }) {
+                                                return engine.orphan(
+                                                    "gregEntry",
+                                                    {
+                                                        mode:
+                                                            mode && !isNaN(mode)
+                                                                ? mode
+                                                                : ton,
+                                                        incipit,
+                                                        anchor,
+                                                    }
+                                                );
+                                            })
+                                        )
+                                    );
+                                })
+                            )
+                        ),
+                    ]);
+                })
+            )
         )
     );
 }

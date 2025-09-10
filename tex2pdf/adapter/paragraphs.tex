@@ -1,8 +1,10 @@
 \def\beginparagraphStd{}
 \def\endparagraphStd{}
 
-\def\beginrubric{}
-\def\endrubric{}
+\def\beginrubric{\begingroup
+\parskip=2mm plus0.5mm minus0.5mm
+\small\it\smallskip}
+\def\endrubric{\par\endgroup}
 
 \def\beginremplacement{\beginrubric\rm\P~}
 \def\endremplacement{\endrubric}
@@ -10,13 +12,18 @@
 \def\beginlesson{}
 \def\endlesson{}
 
-\def\forcebreak{\break\indent}
+\def\forcebreak{\hfil\break\indent}
 
-\def\begintradColonnes{}
-\def\endtradColonnes{}
+\def\beginparagraphLettrine#1{\lettrine{#1}}
+\def\endparagraphLettrine{\par}
+
+\def\begintradColonnes{\medskip\beginiocolumnns}
+\def\endtradColonnes{\endiocolumns}
 
 \def\begincolonnes{}
 \def\endcolonnes{}
+
+\def\colonneTRAD#1#2{\colout#1\colin{\small #2}\colpar}
 
 \def\addl{\futurelet\next\doaddl}
 \def\rml{\futurelet\next\dorml}

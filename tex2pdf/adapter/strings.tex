@@ -1,14 +1,17 @@
-\catcode`℣=\active \def℣{}
-\catcode`℟=\active \def℟{}
+\input graphicx
+
+\protected\def\pdfliteral {\pdfextension literal}
+\catcode`℣=\active \def℣{V\hbox to 0pt{\kern-0.85em\reflectbox{\rotatebox[origin=c]{25}{∫}}\hss}}
+\catcode`℟=\active \def℟{R\hbox to 0pt{\kern-0.5em\reflectbox{\rotatebox[origin=c]{30}{∫}}\hss}}
+
 \def\V{℣.~}
 \def\R{℟.~}
-
-\let\gstella\textborn
-\let\gcrux\textdagger
-\def\italic{}
-\def\bold{}
+\def\gstella{\char"002A}
+\def\gcrux{\char"2020}
+\def\italic#1{{\it #1}}
+\def\bold#1{{\bf #1}}
 \def\roman{}
 \def\smallCaps{}
 \def\upper{}
 
-\def\frenchtext{\frfont\baselineskip=11pt}
+\long\def\frenchpar#1{{\language\frlang #1}}

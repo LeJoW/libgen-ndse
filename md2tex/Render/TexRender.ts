@@ -14,22 +14,18 @@ export class TexRender implements Render {
         attributes?: { [attr: string]: any },
         optionalAttributes?: { [attr: string]: any }
     ): string {
-        return `{\\${type}${Object.values(optionalAttributes ?? [])
-            .map(function (attr) {
-                return attr ? `[${attr}]` : "";
-            })
-            .join("")}${Object.values(attributes ?? [])
+        return `\\${type}${Object.values(attributes ?? [])
             .map(function (attr) {
                 return `{${attr}}`;
             })
-            .join("")}}`;
+            .join("")}{}`;
     }
     container(
         type: string,
         content: any,
         attributes?: { [attr: string]: any }
     ): string {
-        return `\\begin{${type}}${
+        return `\\begin${type} ${
             attributes
                 ? Object.values(attributes)
                       .map(function (attr) {
@@ -37,16 +33,16 @@ export class TexRender implements Render {
                       })
                       .join("")
                 : ""
-        }${content || ""}\\end{${type}}`;
+        }${content || ""}\\end${type} `;
     }
     join(lines: (string | undefined)[]): string {
         return lines.join("\n\n");
     }
     concat(lines: (string | undefined)[]): string {
-        return `{${lines
+        return `${lines
             .filter(function (item) {
                 return item !== undefined;
             })
-            .join("\n")}}`;
+            .join("\n")}`;
     }
 }

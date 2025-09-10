@@ -27,8 +27,7 @@
 \def\storepartialpage{\goodbreak
 \begingroup\output={\global\setbox\partialpage=\vbox{\unvbox255}}\eject\endgroup}
 
-\output={\normaloutput\pagebody
-\unvbox255 \penalty\outputpenalty}
+\output={\normaloutput\pagebody}
 
 \def\normaloutput#1{
 	\pagesetup
@@ -36,6 +35,8 @@
 		\vbox to \textheight{#1}}
 	\advancepageno
 }
+
+\def\pagebody{\unvbox255}
 
 \newtoks\headline
 \def\makeheadline{\begingroup
@@ -47,26 +48,6 @@
 	\kern\dimen0
 	\endgroup}
 
-\def\pagebody{\adjustboxes \boxmaxdepth=\maxdepth
-	\unvbox\partialpage
-	\unvbox1
-	\unvbox155}
-
-\def\adjustboxes{\splitmaxdepth=\maxdepth
-	\dimen0=\textheight
-	\advance\dimen0 by -\ht\partialpage
-	\global\setbox255=\vbox{\penalty0\unvbox255}
-	\setbox155=\vsplit255 upto \dimen0
-	\ifdim\ht155=0pt
-		\setbox1=\vbox{}
-	\else
-		\dimen0=\ifvoid\partialpage\textheight\else\ht155\fi
-		\setbox0=\vsplit\translationbox upto \dimen0
-		\ht0=0pt \dp0=0pt \wd0=\translationwidth
-		\setbox1=\vbox{\hbox to \textwidth{\hfil\box0}}
-	\fi
-}
-
 \newtoks\framerule
 \framerule={\hrule width\textwidth height0.1pt\kern-0.1pt}
 \def\showframe{\begingroup
@@ -77,19 +58,24 @@
 	\endgroup}
 
 \def\pagesetup{\hoffset=-1in \voffset=-1in \vbadness=2000
-	\ifodd\pageno\oddsetup\else\evensetup\fi}
-\def\headerstyle{}
-\newtoks\runninghead
+	\ifodd\pageno\oddsetup\else\evensetup\fi
+	\ifnoheaderthispage\headline={}\fi\global\noheaderthispagefalse}
+
+\newtoks\rrunninghead
+\newtoks\lrunninghead
 \def\oddsetup{\begingroup
 \dimen0=\pagewidth
 \advance\dimen0 by -\textwidth
 \advance\dimen0 by -\outermargin
 \global\advance\hoffset by \dimen0
-\global\headline={\begingroup\headerstyle\hss\the\runninghead\hss\the\pageno\endgroup}
+\global\headline={\begingroup\header\hss\the\rrunninghead\hss\the\pageno\endgroup}
 \endgroup}
 \def\evensetup{
 \advance\hoffset by \outermargin
-\headline={\begingroup\headerstyle\the\pageno\hss\the\runninghead\hss\endgroup}
+\headline={\begingroup\header\the\pageno\hss\the\lrunninghead\hss\endgroup}
 }
 
 \def\advancepageno{\global\advance\pageno by 1}
+
+\newif\ifnoheaderthispage
+\def\noheaderthispage{\global\noheaderthispagetrue}

@@ -1,14 +1,22 @@
-\long\def\begintranslation#1\endtranslation of cantus #2{\storepartialpage
+\long\def\begintranslation#1\endtranslation of cantus #2{
 		\selectpdf{#2}%
 		\dimen0=\pdffirstht\advance\dimen0 by -3mm\advance\dimen0 by -3\baselineskip%
 		\setbox\translationbox=\vbox{\hsize=\translationwidth \hbadness=9000 \tolerance=9999 \vrule height\dimen0 depth0pt width0pt #1}%
+		{\output={\setbox\partialpage=\vbox{\unvbox255}%
+			\dimen0=\textheight%
+					\advance\dimen0 by -\ht\partialpage%
+					\message{@[\the\pageno] c=#2 s=\the\dimen0 \space ht=\the\ht\translationbox}%
+					\ifdim\dimen0>\ht\translationbox%
+					\unvbox\partialpage\penalty0%
+					\else\fi
+				}\eject}
 		\rawcantus}
 
 \def\cantus#1{\selectpdf{#1}\rawcantus}
 
 \def\rawcantus{\begingroup
 	\maxdepth=3mm
-	\baselineskip=1.8cm plus 1pt
+	\baselineskip=1.8cm plus 1pt minus 1pt
 	\printpdf
 	\endgroup}
 
@@ -16,10 +24,11 @@
 	\count100=\pdflength%
 	\loop%
 	\hbox to \textwidth{\lower3mm\hbox{\printnextpdfpage}\hfil}%
-	\ifnum\count100>1\advance \count100 by -1\repeat%
+	\ifnum\count100>1%
+	\advance \count100 by -1\repeat%
 }
 
-\def\selectpdf#1{\directlua{libgen.pdf.open('#1')}}
+\def\selectpdf#1{\directlua{libgen.pdf.open('\luaescapestring{#1}')}}
 \def\pdflength{\directlua{tex.print(libgen.pdf.nof_pages())}}
 \def\pdffirstht{\directlua{tex.print(libgen.pdf.first_page_height())}pt}
 \def\printnextpdfpage{\directlua{libgen.pdf.print_next_page()}}

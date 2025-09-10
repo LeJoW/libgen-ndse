@@ -9,8 +9,8 @@
 \long\def\colout#1\colin#2\colpar{%
 	\prevdepth=-\maxdimen
 	\begingroup%
-	\storecol #1 in \outcolumn
-	\storecol #2 in \incolumn
+	\storecol{#1}{\outcolumn}
+	\storecol{#2}{\incolumn}
 	\updatefreespace%
 	\buildpagesofar%
 	\insertinterrowskip%
@@ -19,7 +19,7 @@
 	\endgroup%
 }
 
-\long\def\storecol#1 in #2{
+\long\def\storecol#1#2{
 	\splittopskip=\topskip \splitmaxdepth=0pt
 	\setbox#2=\vbox{\kern1cm #1}
 	\setbox0=\vsplit#2 to 1cm}
@@ -29,11 +29,11 @@
 \setbox0=\hbox to \textwidth{\hfil\vrule depth5mm\hfil}%
 \ht0=0pt \dp0=0pt \box0 \prevdepth=-\maxdimen%
 \endgroup%
-\vskip0pt plus 5pt%
+\vskip0pt plus 0.5pt%
 \fi}
 
 \def\buildpagesofar{\splittopskip=\topskip \splitmaxdepth=0pt%
-	\dimen0=\updatefreespace
+	\dimen0=\freespace%
 	\setbox0=\vsplit\outcolumn upto \dimen0%
 	\setbox2=\vsplit\incolumn upto \dimen0%
 	\configurepage%

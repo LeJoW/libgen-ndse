@@ -96,19 +96,15 @@ export const renderPsalmusTRAD = (adapter: Adapter) =>
                     versi
                         .slice(intonation ? 1 : 0, -2)
                         .map(function (verse, index) {
-                            return adapter.engine.concat([
-                                adapter.engine.orphan("psalmFR", {
-                                    value: verse.fr,
-                                }),
-                                adapter.engine.orphan("psalmLA", {
-                                    value:
-                                        index === 0 && !intonation
-                                            ? adapter.render(
-                                                  new ParagraphLettrine(verse)
-                                              )
-                                            : verse.la,
-                                }),
-                            ]);
+                            return adapter.engine.orphan("versusTRAD", {
+                                la:
+                                    index === 0 && !intonation
+                                        ? adapter.render(
+                                              new ParagraphLettrine(verse)
+                                          )
+                                        : verse.la,
+                                fr: verse.fr,
+                            });
                         })
                 )
             ),

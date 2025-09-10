@@ -70,11 +70,6 @@ function printParagraphLettrine(text: string, engine: Render): string {
 function printParagraphStdTRAD({ la, fr }: TextNode, engine: Render): string {
     return engine.container(
         "tradColonnes",
-        engine.join([
-            engine.orphan("colFR", { content: fr }),
-            engine.orphan("colLA", {
-                content: la,
-            }),
-        ])
+        engine.orphan("colonneTRAD", { la, fr })
     );
 }

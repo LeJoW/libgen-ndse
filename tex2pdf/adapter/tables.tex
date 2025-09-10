@@ -1,57 +1,53 @@
 \def\anchor#1{\label{#1}}
 
 \def\tableTitle#1{%
-	\vspace*{4mm}%
-	{\centering\fbseries\decorativ #1\par}%
-	\vspace*{3mm}%
-	\global\def\officeTitleShort{#1}%
+\vskip1mm plus 3pt minus 1pt%
+\centerline{\strut{7mm}\decorativ #1}
+\vskip 1mm plus 1pt minus 1pt%
+\global\rrunninghead={#1}%
 }
 
-\newenvironment{tableOfContents}{\thispagestyle{empty}}{}
+\def\begintableOfContents{\noheaderthispage\begingroup
+	\small\parskip=0pt}
+\def\endtableOfContents{\endgroup}
 
-\newenvironment{tableSection}{}{}
-\newenvironment{sectionEntries}{
-	\begin{itemize}
-		}{
-	\end{itemize}
-}
+\def\begintableSection{}
+\def\endtableSection{}
+
+\def\beginsectionEntries{}
+\def\endsectionEntries{}
 
 \def\tableSectionTitle#1{%
-	\global\def\officeTitleShort{#1}%
-	{\small\scshape #1}}
-\def\sectionEntry}[2]{\small\item[] #1\dotfill\pageref{#2}}
+	\global\rrunninghead{#1}%
+	\vskip4mm
+	\noindent{\sc #1}\vskip2mm}
 
+\def\sectionEntry#1#2{#1\dotfill\pageref{#2}}
 
-\newenvironment{gregoIndex}{\thispagestyle{empty}}{}
+\def\begingregoIndex{\begingroup
+	\parindent=0pt\small}
+\def\endgregoIndex{\endgroup}
 
-\newenvironment{psIndex}{
-	\begin{itemize}[left=0pt, leftmargin=1.6cm, labelwidth=6mm, labelsep=1cm]
-		}{
-	\end{itemize}
-}
+\def\beginpsIndex{\beginlist}
+\def\endpsIndex{\endlist}
 
-\def\psEntry}[3]{\small\item[#1] #2. #3.}
-\def\psMode#1{{\scshape (#1)}}
+\def\psEntry#1#2#3{\item[#1] #2. #3.}
+\def\psMode#1{{\sc (#1)}}
 
-\newenvironment{cantIndex}{
-	\setlength\leftskip{1cm}
-	\setlength\parindent{-1cm}
-}{}
-\def\cantEntry}[2]{\small #1. #2.\par}
+\def\begincantIndex{\begingroup\hangindent=10.5mm\hangafter=1}
+\def\endcantIndex{\endgroup}
+\def\cantEntry#1#2{#1. #2.\par}
 
-\newenvironment{gregIndex}{
-	\bigskip%
-	\setlength\columnseprule{0.4pt}
-	\begin{multicols}{2}
-		}{
-	\end{multicols}
-}
-\newenvironment{gregList}{
-	\begin{itemize}[left=0pt, leftmargin=6mm, itemindent=-3mm, rightmargin=3mm]
-		}{
-	\end{itemize}
-}
+\def\begingregIndex{\bigskip\begingroup}
+\def\endgregIndex{\endgroup}
 
-\newenvironment{gregAlphabeticGroup}{\addvspace{2mm plus0.5mm minus0.5mm}}{}
+\def\begingregList{\begingroup
+	\labelwidth=2mm
+	\labeloffset=2mm
+	\beginlist}
+\def\endgregList{\endlist\endgroup}
 
-\def\gregEntry}[3]{\small\item[#1] #2\dotfill\pageref{#3}\hspace*{-3mm}}
+\def\gregEntry#1#2#3{\item[#1] #2\dotfill\pageref{#3}}
+
+\def\begingregAlphabeticGroup{\vskip 2mm plus 0.5mm minus 0.5mm}
+\def\endgregAlphabeticGroup{}

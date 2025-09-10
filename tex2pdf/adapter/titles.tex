@@ -1,12 +1,39 @@
-\def\dayTitleShort{}
-\def\officeTitleShort{}
+\def\dayTitle#1#2#3{\vfil\eject
+\begingroup\display\fontdimen2\font=1.4\fontdimen2\font\baselineskip=40pt
+\begincenterpar\strut15mm #1\endcenterpar\endgroup%
+\vskip5mm
+\global\lrunninghead={#3}\noheaderthispage}
 
-\def\dayTitle#1#2#3{}
+\def\officeTitle#1#2{
+\setbox0=\vbox{\begingroup\decorativ\it
+	\begincenterpar\strut7mm\uppercase{#1}\endcenterpar
+	\endgroup}%
+\ifisroom\else\endrule\fi
+\bigskip\box0\medskip\global\rrunninghead={#2}}
 
-\def\officeTitle#1#2{}
+\def\sectionTitle#1{
+	\centerline{\uppercase{#1}}
+	\global\lrunninghead{#1}
+}
 
-\def\sectionTitle#1{}
+\def\lessonTitle#1#2{
+	\bigskip\def\detail{#2}
+	\ifx\empty\detail
+		\centerline{\decorativ #1}
+		\vskip2mm
+	\else
+		\line{\hfill\decorativ #1\hfill\hfill{\decorativ\it #2}\hfill}
+	\fi}
 
-\def\lessonTitle#1#2{}
+\long\def\psalmTitle#1{}
 
-\def\psalmTitle#1{}
+\newif\ifenoughroom
+\def\ifisroom{\updatefreespace
+	\dimen0=\freespace
+	\advance\dimen0 by -\bigskipamount
+	\advance\dimen0 by -\ht0
+	\advance\dimen0 by -\medskipamount
+	\ifdim\dimen0>2cm \enoughroomtrue\else \enoughroomfalse\fi
+	\ifenoughroom}
+
+\def\endrule{\ifdim\freespace>1cm\vfil\centerline{\vrule height0.4pt depth0pt width0.4\hsize}\vfil\fi\eject}

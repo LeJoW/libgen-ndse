@@ -1,10 +1,15 @@
-\def\beginpsalterium{}
-\def\endpsalterium{}
+\def\beginpsalterium{\bigskip}
+\def\endpsalterium{\bigskip}
 
-\def\beginpsalm{}
-\def\endpsalm{}
+\def\beginpsalm{\begingroup
+\parskip=0pt plus 1pt}
+\def\endpsalm{\endgroup}
 
-\def\beginpsalmTrad{}
-\def\endpsalmTrad{}
+\long\def\balancedcols#1{\begindoublecolumns#1\enddoublecolumns}
+
+\def\beginpsalmTrad{\beginiocolumnns}
+\def\endpsalmTrad{\endiocolumns}
 
 \def\aloneDoxologie#1{{\parskip=0pt #1}}
+
+\def\versusTRAD#1#2{\colout#1\colin{\small #2}\colpar}
