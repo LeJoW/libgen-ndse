@@ -37,14 +37,16 @@
 	\setbox0=\vbox to\dimen0{\unvbox1} \setbox2=\vbox to\dimen0{\unvbox3}}
 
 \def\pagesofar{
-	\dimen0=\dp0 \dimen2=\dp2
-	\setbox0=\vtop{\unvbox0} \setbox2=\vtop{\unvbox2} \wd0=\hsize \wd2=\hsize
-	\setbox1=\vbox{\hbox to \textwidth{\box0\hfil\vrule height\columnruleht\hfil\box2}}
-	\dimen1=\if\dp0>\dp2\dimen0\else\dimen2\fi
-	\dimen0=\ht1\advance\dimen0 by \dp1\advance\dimen0 by -\dimen1
-	\ht1=\dimen0 \dp1=\dimen1
-	\box1}
+	\dimen0=\maxdim(\ht0, \ht2) \dimen1=\maxdim(\dp0, \dp2)
+	\ifdim\dimen0>0pt
+		\setbox0=\vtop to \dimen0{\unvbox0} \setbox2=\vtop to \dimen0{\unvbox2} \wd0=\hsize \wd2=\hsize
+		\setbox1=\vbox{\hbox to \textwidth{\box0\hfil\vrule height\columnruleht\hfil\box2}}
+		\dimen0=\ht1\advance\dimen0 by \dp1\advance\dimen0 by -\dimen1
+		\ht1=\dimen0 \dp1=\dimen1
+		\box1\fi}
 
 \def\donextpage{
 	\ifvoid155\penalty0\else
 		\eject\begindoublecolumns\unvbox155\enddoublecolumns\fi}
+
+\def\maxdim(#1, #2){\ifdim#1>#2 #1\else#2\fi}

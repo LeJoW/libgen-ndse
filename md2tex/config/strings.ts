@@ -7,7 +7,7 @@ const symbols: { [char: string]: keyof Adapter["symbols"] } = {
     "§": "parnumber",
     "+": "cross",
     "\\*": "star",
-    "=": "discretionary"
+    "=": "discretionary",
 };
 
 const strConfig = (adapter: Adapter): StringConfigType => ({
@@ -25,7 +25,14 @@ const strConfig = (adapter: Adapter): StringConfigType => ({
             },
         },
     ],
-    fr: [],
+    fr: [
+        {
+            test: /(')/g,
+            callback: function () {
+                return "’";
+            },
+        },
+    ],
     all: [
         {
             test: /((=)|(\+)|(\\\*))/g,
@@ -61,6 +68,12 @@ const strConfig = (adapter: Adapter): StringConfigType => ({
             test: /\^(\S+)/g,
             callback(_, text) {
                 return adapter.textStyles.upper(text);
+            },
+        },
+        {
+            test: /\s*([:;?!])/g,
+            callback(_, text) {
+                return adapter.symbols.nbsp + text;
             },
         },
     ],

@@ -37,15 +37,20 @@ const blockConfig = (psalmManager: PsalmManager): BlockConfigType => ({
         cantusConfig(gregoIndex),
         psalteriumConfig(gregoIndex, psalmManager),
         {
-            test: /<\s*(\S+)\s*\/>/,
-            callback: function (_, tag) {
+            test: /<\s*(\S+)\s*(\S*)\s*\/>/,
+            callback: function (_, tag, attributes) {
                 switch (tag) {
                     case "grego-index":
                         return gregoIndex;
                     case "table-of-contents":
                         return table;
                     case "hyphens":
-                        return hyphens;
+                        const element = hyphens;
+                        element.outputFile = attributes.replace(
+                            /file="(\S+)"/,
+                            "$1"
+                        );
+                        return element;
                     default:
                         return new GenericElement();
                 }

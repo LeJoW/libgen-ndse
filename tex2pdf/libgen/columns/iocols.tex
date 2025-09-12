@@ -1,6 +1,6 @@
 \newif\ifinsertskip
 
-\def\beginiocolumnns{\begingroup
+\def\beginiocolumnns{\begingroup\widowpenalty=10000
 	\doublecolumnsetup \insertskipfalse}
 \def\endiocolumns{\endgroup \pagegoal=\vsize}
 
@@ -34,9 +34,11 @@
 
 \def\buildpagesofar{\splittopskip=\topskip \splitmaxdepth=0pt%
 	\dimen0=\freespace%
+	\ifdim\freespace>\baselineskip
 	\setbox0=\vsplit\outcolumn upto \dimen0%
 	\setbox2=\vsplit\incolumn upto \dimen0%
 	\configurepage%
+	\else\insertskipfalse\setbox0=\box\voidbox\fi
 }
 
 \def\configurepage{\dimen0=\dp0 \dimen2=\dp2%

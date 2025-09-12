@@ -1,9 +1,8 @@
 \def\anchor#1{\label{#1}}
 
 \def\tableTitle#1{%
-\vskip1mm plus 3pt minus 1pt%
-\centerline{\strut{7mm}\decorativ #1}
-\vskip 1mm plus 1pt minus 1pt%
+\vskip0mm plus 3pt minus 1pt%
+\centerline{\strut{7mm}\decorativ #1}%
 \global\rrunninghead={#1}%
 }
 
@@ -44,7 +43,7 @@
 \def\begingregList{\begingroup
 	\labelwidth=2mm
 	\labeloffset=2mm
-	\beginlist}
+	\beginlist\unskip}
 \def\endgregList{\endlist\endgroup}
 
 \def\gregEntry#1#2#3{\item[#1] #2\dotfill\pageref{#3}}

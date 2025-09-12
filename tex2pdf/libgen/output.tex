@@ -31,17 +31,17 @@
 
 \def\normaloutput#1{
 	\pagesetup
-	\shipout\vbox{\showframe\hrule height0pt\makeheadline\hrule height0pt
-		\vbox to \textheight{#1}}
-	\advancepageno
-}
+	\shipout\vbox{\offinterlineskip
+		\showframe\hrule height0pt\makeheadline\hrule height0pt
+		\vbox to \textheight{#1}}\boxmaxdepth=\maxdepth
+	\advancepageno}
 
 \def\pagebody{\unvbox255}
 
 \newtoks\headline
 \def\makeheadline{\begingroup
-	\setbox0=\hbox to \textwidth{\the\headline}
-	\ht0=\headoffset \dp0=0pt \box0
+	\setbox0=\hbox to \textwidth{\strut\headoffset\the\headline}
+	\dp0=0pt \box0
 	\dimen0=\topmargin
 	\advance\dimen0 by -\topskip
 	\advance\dimen0 by -\headoffset
@@ -59,7 +59,8 @@
 
 \def\pagesetup{\hoffset=-1in \voffset=-1in \vbadness=2000
 	\ifodd\pageno\oddsetup\else\evensetup\fi
-	\ifnoheaderthispage\headline={}\fi\global\noheaderthispagefalse}
+	\ifnoheaderthispage
+		\global\noheaderthispagefalse\headline={}\fi}
 
 \newtoks\rrunninghead
 \newtoks\lrunninghead

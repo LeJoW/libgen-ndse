@@ -1,4 +1,4 @@
-\def\dayTitle#1#2#3{\vfil\eject
+\def\dayTitle#1#2#3{\vfil\eject\cleardoublepage
 \begingroup\display\fontdimen2\font=1.4\fontdimen2\font\baselineskip=40pt
 \begincenterpar\strut15mm #1\endcenterpar\endgroup%
 \vskip5mm
@@ -9,18 +9,17 @@
 	\begincenterpar\strut7mm\uppercase{#1}\endcenterpar
 	\endgroup}%
 \ifisroom\else\endrule\fi
-\bigskip\box0\medskip\global\rrunninghead={#2}}
+\bigskip\box0\bigskip\global\rrunninghead={#2}}
 
-\def\sectionTitle#1{
-	\centerline{\uppercase{#1}}
-	\global\lrunninghead{#1}
-}
+\def\sectionTitle#1{\noheaderthispage
+	\centerline{\strut15mm\uppercase{#1}}
+	\global\lrunninghead{#1}\bigskip}
 
-\def\lessonTitle#1#2{
-	\bigskip\def\detail{#2}
+\def\lessonTitle#1#2{\penalty-9999
+	\medskip\def\detail{#2}
 	\ifx\empty\detail
-		\centerline{\decorativ #1}
-		\vskip2mm
+		\centerline{\strut7mm\decorativ #1}
+		\vskip0mm plus 2mm minus 0.5mm
 	\else
 		\line{\hfill\decorativ #1\hfill\hfill{\decorativ\it #2}\hfill}
 	\fi}
@@ -37,3 +36,5 @@
 	\ifenoughroom}
 
 \def\endrule{\ifdim\freespace>1cm\vfil\centerline{\vrule height0.4pt depth0pt width0.4\hsize}\vfil\fi\eject}
+
+\def\cleardoublepage{\ifodd\pageno\else\hbox{}\vfil\eject\fi}

@@ -14,7 +14,7 @@
 	\ifnum\count1<\count0\repeat%
 	\advance\count0 by 1%
 	\global\parshape=\count0 \pslist 0pt \hsize%
-	\setbox0=\hbox to0pt{\hskip-\dimen1\lower\dimen0\hbox{\lettrinefont #1}\hss}%
+	\setbox0=\hbox to 0pt{\hskip-\dimen1\lower\dimen0\hbox{\lettrinefont #1}\hss}%
 	\dp0=0pt \box0%
 	\endgroup%
 }
@@ -33,13 +33,27 @@
 \dimen1=32pt%
 \dimen2=32pt%
 }
-\def\lettrineexceptionÁ{%
+\def\lettrineexceptionA{%
 \dimen1=20pt%
 \dimen2=25pt%
 }
 \def\lettrineexceptionB{%
 \dimen1=18pt%
 \dimen2=23pt%
+}
+\def\lettrineexceptionC{%
+\dimen1=24pt%
+\dimen2=27pt%
+}
+\def\lettrineexceptionD{%
+\dimen1=24pt%
+\dimen2=28pt%
+}
+\def\lettrineexceptionE{%
+\dimen1=18pt%
+}
+\def\lettrineexceptionF{%
+\dimen1=18pt%
 }
 \def\lettrineexceptionL{%
 	\dimen1=13pt%
@@ -48,10 +62,27 @@
 \dimen1=29pt%
 \dimen2=34pt%
 }
+\def\lettrineexceptionO{%
+\dimen1=26pt%
+\dimen2=30pt%
+}
+\def\lettrineexceptionP{%
+\dimen1=18pt%
+}
 \def\lettrineexceptionQ{%
 	\dimen0=1.5\baselineskip%
 	\count0=3%
 	\dimen1=25pt%
 	\dimen2=30pt%
 	\dimen3=30pt%
+}
+\def\lettrineexceptionS{%
+\dimen1=16pt%
+}
+\def\lettrineexceptionT{%
+\dimen2=25pt%
+}
+\def\lettrineexceptionV{%
+\dimen1=21pt%
+\dimen2=24pt%
 }

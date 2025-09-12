@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import { GenericElement } from "./GenericElement";
 
 export class Hyphens extends GenericElement {
+    outputFile: string | undefined = undefined;
     words: string[] = [];
 
     registerString(text: string) {
