@@ -24,21 +24,21 @@
 	\setbox#2=\vbox{\kern1cm #1}
 	\setbox0=\vsplit#2 to 1cm}
 
-\def\insertinterrowskip{\ifinsertskip%
-\begingroup%
-\setbox0=\hbox to \textwidth{\hfil\vrule depth5mm\hfil}%
-\ht0=0pt \dp0=0pt \box0 \prevdepth=-\maxdimen%
-\endgroup%
-\vskip0pt plus 0.5pt%
-\fi}
+\def\insertinterrowskip{\ifdim\pagetotal>\textheight \insertskipfalse\fi
+	\ifinsertskip%
+		\begingroup%
+		\setbox0=\hbox to \textwidth{\hfil\vrule depth5mm\hfil}%
+		\ht0=0pt \dp0=0pt \box0 \prevdepth=-\maxdimen%
+		\endgroup%
+		\vskip0pt plus 0.5pt\fi}
 
-\def\buildpagesofar{\splittopskip=\topskip \splitmaxdepth=0pt%
+\def\buildpagesofar{\splittopskip=\topskip \splitmaxdepth=2pt%
 	\dimen0=\freespace%
 	\ifdim\freespace>\baselineskip
-	\setbox0=\vsplit\outcolumn upto \dimen0%
-	\setbox2=\vsplit\incolumn upto \dimen0%
-	\configurepage%
-	\else\insertskipfalse\setbox0=\box\voidbox\fi
+		\setbox0=\vsplit\outcolumn upto \dimen0%
+		\setbox2=\vsplit\incolumn upto \dimen0%
+		\configurepage%
+	\else\global\insertskipfalse\setbox0=\box\voidbox\fi
 }
 
 \def\configurepage{\dimen0=\dp0 \dimen2=\dp2%
@@ -49,8 +49,8 @@
 	\dimen1=\ht0 \advance\dimen1 by \dp0 \advance\dimen1 by -\dimen0%
 	\ht0=\dimen1 \dp0=\dimen0}
 
-\def\buildnextpage{\ifvoidiocols
-		\global\insertskiptrue\penalty0\else\insertskipfalse
+\def\buildnextpage{\global\insertskipfalse\ifvoidiocols
+		\global\insertskiptrue\penalty0\else
 		\eject\colout\unvbox\outcolumn\colin\unvbox\incolumn\colpar\fi
 }
 

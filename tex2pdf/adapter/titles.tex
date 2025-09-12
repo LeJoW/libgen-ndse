@@ -19,12 +19,11 @@
 	\medskip\def\detail{#2}
 	\ifx\empty\detail
 		\centerline{\strut7mm\decorativ #1}
-		\vskip0mm plus 2mm minus 0.5mm
 	\else
 		\line{\hfill\decorativ #1\hfill\hfill{\decorativ\it #2}\hfill}
-	\fi}
+	\fi\smallskip}
 
-\long\def\psalmTitle#1{}
+\def\psalmTitle#1{\vskip1mm plus 1pt minus 1pt\centerline{\decorativ #1}}
 
 \newif\ifenoughroom
 \def\ifisroom{\updatefreespace

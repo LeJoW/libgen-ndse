@@ -3,6 +3,7 @@
 
 \def\beginrubric{\begingroup
 \parskip=2mm plus0.5mm minus0.5mm
+\baselineskip=10pt
 \small\it\smallskip
 \def\italic##1{{\rm ##1}}}
 \def\endrubric{\par\endgroup}
@@ -19,13 +20,13 @@
 \def\beginparagraphLettrine#1{\lettrine{#1}}
 \def\endparagraphLettrine{\par}
 
-\def\begintradColonnes{\medskip\beginiocolumnns\def\setparindent{\noindent}}
+\def\begintradColonnes{\beginiocolumnns\def\setparindent{\noindent}}
 \def\endtradColonnes{\endiocolumns}
 
 \def\begincolonnes{}
 \def\endcolonnes{}
 
-\def\colonneTRAD#1#2{\colout #1\colin{\small\setparindent #2}\colpar\gdef\setparindent{}}
+\def\colonneTRAD#1#2{\colout\setparindent #1\colin{\small\setparindent #2}\colpar\gdef\setparindent{}}
 
 \def\addl{\futurelet\next\doaddl}
 \def\rml{\futurelet\next\dorml}

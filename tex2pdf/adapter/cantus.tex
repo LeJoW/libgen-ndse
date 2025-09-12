@@ -1,5 +1,6 @@
-%\def\cantusTRAD#1#2{\begintranslation#2\endtranslation of cantus {../../content/gabc/build/#1.pdf}}
+\def\cantusTRAD#1#2{\begingroup\baselineskip=10pt
+	\begintranslation{\small #2}\endtranslation of cantus {../../content/gabc/build/#1.pdf}\endgroup}
 
 \let\cantusold\cantus
 \def\cantus#1{\cantusold{../../content/gabc/build/#1.pdf}}
-\def\cantusTRAD#1#2{\cantus{#1}}
+%\def\cantusTRAD#1#2{\cantus{#1}}

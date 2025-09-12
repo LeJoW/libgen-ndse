@@ -32,7 +32,8 @@
 \def\normaloutput#1{
 	\pagesetup
 	\shipout\vbox{\offinterlineskip
-		\showframe\hrule height0pt\makeheadline\hrule height0pt
+		\showframe\makeheadline
+		\puttranslationins%
 		\vbox to \textheight{#1}}\boxmaxdepth=\maxdepth
 	\advancepageno}
 
@@ -80,3 +81,9 @@
 
 \newif\ifnoheaderthispage
 \def\noheaderthispage{\global\noheaderthispagetrue}
+
+\newif\ifsamepage
+\def\puttranslationins{
+	\ifvoid\translationins\else
+		\ifsamepage\global\samepagefalse\else\global\samepagetrue
+			\rlap{\vbox to 0pt{\hbox to \textwidth{\hfil\box\translationins}}}\fi\fi}
