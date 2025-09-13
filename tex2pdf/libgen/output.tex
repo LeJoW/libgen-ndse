@@ -82,8 +82,8 @@
 \newif\ifnoheaderthispage
 \def\noheaderthispage{\global\noheaderthispagetrue}
 
-\newif\ifsamepage
-\def\puttranslationins{
-	\ifvoid\translationins\else
-		\ifsamepage\global\samepagefalse\else\global\samepagetrue
-			\rlap{\vbox to 0pt{\hbox to \textwidth{\hfil\box\translationins}}}\fi\fi}
+\newif\ifinserthere
+\def\puttranslationins{\ifvoid\translationins \global\insertherefalse\else
+		\ifinserthere \translation\else\global\insertheretrue\fi\fi}
+
+\def\translation{\rlap{\vbox to 0pt{\hbox to \textwidth{\hfil\box\translationins}\vss}}}

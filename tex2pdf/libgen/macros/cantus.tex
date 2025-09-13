@@ -36,7 +36,9 @@
 
 \def\computestrutheightfor#1{\setbox0=#1%
 	\count10=\countlinesofbox0\count10=\count10%
-	\ifnum\count10>4 \count10=3\else\advance\count10 by -1\fi%
+	\count11=3\ifdim\dimen7>19mm \count11=4\fi%
+	\count12=\count11\advance\count12 by 1%
+	\ifnum\count10>\count12 \count10=\count11\else\advance\count10 by -1\fi%
 	\dimen0=\dimen7\advance\dimen0 by -3mm\advance\dimen0 by -\count10\baselineskip}
 
 \def\selectpdf#1{\directlua{libgen.pdf.open('\luaescapestring{#1}')}}
