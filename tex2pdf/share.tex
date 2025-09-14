@@ -16,7 +16,7 @@
 \newcommand{\fbseries}{\unskip\setBold[0.1]\aftergroup\unsetBold\aftergroup\ignorespaces}
 
 \setmainfont{PlantinStd-Light}[
-	BoldFont=PlantinStd-Bold,
+	BoldFont=PlantinStd-SemiBold,
 	ItalicFont=PlantinStd-LightItalic,
 	BoldItalicFont=PlantinStd-BoldItalic,
 	SmallCapsFont=Sabon,
@@ -25,7 +25,7 @@
 ]
 \newunicodechar{℣}{\mbox{V\kern-0.85em\reflectbox{\rotatebox[origin=c]{25}{∫}}\kern-0.05em}}
 \newunicodechar{℟}{\mbox{R\kern-0.5em\reflectbox{\rotatebox[origin=c]{30}{∫}}\kern-0.25em}}
-\newunicodechar{ǽ}{æ\kern-0.5em´\kern0.15em}
+\newunicodechar{ǽ}{æ\hbox to 0pt{\kern-0.5em´\hss}}
 
 \newfontfamily\decorativ[
 	Numbers=OldStyle,
@@ -33,9 +33,9 @@
 	ItalicFont=SabonItalic,
 	Ligatures=TeX
 ]{Sabon}
-\newfontfamily\courant[Ligatures=TeX]{PlantinStd-Light}
+\newfontfamily\courant[Ligatures=TeX, BoldFont=PlantinStd-SemiBold]{PlantinStd-Light}
 \newfontfamily\courantSM{PlantinStd}[
-	BoldFont=PlantinStd-Bold,
+	BoldFont=PlantinStd-SemiBold,
 	ItalicFont=PlantinStd-Italic,
 	BoldItalicFont=PlantinStd-BoldItalic,
 	SmallCapsFont=Sabon,
@@ -46,7 +46,7 @@
 \fontsize{11.5pt}{5mm}\courant
 
 \newdimen{\gregoLineDepth}
-\gregoLineDepth=2mm
+\gregoLineDepth=3mm
 
 \makeatletter
 %{\relax\ifmmode\copy\strutbox[#1]\else\unhcopy\strutbox[#1]\fi}

@@ -13,6 +13,7 @@ export class Adapter implements AdapterInterface {
         ampersand: string;
         parnumber: string;
         discretionary: string;
+        thinspace: string;
     };
     textStyles = {
         italic: (text: string) => this.engine.orphan("italic", { value: text }),
@@ -62,7 +63,8 @@ export class Adapter implements AdapterInterface {
             ampersand: this.engine.orphan("ampersand"),
             nbsp: this.engine.symbol("nbsp"),
             parnumber: this.engine.orphan("forcebreak"),
-            discretionary: this.engine.symbol("discretionary"),
+            discretionary: this.engine.orphan("-"),
+            thinspace: this.engine.orphan("thinspace"),
         };
     }
 

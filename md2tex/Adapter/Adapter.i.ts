@@ -22,5 +22,6 @@ export interface Adapter {
         ampersand: string;
         parnumber: string;
         discretionary: string;
+        thinspace: string;
     };
 }

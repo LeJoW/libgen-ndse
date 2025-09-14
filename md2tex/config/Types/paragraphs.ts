@@ -21,6 +21,9 @@ export const remplacementConfig: TypeConfig = {
         rrubric.text.context = rrubric;
         return rrubric;
     },
+    saveTranslation(rubric: RemplacementRubric, trad: string) {
+        rubric.text.fr = trad;
+    },
 };
 
 export const lectioConfig: TypeConfig = {

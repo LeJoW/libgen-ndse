@@ -72,8 +72,12 @@ const strConfig = (adapter: Adapter): StringConfigType => ({
         },
         {
             test: /\s*([:;?!])/g,
-            callback(_, text) {
-                return adapter.symbols.nbsp + text;
+            callback(_, punctuation) {
+                return (
+                    (punctuation === ":"
+                        ? adapter.symbols.nbsp
+                        : adapter.symbols.thinspace) + punctuation
+                );
             },
         },
     ],

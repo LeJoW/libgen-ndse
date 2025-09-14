@@ -10,6 +10,7 @@
 		\updatefreespace%
 		\dimen0=\ifdim\freespace>\dimen7 \freespace\else\textheight\fi%
 		\advance\dimen0 by -\pagestretch%
+		\advance\dimen0 by \pageshrink%
 		\setbox0=\vsplit\translationbox upto \dimen0%
 		\setbox\translationbox=\box\translationbox%
 		\ifvoid\translationbox\else\insert\translationins{\unvbox\translationbox}
@@ -23,6 +24,8 @@
 \def\rawcantus{\begingroup
 	\maxdepth=3mm
 	\baselineskip=1.8cm plus 1pt minus 1pt
+	\lineskiplimit=-1pt
+	\lineskip=-1pt plus 1pt minus 1pt
 	\printpdf
 	\endgroup}
 

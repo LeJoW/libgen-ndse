@@ -60,6 +60,10 @@ export const renderRemplacementRubric = ({ engine }: Adapter) =>
     function ({ text }: RemplacementRubric): string {
         return engine.container("remplacement", text.la);
     };
+export const renderRemplacementRubricTRAD = ({ engine }: Adapter) =>
+    function ({ text }: RemplacementRubric): string {
+        return engine.container("remplacement", text.fr);
+    };
 
 function printParagraphLettrine(text: string, engine: Render): string {
     return engine.container("paragraphLettrine", text.slice(1), {

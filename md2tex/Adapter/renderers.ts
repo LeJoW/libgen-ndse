@@ -23,6 +23,7 @@ import {
     renderParagraphStd,
     renderParagraphStdTRAD,
     renderRemplacementRubric,
+    renderRemplacementRubricTRAD,
     renderRubric,
     renderRubricTRAD,
 } from "./render/paragraphs";
@@ -93,4 +94,5 @@ export const renderersTRAD = [
     renderParagraphStdTRAD,
     renderLessonTRAD,
     renderRubricTRAD,
+    renderRemplacementRubricTRAD,
 ];
