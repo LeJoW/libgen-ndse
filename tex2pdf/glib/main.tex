@@ -1,12 +1,18 @@
 \documentclass[11pt]{extarticle}
+\usepackage[latin]{babel}
+\babelprovide[transforms = letters.noj]{latin}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fontspec}
 \usepackage{atbegshi}
 \usepackage{pdfpages}
 \usepackage[paperwidth=10.2cm, paperheight=3cm, margin=0mm]{geometry}
 \usepackage{gregoriotex}
 \usepackage{twoopt}
+\usepackage{newunicodechar}
+
 %\usepackage{lua-visual-debug}
 
-\input{\CurrentFilePath/../share}
 \input{\CurrentFilePath/config}
 \input{\CurrentFilePath/page-crop}
 \input{\CurrentFilePath/check-syllabs}
@@ -39,12 +45,12 @@
 \enablePageCropping
 
 \newcommand{\gabcDisplay}[1]{
-	\grechangestyle{initial}{\fontsize{90}{90}\selectfont\decorativ}
+	\grechangestyle{initial}{\fontsize{90}{90}\lettrine}
 	\snippet{#1}
 }
 
 \newcommand{\gabcNormal}[1]{
-	\grechangestyle{initial}{\fontsize{35}{35}\selectfont\decorativ}
+	\grechangestyle{initial}{\fontsize{35}{35}\lettrine}
 	\gresetinitiallines{1}
 	\snippet{#1}
 }

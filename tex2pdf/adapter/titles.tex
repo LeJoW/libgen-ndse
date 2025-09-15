@@ -8,7 +8,7 @@
 \setbox0=\vbox{\begingroup\decorativ\it\baselineskip=17pt
 	\begincenterpar\strut7mm\uppercase{#1}\endcenterpar
 	\endgroup}%
-\ifisroom\else\endrule\fi
+\ifisroom\else\setendrule\fi
 \bigskip\box0\bigskip\global\rrunninghead={#2}}
 
 \def\sectionTitle#1{\noheaderthispage
@@ -21,7 +21,7 @@
 		\centerline{\strut7mm\decorativ #1}
 	\else
 		\line{\hfill\decorativ #1\hfill\hfill{\decorativ\it #2}\hfill}
-	\fi\smallskip}
+	\fi\medskip}
 
 \def\psalmTitle#1{\vskip0mm plus 1pt minus 1pt\centerline{\strut10mm\decorativ #1}}
 
@@ -34,6 +34,6 @@
 	\ifdim\dimen0>2cm \enoughroomtrue\else \enoughroomfalse\fi
 	\ifenoughroom}
 
-\def\endrule{\ifdim\freespace>1cm\vfil\centerline{\vrule height0.4pt depth0pt width0.4\hsize}\vfil\fi\eject}
+\def\setendrule{\ifdim\freespace>1cm\endrule\fi\eject}
 
 \def\cleardoublepage{\ifodd\pageno\else\hbox{}\vfil\eject\fi}
