@@ -12,8 +12,10 @@
 \def\italic##1{{\it ##1}}\rm\P~}
 \def\endremplacement{\endrubric}
 
-\def\beginlesson{}
-\def\endlesson{}
+\def\beginlesson{\begingroup%
+%\xspacefactor=1000
+}
+\def\endlesson{\endgroup}
 
 \def\forcebreak{\hfil\break\indent}
 
