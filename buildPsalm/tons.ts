@@ -25,6 +25,7 @@ export const tons: {
     "7b": { mediante: [0, 2], end: [0, 2] },
     "7c": { mediante: [0, 2], end: [0, 2] },
     "7c2": { mediante: [0, 2], end: [0, 2] },
+    "8c": { mediante: [0, 1], end: [2, 1] },
     "8G": { mediante: [0, 1], end: [2, 1] },
     p: { mediante: [3, 1], end: [1, 1] },
     none: { mediante: [0, 0], end: [0, 0] },
