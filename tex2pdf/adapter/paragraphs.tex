@@ -4,12 +4,12 @@
 \def\beginrubric{\begingroup
 \parskip=2mm plus0.5mm minus0.5mm
 \baselineskip=10pt
-\small\it\smallskip
+\small\it\vskip-\parskip\smallskip
 \def\italic##1{{\rm ##1}}}
 \def\endrubric{\par\endgroup}
 
-\def\beginremplacement{\beginrubric
-\def\italic##1{{\it ##1}}\rm\P~}
+\def\beginremplacement{\beginrubric\vskip-1\smallskipamount
+\P~}
 \def\endremplacement{\endrubric}
 
 \def\beginlesson{\begingroup%

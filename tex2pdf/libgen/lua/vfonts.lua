@@ -4,7 +4,6 @@ local function patch_aeacute(tfm)
         return
     end
 
-
     -- uniquement si æ (base) + accent combinant sont présents
     local base = 0x00E6
     local accent = 0x00B4
@@ -31,4 +30,32 @@ local function patch_aeacute(tfm)
     texio.write_nl("log", "[patch-font] Added missing ǽ (U+01FD)")
 end
 
-libgen.addPlantin_aeacute = patch_aeacute
+local function patch_versiculum(tfm)
+    local addr = utf.byte("℣")
+
+    if tfm.characters[addr] then
+        return
+    end
+
+    local base = utf.byte("V")
+    local accent = utf.byte("∫")
+
+    local base_glyph = tfm.characters[base]
+    local accent_glyph = tfm.characters[accent]
+
+    local quad = tfm.parameters.quad or 1000
+
+    tfm.characters[addr] = {
+        width = base_glyph.width,
+        height = accent_glyph.height,
+        depth = accent_glyph.depth,
+        commands = {{"char", base}, {"right", -0.85 * quad}, {"char", accent}}
+    }
+end
+
+local function patch_missing_glyphs(tfm)
+    patch_aeacute(tfm)
+    patch_versiculum(tfm)
+end
+
+libgen.addPlantin_aeacute = patch_missing_glyphs
