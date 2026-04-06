@@ -1,7 +1,7 @@
 \long\def\begindoublecolumns#1\enddoublecolumns{\begingroup
 	\updatefreespace
 	\doublecolumnsetup
-	\storecontent{#1}
+	\storecontent{#1\vskip 0pt plus 1sp}
 	\ifbalancecolumns
 		\balancecolumns\else\doublecolumns\fi\pagesofar
 	\donextpage

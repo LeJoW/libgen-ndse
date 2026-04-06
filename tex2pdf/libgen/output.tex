@@ -71,11 +71,11 @@
 \advance\dimen0 by -\textwidth
 \advance\dimen0 by -\outermargin
 \global\advance\hoffset by \dimen0
-\global\headline={\begingroup\header\hss\the\rrunninghead\hss\the\pageno\endgroup}
+\global\headline={\begingroup\header\hss\the\rrunninghead\hss\llap{\the\pageno}\endgroup}
 \endgroup}
 \def\evensetup{
 \advance\hoffset by \outermargin
-\headline={\begingroup\header\the\pageno\hss\the\lrunninghead\hss\endgroup}
+\headline={\begingroup\header\rlap{\the\pageno}\hss\the\lrunninghead\hss\endgroup}
 }
 
 \def\advancepageno{\global\advance\pageno by 1}

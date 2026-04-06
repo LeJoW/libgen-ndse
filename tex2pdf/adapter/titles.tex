@@ -1,7 +1,11 @@
 \def\dayTitle#1#2#3{\vfil\eject\cleardoublepage
 \begingroup\display\fontdimen2\font=1.4\fontdimen2\font\baselineskip=40pt
 \begincenterpar\strut15mm #1\endcenterpar\endgroup%
-\vskip5mm
+\vskip5mm%
+\def\classis{#2}\ifx\empty\classis%
+\else%
+\centerline{\it #2}%
+\fi
 \global\lrunninghead={#3}\noheaderthispage}
 
 \def\officeTitle#1#2{
