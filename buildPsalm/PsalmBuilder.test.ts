@@ -1,4 +1,4 @@
-import { test, expect } from "@jest/globals";
+import { test, expect, beforeAll } from "@jest/globals";
 import { PsalmBuilder } from "./PsalmBuilder";
 import { Syllabifier } from "./Syllabifier";
 
@@ -75,6 +75,11 @@ test("Accent detection", function () {
             after: ["a", "ron"],
         }
     );
+    expect(ps.getLastAccent(["om", "nes ", "ab", "ýs", "si"])).toStrictEqual({
+        before: ["om", "nes ", "ab"],
+        accent: "ýs",
+        after: ["si"],
+    });
 });
 
 test("Accentuate", function () {
@@ -163,6 +168,9 @@ test("half-verse setup", function () {
     expect(ps.setUpHalfVerse("et exquíram eam semper.", [0, 0])).toStrictEqual(
         "et exquíram eam semper."
     );
+    expect(
+        ps.setUpHalfVerse("dracónes, et omnes abýssi.", [2, 1])
+    ).toStrictEqual("dracónes, et om(nes) (ab)[ýs]si.");
 });
 
 test("verse setup", function () {

@@ -15,7 +15,7 @@ export class Syllabifier implements SyllabifierInterface {
     getSyllabsOf(sentence: string): string[] {
         let scanIndex = 0;
         return sentence
-            .replace(/([\wáéíóúǽæœ́œ]+)/gi, (_, word) =>
+            .replace(/([\wáéíóúýǽæœ́œ]+)/gi, (_, word) =>
                 this.hyphenateWord(word)
             )
             .replace(/\s/g, " =")
@@ -27,7 +27,7 @@ export class Syllabifier implements SyllabifierInterface {
                 return output;
             })
             .reduce(function (acc: string[], syllab): string[] {
-                if (!/[a-záéíóúǽæœ́œ]/i.test(syllab) && acc.length > 0) {
+                if (!/[a-záéíóúýǽæœ́œ]/i.test(syllab) && acc.length > 0) {
                     acc[acc.length - 1] += syllab;
                     return acc;
                 }

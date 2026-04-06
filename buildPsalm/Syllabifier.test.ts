@@ -1,3 +1,4 @@
+import { test, expect } from "@jest/globals";
 import { Syllabifier } from "./Syllabifier";
 
 test("", function () {
@@ -49,6 +50,20 @@ test("", function () {
         "rum:",
     ]);
 
-    expect(syllabifier.getSyllabsOf("semper _")).toStrictEqual(["sem", "per _"]);
-    expect(syllabifier.getSyllabsOf("semper ---")).toStrictEqual(["sem", "per ---"]);
+    expect(syllabifier.getSyllabsOf("semper _")).toStrictEqual([
+        "sem",
+        "per _",
+    ]);
+    expect(syllabifier.getSyllabsOf("semper ---")).toStrictEqual([
+        "sem",
+        "per ---",
+    ]);
+
+    expect(syllabifier.getSyllabsOf("omnes abýssi")).toStrictEqual([
+        "om",
+        "nes ",
+        "ab",
+        "ýs",
+        "si",
+    ]);
 });
