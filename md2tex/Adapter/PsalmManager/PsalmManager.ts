@@ -4,7 +4,6 @@ import { PsalmList } from "../../../buildPsalm/PsalmList";
 import { Syllabifier } from "../../../buildPsalm/Syllabifier";
 import { System } from "../../../buildPsalm/System";
 import { Psalmus } from "../../Types/Psalterium";
-import { Adapter } from "../Adapter";
 import { PsalmManager as PsalmManagerInterface } from "./PsalmManager.i";
 
 export class PsalmManager implements PsalmManagerInterface {
@@ -30,7 +29,7 @@ export class PsalmManager implements PsalmManagerInterface {
     }
 
     getPsalm(psalm: Psalmus): { la: string[]; fr: (string | undefined)[] } {
-        const rawPsalm = this.psalmList.getPsalm(psalm.psalmDivision);
+        const rawPsalm = this.psalmList.getPsalm(psalm.psalmDivision, psalm.doxologie);
         return {
             la: this.getLatinVersesOf(psalm, rawPsalm),
             fr: this.getFrenchVersesOf(rawPsalm),

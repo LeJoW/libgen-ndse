@@ -1,3 +1,3 @@
 export interface PsalmList {
-    getPsalm(psalmDivision: string): { la: string[]; fr?: string }[];
+    getPsalm(psalmDivision: string, doxologie: boolean): { la: string[]; fr?: string }[];
 }

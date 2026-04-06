@@ -22,13 +22,13 @@ export class PsalmList implements PsalmListInterface {
         this.system = system;
     }
 
-    getPsalm(psalmDivision: string): { la: string[]; fr?: string }[] {
+    getPsalm(psalmDivision: string, doxologie: boolean): { la: string[]; fr?: string }[] {
         let psalm;
         try {
             psalm = this.system.readJSON(`${this.path}/${psalmDivision}.json`);
         } catch (error) {
             throw new Error(`The psalm '${psalmDivision}' is not stored`);
         }
-        return [...psalm, ...this.doxologie];
+        return [...psalm, ...(doxologie ? this.doxologie : [])];
     }
 }

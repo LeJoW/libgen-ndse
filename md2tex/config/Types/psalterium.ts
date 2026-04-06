@@ -29,6 +29,7 @@ export const psalteriumConfig = (
                     : psalmDescription;
                 const PsalmConstructor = /\d/.test(psalm) ? Psalmus : Canticum;
                 const psalmus = new PsalmConstructor(acc.ton, psalm);
+                psalmus.doxologie = isDoxologie;
                 const { la, fr } = psalmManager.getPsalm(psalmus);
                 psalmus.versi = la.map(function (
                     verse: string,
@@ -42,7 +43,6 @@ export const psalteriumConfig = (
                     }
                     return output;
                 });
-                psalmus.doxologie = isDoxologie;
                 psalmus.title =
                     title && title.length > 0
                         ? (() => {
