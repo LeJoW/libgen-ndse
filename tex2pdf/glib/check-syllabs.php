@@ -6,7 +6,7 @@ function getSyllabsFromGABC(string $gabc): array
     $withoutCommands = preg_replace("/\\\([^\s]+)?/", "", $withoutLineBreak);
     $withoutNotes = preg_replace("/\(.*\)/U", "=", $withoutCommands);
     $withoutStrings = preg_replace("/<\/?.+>/U", "=", $withoutNotes);
-    $withoutSpecialChars = preg_replace("/[^a-z=\sáéíóúýäëïöüÿæœǽœ́]/i", "", $withoutStrings);
+    $withoutSpecialChars = preg_replace("/[^a-z=\sáéíóúýäëïöüÿæœǽœ́Æ]/i", "", $withoutStrings);
     $withoutSpecialChars = preg_replace("/=+/", "=", $withoutSpecialChars);
     $wordsRaw = preg_split("/\s/", $withoutSpecialChars, -1, PREG_SPLIT_NO_EMPTY);
     $wordsTrimed = array_map(function ($word) {

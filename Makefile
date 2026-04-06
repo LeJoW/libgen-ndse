@@ -12,7 +12,7 @@ COPIED_LATEX_FILES=$(LATEX_FILES:$(MARKDOWN)/%.tex=$(SOURCE)/%.tex)
 all: parse $(COPIED_LATEX_FILES) $(WORK_DIR)/core.tex hyphenate pdf | $(OUTPUT_DIR)
 
 pdf:
-	cd $(WORK_DIR) && lualatex --output-directory=build core.tex
+	cd $(WORK_DIR) && luatex --halt-on-error --output-dir=build core.tex
 
 pdf-fr:
 	cd $(WORK_DIR) && luatex --halt-on-error --output-dir=build core-fr.tex
