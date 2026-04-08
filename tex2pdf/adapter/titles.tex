@@ -1,5 +1,5 @@
 \def\dayTitle#1#2#3{\vfil\eject\cleardoublepage
-\begingroup\display\fontdimen2\font=1.4\fontdimen2\font\baselineskip=40pt
+\begingroup\display\spaceskip=1.1ex\baselineskip=40pt
 \begincenterpar\strut15mm #1\endcenterpar\endgroup%
 \vskip5mm%
 \def\classis{#2}\ifx\empty\classis%
@@ -25,9 +25,9 @@
 		\centerline{\strut7mm\decorativ #1}
 	\else
 		\line{\hfill\decorativ #1\hfill\hfill{\decorativ\it #2}\hfill}
-	\fi}
+	\fi\medskip\smallskip}
 
-\def\psalmTitle#1{\vskip0mm plus 1pt minus 1pt\centerline{\strut7mm\decorativ #1}\vskip0mm plus 1pt minus 1pt}
+\def\psalmTitle#1{\vskip0mm plus 1pt minus 1pt\centerline{\strut7mm\decorativ #1}\vskip2\medskipamount}
 
 \newif\ifenoughroom
 \def\ifisroom{\updatefreespace

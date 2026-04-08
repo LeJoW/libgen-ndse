@@ -1,4 +1,5 @@
-\def\beginpsalterium{}
+\let\cantusoriginTRAD=\cantusTRAD
+\def\beginpsalterium{\def\cantusTRAD##1##2{\vskip-2\medskipamount\cantusoriginTRAD{##1}{##2}}}
 \def\endpsalterium{}
 
 \def\beginpsalm{\begingroup

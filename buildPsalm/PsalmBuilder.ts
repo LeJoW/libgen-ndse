@@ -89,7 +89,8 @@ export class PsalmBuilder {
             );
         };
 
-        const syllabs = this.syllabifier.getSyllabsOf(halfVerse + " ");
+        const syllabs = this.syllabifier.getSyllabsOf(halfVerse);
+        syllabs[syllabs.length - 1] += " "; // Pour la détection des accents
         return rec("", accents, syllabs).trim();
     }
 
