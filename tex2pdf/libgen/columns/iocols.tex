@@ -1,6 +1,8 @@
 \newif\ifinsertskip
 
-\def\beginiocolumnns{\begingroup\widowpenalty=10000
+\newdimen\colprevdepth
+\newdimen\colthisht
+\def\beginiocolumnns{\begingroup\widowpenalty=10000 \colprevdepth=0pt
 	\doublecolumnsetup \insertskipfalse}
 \def\endiocolumns{\endgroup \pagegoal=\vsize}
 
@@ -9,11 +11,13 @@
 \long\def\colout#1\colin#2\colpar{%
 	\prevdepth=-\maxdimen
 	\begingroup%
-	\storecol{#1}{\outcolumn}
-	\storecol{#2}{\incolumn}
+	\computefinalheightfrom{#1}%
+	\storecol{#1}{\outcolumn}%
+	\storecol{#2}{\incolumn}%
 	\updatefreespace%
 	\buildpagesofar%
 	\insertinterrowskip%
+	\global\colprevdepth=\dp0%
 	\box0%
 	\buildnextpage%
 	\endgroup%
@@ -63,3 +67,12 @@
 }
 
 \def\finaldepth{\ifdim\dp0>\dp2 \dimen0\else\dimen2\fi}
+
+\def\computefinalheightfrom#1{%
+	\setbox0=\vtop{#1}%
+	\global\colthisht=\ht0}
+
+\def\computeinterlineskip{\dimen0=\baselineskip%
+	\advance\dimen0 by -\colprevdepth%
+	\advance\dimen0 by -\colthisht%
+	\ifdim\dimen0<0pt\dimen0=\lineskip\fi}

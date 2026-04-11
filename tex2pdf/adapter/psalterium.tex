@@ -8,9 +8,9 @@
 
 \long\def\balancedcols#1{\begindoublecolumns#1\enddoublecolumns}
 
-\def\beginpsalmTrad{\beginiocolumnns}
-\def\endpsalmTrad{\endiocolumns}
+\let\beginpsalmTrad=\begintradColonnes
+\let\endpsalmTrad=\endtradColonnes
 
 \def\aloneDoxologie#1{{\widowpenalty=10000\parskip=0pt plus 1pt #1}}
 
-\def\versusTRAD#1#2{\colout#1\colin{\small #2}\colpar}
+\let\versusTRAD=\colonneTRAD
