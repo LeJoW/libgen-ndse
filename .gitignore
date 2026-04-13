@@ -2,6 +2,7 @@
 build/
 dist/
 source/
+buildPsalm/psalms
 
 # System files
 .DS_Store
