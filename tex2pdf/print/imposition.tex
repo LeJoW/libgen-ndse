@@ -10,7 +10,9 @@
 \includepdf[
 	pages=-,
 	booklet,
-	noautoscale
-]{build/core}
+	noautoscale,
+	scale=1,
+	picturecommand={\put(0,0){\includegraphics{print/crop-marks}}}
+]{\inputpdf}
 
 \end{document}

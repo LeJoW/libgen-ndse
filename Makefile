@@ -23,11 +23,15 @@ parse: $(COPIED_LATEX_FILES) $(JSON_FILES_FROM_TXT) $(MARKDOWN)/*.md | $(SOURCE)
 parse-fr: $(COPIED_LATEX_FILES) $(JSON_FILES_FROM_TXT) $(MARKDOWN)/*.md | $(SOURCE)
 	node dist/md2tex/main.js parse -t ../content/md.list -o $(SOURCE)/parsed-fr.tex
 
-print: $(WORK_DIR)/core.tex
-	cd $(WORK_DIR) && lualatex --output-directory=build print/print.tex
+print: $(OUTPUT_DIR)/core.pdf
+	cd $(WORK_DIR) && lualatex --output-directory=build --jobname=print "\def\inputpdf{build/core}\include{print/imposition.tex}"
 
-print-fr: $(WORK_DIR)/core-fr.tex
-	cd $(WORK_DIR) && lualatex --output-directory=build print/print-fr.tex
+print-fr: $(OUTPUT_DIR)/core-fr.pdf
+	cd $(WORK_DIR) && lualatex --output-directory=build --jobname=print-fr "\def\inputpdf{build/core-fr}\include{print/imposition.tex}"
+
+cover: $(SOURCE)/couverture.tex
+	cd $(WORK_DIR) && luatex --halt-on-error --output-dir=build source/couverture.tex
+	cd $(WORK_DIR) && lualatex --output-directory=build --jobname=cover "\def\inputpdf{build/couverture}\include{print/imposition.tex}"
 
 $(SOURCE)/%.tex: $(MARKDOWN)/%.tex | $(SOURCE)
 	cp $< $@

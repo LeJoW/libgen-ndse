@@ -1,8 +1,6 @@
 \newif\ifinsertskip
 
-\newdimen\colprevdepth
-\newdimen\colthisht
-\def\beginiocolumnns{\begingroup\widowpenalty=10000 \colprevdepth=0pt
+\def\beginiocolumnns{\begingroup\widowpenalty=10000
 	\doublecolumnsetup \insertskipfalse}
 \def\endiocolumns{\endgroup \pagegoal=\vsize}
 
@@ -11,13 +9,11 @@
 \long\def\colout#1\colin#2\colpar{%
 	\prevdepth=-\maxdimen
 	\begingroup%
-	\computefinalheightfrom{#1}%
-	\storecol{#1}{\outcolumn}%
-	\storecol{#2}{\incolumn}%
+	\storecol{#1}{\outcolumn}
+	\storecol{#2}{\incolumn}
 	\updatefreespace%
 	\buildpagesofar%
 	\insertinterrowskip%
-	\global\colprevdepth=\dp0%
 	\box0%
 	\buildnextpage%
 	\endgroup%
@@ -49,9 +45,13 @@
 	\setbox0=\vtop{\unvbox0}	\setbox2=\vtop{\unvbox2}%
 	\dimen0=\finaldepth%
 	\wd0=\hsize \wd2=\hsize%
-	\setbox0=\vbox{\hbox to \textwidth{\box0\hfil\vrule height\columnruleht\hfil\box2}}%
+	\setbox0=\vbox{\hbox to \textwidth{\boxcontent}}%
 	\dimen1=\ht0 \advance\dimen1 by \dp0 \advance\dimen1 by -\dimen0%
 	\ht0=\dimen1 \dp0=\dimen0}
+
+\def\boxcontent{\ifodd\pageno%
+\box2\hfil\vrule height\columnruleht\hfil\box0\else
+\box0\hfil\vrule height\columnruleht\hfil\box2\fi}
 
 \def\buildnextpage{\global\insertskipfalse\ifvoidiocols
 		\global\insertskiptrue\penalty0\else
@@ -67,12 +67,3 @@
 }
 
 \def\finaldepth{\ifdim\dp0>\dp2 \dimen0\else\dimen2\fi}
-
-\def\computefinalheightfrom#1{%
-	\setbox0=\vtop{#1}%
-	\global\colthisht=\ht0}
-
-\def\computeinterlineskip{\dimen0=\baselineskip%
-	\advance\dimen0 by -\colprevdepth%
-	\advance\dimen0 by -\colthisht%
-	\ifdim\dimen0<0pt\dimen0=\lineskip\fi}
