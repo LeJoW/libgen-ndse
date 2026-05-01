@@ -92,6 +92,7 @@ test("Accentuate", function () {
     expect(ps.accentuate("ær")).toStrictEqual("ǽr");
     expect(ps.accentuate("auf")).toStrictEqual("áuf");
     expect(ps.accentuate("Fíli")).toStrictEqual("Fíli");
+    expect(ps.accentuate("iustus")).toStrictEqual("iústus");
 });
 
 test("Check latin accent", function () {

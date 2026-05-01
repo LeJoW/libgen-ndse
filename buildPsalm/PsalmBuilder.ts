@@ -20,7 +20,7 @@ export class PsalmBuilder {
         æ: "ǽ",
         œ: "œ́",
         au: "áu",
-        iu: "íu",
+        iu: "iú",
     };
 
     constructor(syllabifier: Syllabifier) {
