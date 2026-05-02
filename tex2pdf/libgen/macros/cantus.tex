@@ -11,6 +11,7 @@
 		\dimen0=\ifdim\freespace>\dimen7 \freespace\else\textheight\fi%
 		\advance\dimen0 by -\pagestretch%
 		\advance\dimen0 by \pageshrink%
+		\splittopskip=13pt%
 		\setbox0=\vsplit\translationbox upto \dimen0%
 		\setbox\translationbox=\box\translationbox%
 		\ifvoid\translationbox\else\insert\translationins{\unvbox\translationbox}

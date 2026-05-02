@@ -6,11 +6,11 @@
 \parskip=0pt plus 1pt}
 \def\endpsalm{\endgroup}
 
-\long\def\balancedcols#1{\begindoublecolumns#1\enddoublecolumns}
+\long\def\balancedcols#1{\begingroup\baselineskip=\the\baselineskip plus 1sp\begindoublecolumns#1\enddoublecolumns\endgroup}
 
 \let\beginpsalmTrad=\begintradColonnes
 \let\endpsalmTrad=\endtradColonnes
 
-\def\aloneDoxologie#1{{\widowpenalty=10000\parskip=0pt plus 1pt #1}}
+\def\aloneDoxologie#1{{\widowpenalty=10000\parskip=0pt plus 0pt #1}}
 
 \let\versusTRAD=\colonneTRAD
