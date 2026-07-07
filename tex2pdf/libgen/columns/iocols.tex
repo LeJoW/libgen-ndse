@@ -1,69 +1,51 @@
 \newif\ifinsertskip
 
-\def\beginiocolumnns{\begingroup\widowpenalty=10000
+\def\beginiocolumnns{\begingroup\baselineskip=\the\baselineskip plus 1pt%
 	\doublecolumnsetup \insertskipfalse}
 \def\endiocolumns{\endgroup \pagegoal=\vsize}
 
 \newbox\outcolumn
 \newbox\incolumn
 \long\def\colout#1\colin#2\colpar{%
-	\prevdepth=-\maxdimen
 	\begingroup%
-	\storecol{#1}{\outcolumn}
-	\storecol{#2}{\incolumn}
-	\updatefreespace%
-	\buildpagesofar%
-	\insertinterrowskip%
-	\box0%
-	\buildnextpage%
+	\setbox\outcolumn=\vbox{#1}%
+	\setbox\incolumn=\vbox{#2}%
+	\storecolumns%
+	\buildpar%
 	\endgroup%
 }
 
-\long\def\storecol#1#2{
-	\splittopskip=\topskip \splitmaxdepth=0pt
-	\setbox#2=\vbox{\kern1cm #1}
-	\setbox0=\vsplit#2 to 1cm}
+\def\storecolumns{\directlua{libgen.iocols:store_lines_from("incolumn", "outcolumn")}}
 
-\def\insertinterrowskip{\ifdim\pagetotal>\textheight \insertskipfalse\fi
-	\ifinsertskip%
-		\begingroup%
-		\setbox0=\hbox to \textwidth{\hfil\vrule depth5mm\hfil}%
-		\ht0=0pt \dp0=0pt \box0 \prevdepth=-\maxdimen%
-		\endgroup%
-		\vskip0pt plus 0.5pt\fi}
+\def\buildpar{\begingroup\count100=1%
+	\loop%
+	\getboxes%
+	\ifnum\count100=1%
+	\buildline\repeat%
+	\endgroup}
 
-\def\buildpagesofar{\splittopskip=\topskip \splitmaxdepth=2pt%
-	\dimen0=\freespace%
-	\ifdim\freespace>\baselineskip
-		\setbox0=\vsplit\outcolumn upto \dimen0%
-		\setbox2=\vsplit\incolumn upto \dimen0%
-		\configurepage%
-	\else\global\insertskipfalse\setbox0=\box\voidbox\fi
-}
+\def\buildline{%
+	\setbox2=\hbox to \textwidth{%
+		\hbox to \hsize{\hfil\copy0}%
+		\hfil\vrule\hfil%
+		\hbox to \hsize{\hfil\copy1}}
+	\ioaddline2
+	\hbox attr 37=\linecount to \textwidth{%
+		\hbox to \hsize{\hfil\box1}%
+		\hfil\vrule\hfil%
+		\hbox to \hsize{\hfil\box0}}}
+\def\linecount{\directlua{tex.write(libgen.iocols.line_count)}}
+\def\ioaddline#1{\directlua{libgen.iocols:add_line(#1)}}
 
-\def\configurepage{\dimen0=\dp0 \dimen2=\dp2%
-	\setbox0=\vtop{\unvbox0}	\setbox2=\vtop{\unvbox2}%
-	\dimen0=\finaldepth%
-	\wd0=\hsize \wd2=\hsize%
-	\setbox0=\vbox{\hbox to \textwidth{\boxcontent}}%
-	\dimen1=\ht0 \advance\dimen1 by \dp0 \advance\dimen1 by -\dimen0%
-	\ht0=\dimen1 \dp0=\dimen0}
+\def\getboxes{\setbox0=\hbox{}\setbox1=\hbox{}
+	\directlua{local next_item = libgen.iocols:get_next_item();
+		if next_item == nil then
+		tex.count[100] = 0;
+		else
+		local colin = next_item.i;
+		local colout = next_item.o;
+		if colin then tex.setbox(0, colin) end
+		if colout then tex.setbox(1, colout) end
+		end}}
 
-\def\boxcontent{\ifodd\pageno%
-\box2\hfil\vrule height\columnruleht\hfil\box0\else
-\box0\hfil\vrule height\columnruleht\hfil\box2\fi}
-
-\def\buildnextpage{\global\insertskipfalse\ifvoidiocols
-		\global\insertskiptrue\penalty0\else
-		\eject\colout\unvbox\outcolumn\colin\unvbox\incolumn\colpar\fi
-}
-
-\newif\ifemptyiocols
-\def\ifvoidiocols{
-	\emptyiocolstrue
-	\ifvoid\outcolumn\else\emptyiocolsfalse\fi
-	\ifvoid\incolumn\else\emptyiocolsfalse\fi
-	\ifemptyiocols
-}
-
-\def\finaldepth{\ifdim\dp0>\dp2 \dimen0\else\dimen2\fi}
+\def\iocolsprocess{\directlua{libgen.iocols.pageprocess()}}

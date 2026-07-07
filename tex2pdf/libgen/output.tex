@@ -27,7 +27,9 @@
 \def\storepartialpage{\goodbreak
 \begingroup\output={\global\setbox\partialpage=\vbox{\unvbox255}}\eject\endgroup}
 
-\output={\normaloutput\pagebody}
+\output={\processpage\normaloutput\pagebody}
+
+\def\processpage{\iocolsprocess}
 
 \def\normaloutput#1{
 	\pagesetup
