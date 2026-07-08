@@ -1,16 +1,18 @@
 \let\cantusoriginTRAD=\cantusTRAD
-\def\beginpsalterium{\def\cantusTRAD##1##2{\vskip-2\medskipamount\cantusoriginTRAD{##1}{##2}}}
-\def\endpsalterium{}
+\def\beginpsalterium{%
+\def\cantusTRAD##1##2{\vskip-2\medskipamount\cantusoriginTRAD{##1}{##2}}%
+\begingroup%
+\parskip=0pt%
+\baselineskip=12pt plus 2pt minus 1pt}
+\def\endpsalterium{\endgroup}
 
-\def\beginpsalm{\begingroup
-\parskip=0pt}
-\def\endpsalm{\endgroup}
+\def\beginpsalm{}\def\endpsalm{}
 
-\long\def\balancedcols#1{\begingroup\baselineskip=\the\baselineskip plus 1pt\begindoublecolumns#1\enddoublecolumns\endgroup}
+\long\def\balancedcols#1{\begindoublecolumns#1\enddoublecolumns}
 
 \let\beginpsalmTrad=\begintradColonnes
 \let\endpsalmTrad=\endtradColonnes
 
-\def\aloneDoxologie#1{{\widowpenalty=10000\parskip=0pt #1}}
+\def\aloneDoxologie#1{#1\par}
 
 \let\versusTRAD=\colonneTRAD

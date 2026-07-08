@@ -1,20 +1,46 @@
-function list_iter(t)
-    local i = 0
-    local n = table.getn(t)
+-- =========================================================================
+-- Constantes et Configuration
+-- =========================================================================
+local NODE_TYPES = {
+    HLIST = node.id("hlist"),
+    VLIST = node.id("vlist"),
+    GLUE = node.id("glue")
+}
+
+local DIMENSIONS = {
+    SCALED_POINT = 65536, -- 1pt en Sp
+    RULE_WIDTH = 26214 -- 0.4pt en Sp
+}
+
+local REGISTERS = {
+    OUTPUT_PAGE_BOX = 255
+}
+
+local ATTRIBUTES = {
+    IO_LINE = 37
+}
+
+-- =========================================================================
+-- Fonctions Utilitaires de Base (Nœuds et Itérateurs)
+-- =========================================================================
+
+local function create_list_iterator(list)
+    local index = 0
+    local count = table.getn(list)
     return function()
-        i = i + 1
-        if i <= n then
-            return t[i]
+        index = index + 1
+        if index <= count then
+            return list[index]
         end
     end
 end
 
-local HLIST_NODE_ID = node.id("hlist")
-local VLIST_NODE_ID = node.id("vlist")
-local GLUE_NODE_ID = node.id("glue")
-
 local function is_hlist(current_node)
-    return current_node and current_node.id == HLIST_NODE_ID
+    return current_node and current_node.id == NODE_TYPES.HLIST
+end
+
+local function is_vbox_or_hbox(current_node)
+    return current_node.id == NODE_TYPES.HLIST or current_node.id == NODE_TYPES.VLIST
 end
 
 local function isolate_node(current_node)
@@ -22,6 +48,23 @@ local function isolate_node(current_node)
     clean_node.next = nil
     clean_node.prev = nil
     return clean_node
+end
+
+-- =========================================================================
+-- Extraction et Parcours de l'Arbre de Nœuds
+-- =========================================================================
+
+local function debug(box)
+    local current = box.head
+
+    while current do
+        local type_name = node.type(current.id) or "unknown"
+        local subtype = current.subtype or 0
+
+        print(string.format("===> Type: %-12s (ID: %2d) | Subtype: %d", type_name, current.id, subtype))
+
+        current = current.next
+    end
 end
 
 local function extract_lines_from(vbox)
@@ -51,99 +94,132 @@ end
 local function scan_node_for_attribute(head, attr_id)
     local nodes_list = {}
 
-    -- On déclare la fonction de manière locale
-    local function rec(current)
+    local function search_recursive(current)
         while current do
-            -- 1. On vérifie si le nœud actuel possède l'attribut
-            local val = node.has_attribute(current, attr_id)
-            if val then
+            local attr_value = node.has_attribute(current, attr_id)
+            if attr_value then
                 table.insert(nodes_list, {
                     node = current,
-                    attr = val
+                    attr = attr_value
                 })
             end
 
-            -- 2. Si c'est une boîte, on plonge récursivement dans sa liste
-            if current.id == HLIST_NODE_ID or current.id == VLIST_NODE_ID then
-                if current.head then
-                    rec(current.head)
-                end
+            if is_vbox_or_hbox(current) and current.head then
+                search_recursive(current.head)
             end
 
             current = current.next
         end
     end
 
-    -- On lance la récursion sur la tête de liste
-    rec(head)
-
-    -- On renvoie enfin la table unique qui a été remplie au fur et à mesure
+    search_recursive(head)
     return nodes_list
 end
 
-function check_page_parity(page, line)
-    local pageno = tex.getcount("pageno");
-    if pageno % 2 == 0 then
+-- =========================================================================
+-- Transformation et Traitement des Lignes
+-- =========================================================================
+
+local function is_even_page()
+    local current_page = tex.getcount("pageno")
+    return current_page % 2 == 0
+end
+
+local function check_page_parity(page, line)
+    if is_even_page() then
         return
     end
-    local right_setting = libgen.iocols:get_line(line.attr);
+
+    local right_setting = libgen.iocols:get_line(line.attr)
     if right_setting then
-        node.insert_before(page, line.node, right_setting);
+        node.insert_before(page, line.node, right_setting)
         node.remove(page, line.node)
     end
 end
 
-function replace_glue(page, line)
-    local glue = line.node.next
-    if glue and glue.id == GLUE_NODE_ID then
-        local size = node.effective_glue(glue, page)
+local function create_vertical_rule_filler(height)
+    local stretch_glue = node.new("glue")
+    stretch_glue.stretch = DIMENSIONS.SCALED_POINT
+    stretch_glue.stretch_order = 1
 
-        -- 1. Créer les composants internes d'abord
-        local hfil1 = node.new("glue")
-        hfil1.stretch = 65536
-        hfil1.stretch_order = 1
+    local rule = node.new("rule")
+    rule.width = DIMENSIONS.RULE_WIDTH
+    rule.height = height
+    rule.depth = 0
 
-        local rule = node.new("rule")
-        rule.width = 26214 -- 0.4pt
-        rule.height = size
-        rule.depth = 0
+    local end_glue = node.copy(stretch_glue)
 
-        local hfil2 = node.copy(hfil1)
+    stretch_glue.next = rule
+    rule.next = end_glue
 
-        -- Chaîner les enfants
-        hfil1.next = rule
-        rule.next = hfil2
-
-        -- 2. Utiliser node.hpack pour "empaqueter" la boîte comme le ferait \hbox to \hsize
-        -- "exactly" spécifie qu'on veut une taille précise (comme "to" en TeX)
-        local target_width = line.node.width
-        local box = node.hpack(hfil1, target_width, "exactly")
-
-        -- 3. Ajuster la hauteur, profondeur et direction de la boîte résultante
-        box.height = size
-        box.depth = 0
-        box.dir = line.node.dir or "TLT"
-
-        -- 4. Remplacement du nœud de colle d'origine
-        node.insert_before(page, glue, box)
-        node.remove(page, glue)
-    end
+    return stretch_glue
 end
 
-function line_process(page, line)
-    check_page_parity(page, line);
+local function create_packed_rule_box(line_node, height)
+    local components = create_vertical_rule_filler(height)
+    local target_width = line_node.width
+
+    local box = node.hpack(components, target_width, "exactly")
+    box.height = height
+    box.depth = 0
+    box.dir = line_node.dir or "TLT"
+
+    return box
+end
+
+local function is_glue(node)
+    return node and node.id == NODE_TYPES.GLUE;
+end
+
+local function replace_glue(page, line)
+    if not line.node.next or not line.node.next.next then
+        return
+    end
+    local glue = line.node.next.next;
+
+    if not is_glue(glue) then
+        return
+    end
+
+    local glue_size = node.effective_glue(glue, page)
+    local replacement_box = create_packed_rule_box(line.node, glue_size)
+
+    node.insert_before(page, glue, replacement_box)
+    node.remove(page, glue)
+end
+
+local function process_single_line(page, line)
+    check_page_parity(page, line)
     replace_glue(page, line)
 end
 
+local function add_penalties(lines_list)
+    local list_with_penalties = lines_list;
+    for _, line in ipairs(list_with_penalties) do
+        line["penalty"] = 0
+    end
+    list_with_penalties[#list_with_penalties - 1]["penalty"] = 1000;
+    return list_with_penalties;
+end
+
+-- =========================================================================
+-- API Publique
+-- =========================================================================
+
 libgen.iocols = {
     lines_iterator = {},
+    all_lines = {},
+    lines_count = 0,
 
-    store_lines_from = function(self, inbox_register, outbox_register)
-        local inbox_lines = extract_lines_from(tex.getbox(inbox_register))
-        local outbox_lines = extract_lines_from(tex.getbox(outbox_register))
+    process_lines_from = function(self, inbox_register, outbox_register)
+        local inbox = tex.getbox(inbox_register);
+        local outbox = tex.getbox(outbox_register);
+        local inbox_lines = extract_lines_from(inbox);
+        local outbox_lines = extract_lines_from(outbox);
 
-        local lines_list = zip_lines(inbox_lines, outbox_lines)
-        self.lines_iterator = list_iter(lines_list);
+        local lines_list = zip_lines(inbox_lines, outbox_lines);
+        lines_list = add_penalties(lines_list);
+        self.lines_iterator = create_list_iterator(lines_list);
     end,
 
     get_next_item = function(self)
@@ -151,20 +227,18 @@ libgen.iocols = {
     end,
 
     pageprocess = function()
-        local page = tex.getbox(255);
-        local iolineattr = 37;
-        local lines = scan_node_for_attribute(page.list, iolineattr);
+        local page = tex.getbox(REGISTERS.OUTPUT_PAGE_BOX)
+        local lines = scan_node_for_attribute(page.list, ATTRIBUTES.IO_LINE)
+
         for _, line in ipairs(lines) do
-            line_process(page, line)
+            process_single_line(page, line)
         end
     end,
 
-    line_count = 0,
-    all_lines = {},
-
-    add_line = function(self, right)
-        table.insert(self.all_lines, isolate_node(tex.getbox(right)));
-        self.line_count = #self.all_lines;
+    add_line = function(self, right_box_register)
+        local isolated = isolate_node(tex.getbox(right_box_register))
+        table.insert(self.all_lines, isolated)
+        self.lines_count = #self.all_lines
     end,
 
     get_line = function(self, id)
@@ -172,8 +246,8 @@ libgen.iocols = {
             return nil
         end
 
-        local output = self.all_lines[id]
+        local requested_line = self.all_lines[id]
         self.all_lines[id] = nil
-        return output
+        return requested_line
     end
 }

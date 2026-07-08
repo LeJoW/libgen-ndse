@@ -1,8 +1,6 @@
-\newif\ifinsertskip
-
-\def\beginiocolumnns{\begingroup\baselineskip=\the\baselineskip plus 1pt%
-	\doublecolumnsetup \insertskipfalse}
-\def\endiocolumns{\endgroup \pagegoal=\vsize}
+\def\beginiocolumnns{\begingroup%
+	\doublecolumnsetup}
+\def\endiocolumns{\endgroup}
 
 \newbox\outcolumn
 \newbox\incolumn
@@ -12,16 +10,16 @@
 	\setbox\incolumn=\vbox{#2}%
 	\storecolumns%
 	\buildpar%
-	\endgroup%
-}
+	\endgroup}
 
-\def\storecolumns{\directlua{libgen.iocols:store_lines_from("incolumn", "outcolumn")}}
+\def\storecolumns{\directlua{libgen.iocols:process_lines_from("incolumn", "outcolumn")}}
 
+\newcount\nextlinepenalty
 \def\buildpar{\begingroup\count100=1%
 	\loop%
 	\getboxes%
 	\ifnum\count100=1%
-	\buildline\repeat%
+	\buildline\setpenalty\repeat%
 	\endgroup}
 
 \def\buildline{%
@@ -34,8 +32,10 @@
 		\hbox to \hsize{\hfil\box1}%
 		\hfil\vrule\hfil%
 		\hbox to \hsize{\hfil\box0}}}
-\def\linecount{\directlua{tex.write(libgen.iocols.line_count)}}
+\def\linecount{\directlua{tex.write(libgen.iocols.lines_count)}}
 \def\ioaddline#1{\directlua{libgen.iocols:add_line(#1)}}
+
+\def\setpenalty{\penalty\nextlinepenalty}
 
 \def\getboxes{\setbox0=\hbox{}\setbox1=\hbox{}
 	\directlua{local next_item = libgen.iocols:get_next_item();
@@ -44,6 +44,7 @@
 		else
 		local colin = next_item.i;
 		local colout = next_item.o;
+		tex.setcount("nextlinepenalty", next_item.penalty);
 		if colin then tex.setbox(0, colin) end
 		if colout then tex.setbox(1, colout) end
 		end}}
