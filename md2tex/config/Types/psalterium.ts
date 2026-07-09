@@ -10,7 +10,7 @@ import { incipits } from "../incipits";
 export const psalteriumConfig = (
     gregoIndex: GregoIndex,
     psalmManager: PsalmManager
-):TypeConfig => ({
+): TypeConfig => ({
     test: /^@(?:(\d+))?(?:\((\S+)\))?\[([\S\s]+)\]/,
     callback(_, linesTrad, ton, psaumes): Psalterium {
         return psaumes
@@ -48,6 +48,7 @@ export const psalteriumConfig = (
                         ? (() => {
                               const out = new PsalmTitle(new TextNode(title));
                               out.content.context = out;
+                              out.parent = psalmus;
                               return out;
                           })()
                         : false;
@@ -80,6 +81,7 @@ export const psalteriumConfig = (
                 if (!psalm.title) {
                     psalm.title = new PsalmTitle(new TextNode());
                     psalm.title.content.context = psalm.title;
+                    psalm.title.parent = psalm;
                 }
                 psalm.title.translation = true;
                 psalm.title.content.fr = title;

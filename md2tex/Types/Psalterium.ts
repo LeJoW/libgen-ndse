@@ -55,6 +55,7 @@ export class Psalterium extends GenericElement {
     }
 
     addPsalm(psalm: Psalmus | Canticum) {
+        psalm.parent = this;
         this.psalms.push(psalm);
     }
 }
