@@ -101,10 +101,10 @@ function printOfficeTitle(
     shortTitle: string
 ): string {
     return engine.concat([
-        anchor ? engine.orphan("anchor", { href: anchor }) : undefined,
         engine.orphan("officeTitle", {
             title,
             short: shortTitle,
         }),
+        anchor ? engine.orphan("anchor", { href: anchor }) : undefined,
     ]);
 }
