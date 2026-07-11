@@ -6,7 +6,7 @@
 \global\rrunninghead={#1}%
 }
 
-\def\begintableOfContents{\noheaderthispage\begingroup
+\def\begintableOfContents{\begingroup
 	\small\parskip=0pt}
 \def\endtableOfContents{\endgroup}
 
@@ -17,7 +17,7 @@
 \def\endsectionEntries{}
 
 \def\tableSectionTitle#1{%
-	\global\rrunninghead{#1}%
+	%\global\rrunninghead{#1}%
 	\vskip4mm
 	\noindent{\sc #1}\vskip2mm}
 
