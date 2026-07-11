@@ -3,6 +3,7 @@ import { TextNode as TextNodeInterface } from "./TextNode.i";
 
 export class TextNode implements TextNodeInterface {
     la: string;
+    parsed: boolean;
     private _fr: string | false = false;
     public get fr(): string | false {
         return this.render.fr(this._fr);
@@ -12,6 +13,7 @@ export class TextNode implements TextNodeInterface {
     }
 
     constructor(text?: string) {
+        this.parsed = false;
         this.la = text ? text.trim() : "";
     }
     render = {

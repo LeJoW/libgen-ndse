@@ -56,7 +56,9 @@ export default class Parser {
     }
 
     parseElementTextNodes(element: GenericElement): GenericElement {
-        element.TextNodes.map(this.parseTextNode);
+        element.TextNodes.map((node) => {
+            return node.parsed ? node : this.parseTextNode(node);
+        });
         return element;
     }
 
@@ -65,6 +67,7 @@ export default class Parser {
         if (node.fr) {
             node.fr = this.parseString(node.fr, "fr");
         }
+        node.parsed = true;
         return node;
     };
 

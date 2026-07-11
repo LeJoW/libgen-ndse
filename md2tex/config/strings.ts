@@ -35,7 +35,7 @@ const strConfig = (adapter: Adapter): StringConfigType => ({
     ],
     all: [
         {
-            test: /((=)|(\+)|(\\\*))/g,
+            test: /(=|\+|\\\*)/g,
             callback: function (_, symbol) {
                 return adapter.symbols[symbols[symbol.trim()]];
             },
