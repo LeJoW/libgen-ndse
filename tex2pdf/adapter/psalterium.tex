@@ -6,7 +6,10 @@
 \baselineskip=12pt plus 2pt minus 1pt}
 \def\endpsalterium{\endgroup}
 
-\def\beginpsalm{}\def\endpsalm{}
+\def\beginpsalm{\begingroup
+\baselineskip=12pt%
+\parskip=0pt plus 1pt}
+\def\endpsalm{\endgroup}
 
 \long\def\balancedcols#1{\begindoublecolumns#1\enddoublecolumns}
 

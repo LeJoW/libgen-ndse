@@ -1,6 +1,7 @@
 \long\def\begindoublecolumns#1\enddoublecolumns{\begingroup
 	\updatefreespace
 	\doublecolumnsetup
+	\clubpenalty=0
 	\storecontent{#1}
 	\ifbalancecolumns
 		\balancecolumns\else\doublecolumns\fi\pagesofar
