@@ -17,6 +17,7 @@ local REGISTERS = {
 }
 
 local ATTRIBUTES = {
+    IO_COLS = 36,
     IO_LINE = 37
 }
 
@@ -167,8 +168,12 @@ local function create_packed_rule_box(line_node, height)
     return box
 end
 
-local function is_glue(node)
-    return node and node.id == NODE_TYPES.GLUE;
+local function is_glue(nde)
+    return nde and nde.id == NODE_TYPES.GLUE;
+end
+
+local function is_in_scope(nde)
+    return node.has_attribute(nde, ATTRIBUTES.IO_COLS);
 end
 
 local function replace_glue(page, line)
@@ -177,7 +182,7 @@ local function replace_glue(page, line)
     end
     local glue = line.node.next.next;
 
-    if not is_glue(glue) then
+    if not is_glue(glue) or not is_in_scope(glue) then
         return
     end
 
