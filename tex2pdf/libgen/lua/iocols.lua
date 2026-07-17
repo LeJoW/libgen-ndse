@@ -148,7 +148,7 @@ local function guard_against_invalid_columns(cols)
 end
 
 local function check_page_parity(page, line)
-    if is_even_page() then
+    if not is_even_page() then
         return
     end
 
