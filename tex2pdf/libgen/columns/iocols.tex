@@ -23,18 +23,10 @@
 	\buildline\setpenalty\repeat%
 	\endgroup}
 
-\def\buildline{%
-	\setbox2=\hbox to \textwidth{%
-		\hbox to \hsize{\hfil\copy0}%
+\def\buildline{\hbox attr 37=0 to \textwidth{%
+		\hbox attr 38=1 to \hsize{\hfil\copy0}%
 		\hfil\vrule\hfil%
-		\hbox to \hsize{\hfil\copy1}}
-	\ioaddline2
-	\hbox attr 37=\linecount to \textwidth{%
-		\hbox to \hsize{\hfil\box1}%
-		\hfil\vrule\hfil%
-		\hbox to \hsize{\hfil\box0}}}
-\def\linecount{\directlua{tex.write(libgen.iocols.lines_count)}}
-\def\ioaddline#1{\directlua{libgen.iocols:add_line(#1)}}
+		\hbox attr 38=2 to \hsize{\hfil\copy1}}}
 
 \def\setpenalty{\penalty\nextlinepenalty}
 

@@ -18,7 +18,8 @@ local REGISTERS = {
 
 local ATTRIBUTES = {
     IO_COLS = 36,
-    IO_LINE = 37
+    IO_LINE = 37,
+    IO_LINE_ITEM = 38
 }
 
 -- =========================================================================
@@ -126,16 +127,40 @@ local function is_even_page()
     return current_page % 2 == 0
 end
 
+local function swap_nodes(head, node_a, node_b)
+    local copy_a = node.copy(node_a);
+    local copy_b = node.copy(node_b);
+    head = node.insert_before(head, node_a, copy_b);
+    head = node.insert_before(head, node_b, copy_a);
+    head = node.remove(head, node_a);
+    head = node.remove(head, node_b);
+
+    node.flush_node(node_a)
+    node.flush_node(node_b)
+
+    return head;
+end
+
+local function guard_against_invalid_columns(cols)
+    if #cols ~= 2 then
+        error("A iocol must have exactly two items")
+    end
+end
+
 local function check_page_parity(page, line)
     if is_even_page() then
         return
     end
 
-    local right_setting = libgen.iocols:get_line(line.attr)
-    if right_setting then
-        node.insert_before(page, line.node, right_setting)
-        node.remove(page, line.node)
-    end
+    local head = line.node.list
+    local cols = scan_node_for_attribute(head, ATTRIBUTES.IO_LINE_ITEM)
+
+    guard_against_invalid_columns(cols)
+
+    local first_col = cols[1].node;
+    local second_col = cols[2].node;
+
+    line.node.list = swap_nodes(head, first_col, second_col)
 end
 
 local function create_vertical_rule_filler(height)
@@ -213,8 +238,6 @@ end
 
 libgen.iocols = {
     lines_iterator = {},
-    all_lines = {},
-    lines_count = 0,
 
     process_lines_from = function(self, inbox_register, outbox_register)
         local inbox = tex.getbox(inbox_register);
@@ -238,21 +261,5 @@ libgen.iocols = {
         for _, line in ipairs(lines) do
             process_single_line(page, line)
         end
-    end,
-
-    add_line = function(self, right_box_register)
-        local isolated = isolate_node(tex.getbox(right_box_register))
-        table.insert(self.all_lines, isolated)
-        self.lines_count = #self.all_lines
-    end,
-
-    get_line = function(self, id)
-        if not id then
-            return nil
-        end
-
-        local requested_line = self.all_lines[id]
-        self.all_lines[id] = nil
-        return requested_line
     end
 }
