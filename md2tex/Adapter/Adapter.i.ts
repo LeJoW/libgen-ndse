@@ -23,5 +23,6 @@ export interface Adapter {
         parnumber: string;
         discretionary: string;
         thinspace: string;
+        italicCorrection: string;
     };
 }

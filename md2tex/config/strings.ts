@@ -10,6 +10,13 @@ const symbols: { [char: string]: keyof Adapter["symbols"] } = {
     "=": "discretionary",
 };
 
+export function needsItalicCorrection(nextChar: string) {
+    const specialChars = [",", ".", "="];
+
+    if (!nextChar || specialChars.includes(nextChar)) return false;
+    return true;
+}
+
 const strConfig = (adapter: Adapter): StringConfigType => ({
     la: [
         {
@@ -41,15 +48,21 @@ const strConfig = (adapter: Adapter): StringConfigType => ({
             },
         },
         {
-            test: /[\*_]{2}([^*]+?)[\*_]{2}/g,
+            test: /[\*_]{2}([^*_]+?)[\*_]{2}/g,
             callback: function (_, text) {
                 return adapter.textStyles.bold(text);
             },
         },
         {
-            test: /[\*_]{1}([^*]+?)[\*_]{1}/g,
-            callback: function (_, text) {
-                return adapter.textStyles.italic(text);
+            test: /[\*_]{1}([^*_]+?)[\*_]{1}([\s\S]?)/g,
+            callback: function (_, text, nextChar) {
+                const italicCorrection = needsItalicCorrection(nextChar)
+                    ? adapter.symbols.italicCorrection
+                    : "";
+                return (
+                    adapter.textStyles.italic(text + italicCorrection) +
+                    nextChar
+                );
             },
         },
         {

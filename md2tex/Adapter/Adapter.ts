@@ -14,6 +14,7 @@ export class Adapter implements AdapterInterface {
         parnumber: string;
         discretionary: string;
         thinspace: string;
+        italicCorrection: string;
     };
     textStyles = {
         italic: (text: string) => this.engine.orphan("italic", { value: text }),
@@ -65,6 +66,7 @@ export class Adapter implements AdapterInterface {
             parnumber: this.engine.orphan("forcebreak"),
             discretionary: this.engine.orphan("-"),
             thinspace: this.engine.orphan("thinspace"),
+            italicCorrection: this.engine.orphan("itlc"),
         };
     }
 

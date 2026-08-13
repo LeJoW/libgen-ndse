@@ -56,19 +56,6 @@ end
 -- Extraction et Parcours de l'Arbre de Nœuds
 -- =========================================================================
 
-local function debug(box)
-    local current = box.head
-
-    while current do
-        local type_name = node.type(current.id) or "unknown"
-        local subtype = current.subtype or 0
-
-        print(string.format("===> Type: %-12s (ID: %2d) | Subtype: %d", type_name, current.id, subtype))
-
-        current = current.next
-    end
-end
-
 local function extract_lines_from(vbox)
     local lines = {}
     local current = vbox.head

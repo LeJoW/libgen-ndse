@@ -13,11 +13,12 @@ export class TexRender implements Render {
         attributes?: { [attr: string]: any },
         optionalAttributes?: { [attr: string]: any }
     ): string {
+        const hasAttributes = Object.values(attributes ?? []).length > 0;
         return `\\${type}${Object.values(attributes ?? [])
             .map(function (attr) {
                 return `{${attr}}`;
             })
-            .join("")}{}`;
+            .join("")}${hasAttributes ? "" : "{}"}`;
     }
     container(
         type: string,
