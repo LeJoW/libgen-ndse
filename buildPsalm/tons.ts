@@ -14,6 +14,7 @@ export const tons: {
     "1g": { mediante: [0, 2], end: [2, 1] },
     "1g2": { mediante: [0, 2], end: [2, 1] },
     "2D": { mediante: [0, 1], end: [1, 1, true] },
+    "2Dsol": { mediante: [3, 1], end: [1, 1, true] },
     "3a": { mediante: [0, 2, true], end: [0, 2] },
     "3b": { mediante: [0, 2, true], end: [0, 2] },
     "5a": { mediante: [0, 1], end: [0, 2] },

@@ -215,6 +215,7 @@ local function add_penalties(lines_list)
     for _, line in ipairs(list_with_penalties) do
         line["penalty"] = 0
     end
+    list_with_penalties[1]["penalty"] = 10000;
     list_with_penalties[#list_with_penalties - 1]["penalty"] = 1000;
     return list_with_penalties;
 end
