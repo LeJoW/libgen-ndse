@@ -39,7 +39,7 @@
 		\vbox to \textheight{#1}}\boxmaxdepth=\maxdepth
 	\advancepageno}
 
-\def\pagebody{\unvbox255}
+\def\pagebody{\luaprocesspage\unvbox255}
 
 \newtoks\headline
 \def\makeheadline{\begingroup
@@ -91,3 +91,5 @@
 		\ifinserthere \translation\else\global\insertheretrue\fi\fi}
 
 \def\translation{\rlap{\vbox to 0pt{\hbox to \textwidth{\hfil\box\translationins}\vss}}}
+
+\def\luaprocesspage{{\directlua{libgen.processpage()}}}
